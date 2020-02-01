@@ -1,0 +1,25 @@
+{
+  "name": "deprecations",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prebuild": "rm -rf ./dist",
+    "build": "tsc",
+    "crawl": "npm run build && node ./dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.18.0",
+    "@typescript-eslint/parser": "^2.18.0"
+  },
+  "devDependencies": {
+    "@types/eslint": "^6.1.7",
+    "@types/node": "^13.5.3",
+    "eslint": "^6.8.0",
+    "typescript": "^3.7.5"
+  }
+}

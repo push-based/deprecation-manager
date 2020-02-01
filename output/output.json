@@ -1,0 +1,1806 @@
+[
+    {
+        "version": "6.3.2",
+        "numberOfDeprecations": 137,
+        "numberOfNewDeprecations": 137,
+        "deprecations": [
+            {
+                "name": "AsyncSubject._subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/AsyncSubject.ts#14"
+            },
+            {
+                "name": "BehaviorSubject._subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/BehaviorSubject.ts#21"
+            },
+            {
+                "name": "bindCallback",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is no longer supported, use a mapping function.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/bindCallback.ts#11"
+            },
+            {
+                "name": "bindNodeCallback",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is deprecated, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/bindNodeCallback.ts#11"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#16"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#18"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#20"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#22"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#24"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#26"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#37"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#39"
+            },
+            {
+                "name": "ConnectableObservable._subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/ConnectableObservable.ts#26"
+            },
+            {
+                "name": "AjaxObservable._subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/dom/AjaxObservable.ts#185"
+            },
+            {
+                "name": "resultSelector",
+                "type": "TSPropertySignature",
+                "deprecationMsg": "use {@link deserializer}",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/dom/WebSocketSubject.ts#17"
+            },
+            {
+                "name": "WebSocketSubject._output",
+                "type": "ClassProperty",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/dom/WebSocketSubject.ts#72"
+            },
+            {
+                "name": "WebSocketSubject._subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/dom/WebSocketSubject.ts#271"
+            },
+            {
+                "name": "empty",
+                "type": "FunctionDeclaration",
+                "deprecationMsg": "Deprecated in favor of using {@link index/EMPTY} constant.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/empty.ts#59"
+            },
+            {
+                "name": "forkJoin",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is deprecated, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/forkJoin.ts#30"
+            },
+            {
+                "name": "fromEvent",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/fromEvent.ts#52"
+            },
+            {
+                "name": "fromEvent",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/fromEvent.ts#55"
+            },
+            {
+                "name": "fromEventPattern",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/fromEventPattern.ts#10"
+            },
+            {
+                "name": "never",
+                "type": "FunctionDeclaration",
+                "deprecationMsg": "Deprecated in favor of using {@link NEVER} constant.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/never.ts#36"
+            },
+            {
+                "name": "SubscribeOnObservable._subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/SubscribeOnObservable.ts#43"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/zip.ts#14"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/zip.ts#16"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/zip.ts#18"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/zip.ts#20"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/zip.ts#22"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/zip.ts#24"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/zip.ts#35"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/zip.ts#37"
+            },
+            {
+                "name": "Observable.source",
+                "type": "ClassProperty",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Observable.ts#24"
+            },
+            {
+                "name": "Observable.operator",
+                "type": "ClassProperty",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Observable.ts#27"
+            },
+            {
+                "name": "Observable._trySubscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Observable.ts#221"
+            },
+            {
+                "name": "Observable.if",
+                "type": "ClassProperty",
+                "deprecationMsg": "In favor of iif creation function: import { iif } from 'rxjs';",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Observable.ts#272"
+            },
+            {
+                "name": "Observable.throw",
+                "type": "ClassProperty",
+                "deprecationMsg": "In favor of throwError creation function: import { throwError } from 'rxjs';",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Observable.ts#277"
+            },
+            {
+                "name": "BufferTimeSubscriber._unsubscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/bufferTime.ts#182"
+            },
+            {
+                "name": "BufferWhenSubscriber._unsubscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/bufferWhen.ts#95"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static combineLatest.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/combineLatest.ts#12"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static combineLatest.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/combineLatest.ts#14"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static combineLatest.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/combineLatest.ts#16"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static combineLatest.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/combineLatest.ts#18"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static combineLatest.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/combineLatest.ts#20"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static combineLatest.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/combineLatest.ts#22"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static combineLatest.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/combineLatest.ts#24"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static combineLatest.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/combineLatest.ts#26"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static combineLatest.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/combineLatest.ts#28"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static combineLatest.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/combineLatest.ts#30"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static combineLatest.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/combineLatest.ts#32"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static combineLatest.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/combineLatest.ts#34"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static combineLatest.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/combineLatest.ts#36"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static combineLatest.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/combineLatest.ts#38"
+            },
+            {
+                "name": "combineLatest",
+                "type": "FunctionDeclaration",
+                "deprecationMsg": "Deprecated in favor of static {@link combineLatest}.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/combineLatest.ts#44"
+            },
+            {
+                "name": "concat",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static concat.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/concat.ts#7"
+            },
+            {
+                "name": "concat",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static concat.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/concat.ts#9"
+            },
+            {
+                "name": "concat",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static concat.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/concat.ts#11"
+            },
+            {
+                "name": "concat",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static concat.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/concat.ts#13"
+            },
+            {
+                "name": "concat",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static concat.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/concat.ts#15"
+            },
+            {
+                "name": "concat",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static concat.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/concat.ts#17"
+            },
+            {
+                "name": "concat",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static concat.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/concat.ts#19"
+            },
+            {
+                "name": "concat",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static concat.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/concat.ts#21"
+            },
+            {
+                "name": "concat",
+                "type": "FunctionDeclaration",
+                "deprecationMsg": "Deprecated in favor of static {@link concat}.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/concat.ts#27"
+            },
+            {
+                "name": "concatMap",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector no longer supported, use inner map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/concatMap.ts#7"
+            },
+            {
+                "name": "concatMap",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector no longer supported, use inner map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/concatMap.ts#9"
+            },
+            {
+                "name": "concatMapTo",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/concatMapTo.ts#7"
+            },
+            {
+                "name": "concatMapTo",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/concatMapTo.ts#9"
+            },
+            {
+                "name": "delayWhen",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "In future versions, empty notifiers will no longer re-emit the source value on the output observable.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/delayWhen.ts#12"
+            },
+            {
+                "name": "SubscriptionDelayObservable._subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/delayWhen.ts#175"
+            },
+            {
+                "name": "exhaustMap",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is no longer supported. Use inner map instead.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/exhaustMap.ts#15"
+            },
+            {
+                "name": "exhaustMap",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is no longer supported. Use inner map instead.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/exhaustMap.ts#17"
+            },
+            {
+                "name": "GroupDurationSubscriber._unsubscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/groupBy.ts#260"
+            },
+            {
+                "name": "GroupedObservable.constructor",
+                "type": "MethodDefinition",
+                "deprecationMsg": "Do not construct this type. Internal use only",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/groupBy.ts#279"
+            },
+            {
+                "name": "GroupedObservable._subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/groupBy.ts#286"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static merge.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/merge.ts#7"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static merge.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/merge.ts#9"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static merge.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/merge.ts#11"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static merge.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/merge.ts#13"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static merge.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/merge.ts#15"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static merge.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/merge.ts#17"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static merge.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/merge.ts#19"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static merge.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/merge.ts#21"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static merge.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/merge.ts#23"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static merge.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/merge.ts#25"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static merge.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/merge.ts#27"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static merge.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/merge.ts#29"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static merge.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/merge.ts#31"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static merge.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/merge.ts#33"
+            },
+            {
+                "name": "merge",
+                "type": "FunctionDeclaration",
+                "deprecationMsg": "Deprecated in favor of static {@link merge}.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/merge.ts#39"
+            },
+            {
+                "name": "mergeMap",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector no longer supported, use inner map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/mergeMap.ts#15"
+            },
+            {
+                "name": "mergeMap",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector no longer supported, use inner map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/mergeMap.ts#17"
+            },
+            {
+                "name": "mergeMapTo",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/mergeMapTo.ts#9"
+            },
+            {
+                "name": "race",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static race.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/race.ts#8"
+            },
+            {
+                "name": "race",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static race.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/race.ts#10"
+            },
+            {
+                "name": "race",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static race.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/race.ts#12"
+            },
+            {
+                "name": "race",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static race.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/race.ts#14"
+            },
+            {
+                "name": "race",
+                "type": "FunctionDeclaration",
+                "deprecationMsg": "Deprecated in favor of static {@link race}.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/race.ts#26"
+            },
+            {
+                "name": "RepeatWhenSubscriber._unsubscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/repeatWhen.ts#90"
+            },
+            {
+                "name": "RepeatWhenSubscriber._unsubscribeAndRecycle",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/repeatWhen.ts#104"
+            },
+            {
+                "name": "RetryWhenSubscriber._unsubscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/retryWhen.ts#90"
+            },
+            {
+                "name": "switchMap",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is no longer supported, use inner map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/switchMap.ts#15"
+            },
+            {
+                "name": "switchMap",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is no longer supported, use inner map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/switchMap.ts#17"
+            },
+            {
+                "name": "switchMapTo",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is no longer supported. Switch to using switchMap with an inner map",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/switchMapTo.ts#14"
+            },
+            {
+                "name": "switchMapTo",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is no longer supported. Switch to using switchMap with an inner map",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/switchMapTo.ts#16"
+            },
+            {
+                "name": "TimeoutWithSubscriber._unsubscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/timeoutWith.ts#136"
+            },
+            {
+                "name": "WindowSubscriber._unsubscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/window.ts#114"
+            },
+            {
+                "name": "WindowToggleSubscriber._unsubscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/windowToggle.ts#142"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static zip.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/zip.ts#7"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static zip.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/zip.ts#9"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static zip.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/zip.ts#11"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static zip.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/zip.ts#13"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static zip.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/zip.ts#15"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static zip.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/zip.ts#17"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static zip.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/zip.ts#19"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static zip.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/zip.ts#21"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static zip.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/zip.ts#23"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static zip.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/zip.ts#25"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static zip.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/zip.ts#27"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static zip.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/zip.ts#29"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static zip.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/zip.ts#31"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Deprecated in favor of static zip.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/zip.ts#33"
+            },
+            {
+                "name": "zip",
+                "type": "FunctionDeclaration",
+                "deprecationMsg": "Deprecated in favor of static {@link zip}.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/zip.ts#39"
+            },
+            {
+                "name": "ReplaySubject._subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/ReplaySubject.ts#53"
+            },
+            {
+                "name": "AsyncAction._unsubscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/scheduler/AsyncAction.ts#133"
+            },
+            {
+                "name": "AsyncScheduler.active",
+                "type": "ClassProperty",
+                "deprecationMsg": "internal use only",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/scheduler/AsyncScheduler.ts#16"
+            },
+            {
+                "name": "AsyncScheduler.scheduled",
+                "type": "ClassProperty",
+                "deprecationMsg": "internal use only",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/scheduler/AsyncScheduler.ts#24"
+            },
+            {
+                "name": "Scheduler",
+                "type": "ClassDeclaration",
+                "deprecationMsg": "Scheduler is an internal implementation detail of RxJS, and\r\n * should not be used directly. Rather, create your own class and implement\r\n * {@link SchedulerLike}",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Scheduler.ts#24"
+            },
+            {
+                "name": "Subject._trySubscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Subject.ts#104"
+            },
+            {
+                "name": "Subject._subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Subject.ts#113"
+            },
+            {
+                "name": "AnonymousSubject._subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Subject.ts#166"
+            },
+            {
+                "name": "Subscriber._addParentTeardownLogic",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Subscriber.ts#160"
+            },
+            {
+                "name": "Subscriber._unsubscribeParentSubscription",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Subscriber.ts#167"
+            },
+            {
+                "name": "Subscriber._unsubscribeAndRecycle",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Subscriber.ts#174"
+            },
+            {
+                "name": "$$iterator",
+                "type": "VariableDeclaration",
+                "deprecationMsg": "use {@link iterator} instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/symbol/iterator.ts#14"
+            },
+            {
+                "name": "$$rxSubscriber",
+                "type": "VariableDeclaration",
+                "deprecationMsg": "use rxSubscriber instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/symbol/rxSubscriber.ts#9"
+            },
+            {
+                "name": "HotObservable._subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/testing/HotObservable.ts#28"
+            },
+            {
+                "name": "ObservableLike",
+                "type": "TSTypeAliasDeclaration",
+                "deprecationMsg": "use {@link InteropObservable }",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/types.ts#49"
+            }
+        ]
+    },
+    {
+        "version": "6.3.3",
+        "numberOfDeprecations": 136,
+        "numberOfNewDeprecations": 25,
+        "deprecations": [
+            {
+                "name": "AsyncSubject._subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/AsyncSubject.ts#17"
+            },
+            {
+                "name": "BehaviorSubject._subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/BehaviorSubject.ts#24"
+            },
+            {
+                "name": "bindCallback",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is no longer supported, use a mapping function.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/bindCallback.ts#12"
+            },
+            {
+                "name": "bindNodeCallback",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is deprecated, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/bindNodeCallback.ts#12"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/zip.ts#15"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/zip.ts#17"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/zip.ts#19"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/zip.ts#21"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/zip.ts#23"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/zip.ts#25"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/zip.ts#36"
+            },
+            {
+                "name": "zip",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/zip.ts#38"
+            },
+            {
+                "name": "Observable.source",
+                "type": "ClassProperty",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Observable.ts#25"
+            },
+            {
+                "name": "Observable.operator",
+                "type": "ClassProperty",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Observable.ts#28"
+            },
+            {
+                "name": "Observable._trySubscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Observable.ts#222"
+            },
+            {
+                "name": "Observable.if",
+                "type": "ClassProperty",
+                "deprecationMsg": "In favor of iif creation function: import { iif } from 'rxjs';",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Observable.ts#277"
+            },
+            {
+                "name": "Observable.throw",
+                "type": "ClassProperty",
+                "deprecationMsg": "In favor of throwError creation function: import { throwError } from 'rxjs';",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Observable.ts#282"
+            },
+            {
+                "name": "SubscriptionDelayObservable._subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/delayWhen.ts#177"
+            },
+            {
+                "name": "ReplaySubject._subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/ReplaySubject.ts#57"
+            },
+            {
+                "name": "Subject._trySubscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Subject.ts#110"
+            },
+            {
+                "name": "Subject._subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Subject.ts#119"
+            },
+            {
+                "name": "AnonymousSubject._subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Subject.ts#178"
+            },
+            {
+                "name": "Subscriber._unsubscribeAndRecycle",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Subscriber.ts#155"
+            },
+            {
+                "name": "rxSubscriber",
+                "type": "VariableDeclaration",
+                "deprecationMsg": "do not use, this is no longer checked by RxJS internals",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/symbol/rxSubscriber.ts#2"
+            },
+            {
+                "name": "$$rxSubscriber",
+                "type": "VariableDeclaration",
+                "deprecationMsg": "use rxSubscriber instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/symbol/rxSubscriber.ts#10"
+            }
+        ]
+    },
+    {
+        "version": "6.4.0",
+        "numberOfDeprecations": 154,
+        "numberOfNewDeprecations": 43,
+        "deprecations": [
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#28"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#30"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#34"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#36"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#38"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#40"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#42"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#44"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#64"
+            },
+            {
+                "name": "resultSelector",
+                "type": "TSPropertySignature",
+                "deprecationMsg": "use {@link deserializer}",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/dom/WebSocketSubject.ts#106"
+            },
+            {
+                "name": "WebSocketSubject._output",
+                "type": "ClassProperty",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/dom/WebSocketSubject.ts#156"
+            },
+            {
+                "name": "WebSocketSubject._subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/dom/WebSocketSubject.ts#358"
+            },
+            {
+                "name": "empty",
+                "type": "FunctionDeclaration",
+                "deprecationMsg": "Deprecated in favor of using {@link index/EMPTY} constant.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/empty.ts#65"
+            },
+            {
+                "name": "never",
+                "type": "FunctionDeclaration",
+                "deprecationMsg": "Deprecated in favor of using {@link NEVER} constant.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/never.ts#39"
+            },
+            {
+                "name": "Observable.create",
+                "type": "ClassProperty",
+                "deprecationMsg": "use new Observable() instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Observable.ts#55"
+            },
+            {
+                "name": "Observable.subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "Use an observer instead of a complete callback",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Observable.ts#75"
+            },
+            {
+                "name": "Observable.subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "Use an observer instead of an error callback",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Observable.ts#77"
+            },
+            {
+                "name": "Observable.subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "Use an observer instead of a complete callback",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Observable.ts#79"
+            },
+            {
+                "name": "Observable._trySubscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Observable.ts#229"
+            },
+            {
+                "name": "Observable.if",
+                "type": "ClassProperty",
+                "deprecationMsg": "In favor of iif creation function: import { iif } from 'rxjs';",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Observable.ts#284"
+            },
+            {
+                "name": "Observable.throw",
+                "type": "ClassProperty",
+                "deprecationMsg": "In favor of throwError creation function: import { throwError } from 'rxjs';",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Observable.ts#289"
+            },
+            {
+                "name": "BufferTimeSubscriber._unsubscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/bufferTime.ts#188"
+            },
+            {
+                "name": "BufferWhenSubscriber._unsubscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/bufferWhen.ts#96"
+            },
+            {
+                "name": "SubscriptionDelayObservable._subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/delayWhen.ts#180"
+            },
+            {
+                "name": "RepeatWhenSubscriber._unsubscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/repeatWhen.ts#88"
+            },
+            {
+                "name": "RepeatWhenSubscriber._unsubscribeAndRecycle",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/repeatWhen.ts#102"
+            },
+            {
+                "name": "tap",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Use an observer instead of a complete callback",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/tap.ts#10"
+            },
+            {
+                "name": "tap",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Use an observer instead of an error callback",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/tap.ts#12"
+            },
+            {
+                "name": "tap",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Use an observer instead of a complete callback",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/tap.ts#14"
+            },
+            {
+                "name": "TimeInterval",
+                "type": "ClassDeclaration",
+                "deprecationMsg": "exposed API, use as interface only.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/timeInterval.ts#71"
+            },
+            {
+                "name": "TimeoutWithSubscriber._unsubscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/timeoutWith.ts#139"
+            },
+            {
+                "name": "WindowSubscriber._unsubscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/window.ts#117"
+            },
+            {
+                "name": "WindowToggleSubscriber._unsubscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/windowToggle.ts#143"
+            },
+            {
+                "name": "AsyncAction._unsubscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/scheduler/AsyncAction.ts#134"
+            },
+            {
+                "name": "Subject.create",
+                "type": "ClassProperty",
+                "deprecationMsg": "use new Subject() instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Subject.ts#51"
+            },
+            {
+                "name": "Subject._trySubscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Subject.ts#112"
+            },
+            {
+                "name": "Subject._subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Subject.ts#121"
+            },
+            {
+                "name": "AnonymousSubject._subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Subject.ts#180"
+            },
+            {
+                "name": "Subscriber._unsubscribeAndRecycle",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Subscriber.ts#153"
+            },
+            {
+                "name": "subscribe",
+                "type": "TSMethodSignature",
+                "deprecationMsg": "Use an observer instead of a complete callback",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/types.ts#44"
+            },
+            {
+                "name": "subscribe",
+                "type": "TSMethodSignature",
+                "deprecationMsg": "Use an observer instead of an error callback",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/types.ts#46"
+            },
+            {
+                "name": "subscribe",
+                "type": "TSMethodSignature",
+                "deprecationMsg": "Use an observer instead of a complete callback",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/types.ts#48"
+            },
+            {
+                "name": "ObservableLike",
+                "type": "TSTypeAliasDeclaration",
+                "deprecationMsg": "use {@link InteropObservable }",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/types.ts#55"
+            }
+        ]
+    },
+    {
+        "version": "master",
+        "numberOfDeprecations": 229,
+        "numberOfNewDeprecations": 91,
+        "deprecations": [
+            {
+                "name": "NotificationKind",
+                "type": "TSEnumDeclaration",
+                "deprecationMsg": "NotificationKind is deprecated as const enums are not compatible with isolated modules. Use a string literal instead.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Notification.ts#11"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Passing a scheduler here is deprecated, use {@link subscribeOn} and/or {@link observeOn} instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#48"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Passing a scheduler here is deprecated, use {@link subscribeOn} and/or {@link observeOn} instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#50"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Passing a scheduler here is deprecated, use {@link subscribeOn} and/or {@link observeOn} instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#52"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Passing a scheduler here is deprecated, use {@link subscribeOn} and/or {@link observeOn} instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#54"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Passing a scheduler here is deprecated, use {@link subscribeOn} and/or {@link observeOn} instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#56"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Passing a scheduler here is deprecated, use {@link subscribeOn} and/or {@link observeOn} instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#58"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Passing a scheduler here is deprecated, use {@link subscribeOn} and/or {@link observeOn} instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#60"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Pass arguments in a single array instead `combineLatest([a, b, c])`",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#73"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Pass arguments in a single array instead `combineLatest([a, b, c])`",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#75"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Pass arguments in a single array instead `combineLatest([a, b, c])`",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#77"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Pass arguments in a single array instead `combineLatest([a, b, c])`",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#79"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Pass arguments in a single array instead `combineLatest([a, b, c])`",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#81"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Pass arguments in a single array instead `combineLatest([a, b, c])`",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#83"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Pass arguments in a single array instead `combineLatest([a, b, c])`",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#86"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Pass arguments in a single array instead `combineLatest([a, b, c])`",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#89"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector no longer supported, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#92"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Passing a scheduler here is deprecated, use {@link subscribeOn} and/or {@link observeOn} instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#95"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Passing a scheduler here is deprecated, use {@link subscribeOn} and/or {@link observeOn} instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#98"
+            },
+            {
+                "name": "combineLatest",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Passing a scheduler here is deprecated, use {@link subscribeOn} and/or {@link observeOn} instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/combineLatest.ts#101"
+            },
+            {
+                "name": "concat",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Use {@link scheduled} and {@link concatAll} (e.g. `scheduled([o1, o2, o3], scheduler).pipe(concatAll())`)",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/concat.ts#8"
+            },
+            {
+                "name": "concat",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Use {@link scheduled} and {@link concatAll} (e.g. `scheduled([o1, o2, o3], scheduler).pipe(concatAll())`)",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/concat.ts#10"
+            },
+            {
+                "name": "concat",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Use {@link scheduled} and {@link concatAll} (e.g. `scheduled([o1, o2, o3], scheduler).pipe(concatAll())`)",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/concat.ts#12"
+            },
+            {
+                "name": "concat",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Use {@link scheduled} and {@link concatAll} (e.g. `scheduled([o1, o2, o3], scheduler).pipe(concatAll())`)",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/concat.ts#14"
+            },
+            {
+                "name": "concat",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Use {@link scheduled} and {@link concatAll} (e.g. `scheduled([o1, o2, o3], scheduler).pipe(concatAll())`)",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/concat.ts#16"
+            },
+            {
+                "name": "concat",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Use {@link scheduled} and {@link concatAll} (e.g. `scheduled([o1, o2, o3], scheduler).pipe(concatAll())`)",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/concat.ts#18"
+            },
+            {
+                "name": "concat",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Use {@link scheduled} and {@link concatAll} (e.g. `scheduled([o1, o2, o3], scheduler).pipe(concatAll())`)",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/concat.ts#28"
+            },
+            {
+                "name": "concat",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Use {@link scheduled} and {@link concatAll} (e.g. `scheduled([o1, o2, o3], scheduler).pipe(concatAll())`)",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/concat.ts#31"
+            },
+            {
+                "name": "empty",
+                "type": "FunctionDeclaration",
+                "deprecationMsg": "Deprecated in favor of using {@link EMPTY} constant, or {@link scheduled} (e.g. `scheduled([], scheduler)`)",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/empty.ts#62"
+            },
+            {
+                "name": "forkJoin",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Use the version that takes an array of Observables instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/forkJoin.ts#13"
+            },
+            {
+                "name": "forkJoin",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Use the version that takes an array of Observables instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/forkJoin.ts#15"
+            },
+            {
+                "name": "forkJoin",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Use the version that takes an array of Observables instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/forkJoin.ts#17"
+            },
+            {
+                "name": "forkJoin",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Use the version that takes an array of Observables instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/forkJoin.ts#19"
+            },
+            {
+                "name": "forkJoin",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Use the version that takes an array of Observables instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/forkJoin.ts#21"
+            },
+            {
+                "name": "forkJoin",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Use the version that takes an array of Observables instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/forkJoin.ts#23"
+            },
+            {
+                "name": "forkJoin",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is deprecated, pipe to map instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/forkJoin.ts#41"
+            },
+            {
+                "name": "forkJoin",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "Use the version that takes an array of Observables instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/forkJoin.ts#43"
+            },
+            {
+                "name": "from",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} instead.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/from.ts#8"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link mergeAll} (e.g. `scheduled([ob1, ob2, ob3], scheduled).pipe(mergeAll())",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/merge.ts#9"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link mergeAll} (e.g. `scheduled([ob1, ob2, ob3], scheduled).pipe(mergeAll())",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/merge.ts#11"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link mergeAll} (e.g. `scheduled([ob1, ob2, ob3], scheduled).pipe(mergeAll())",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/merge.ts#13"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link mergeAll} (e.g. `scheduled([ob1, ob2, ob3], scheduled).pipe(mergeAll())",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/merge.ts#15"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link mergeAll} (e.g. `scheduled([ob1, ob2, ob3], scheduled).pipe(mergeAll())",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/merge.ts#17"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link mergeAll} (e.g. `scheduled([ob1, ob2, ob3], scheduled).pipe(mergeAll())",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/merge.ts#19"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link mergeAll} (e.g. `scheduled([ob1, ob2, ob3], scheduled).pipe(mergeAll())",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/merge.ts#21"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link mergeAll} (e.g. `scheduled([ob1, ob2, ob3], scheduled).pipe(mergeAll())",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/merge.ts#23"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link mergeAll} (e.g. `scheduled([ob1, ob2, ob3], scheduled).pipe(mergeAll())",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/merge.ts#25"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link mergeAll} (e.g. `scheduled([ob1, ob2, ob3], scheduled).pipe(mergeAll())",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/merge.ts#27"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link mergeAll} (e.g. `scheduled([ob1, ob2, ob3], scheduled).pipe(mergeAll())",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/merge.ts#29"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link mergeAll} (e.g. `scheduled([ob1, ob2, ob3], scheduled).pipe(mergeAll())",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/merge.ts#31"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link mergeAll} (e.g. `scheduled([ob1, ob2, ob3], scheduled).pipe(mergeAll())",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/merge.ts#47"
+            },
+            {
+                "name": "merge",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link mergeAll} (e.g. `scheduled([ob1, ob2, ob3], scheduled).pipe(mergeAll())",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/merge.ts#50"
+            },
+            {
+                "name": "of",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} instead `scheduled([a, b, c], scheduler)`",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/of.ts#9"
+            },
+            {
+                "name": "of",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} instead `scheduled([a, b, c], scheduler)`",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/of.ts#11"
+            },
+            {
+                "name": "of",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} instead `scheduled([a, b, c], scheduler)`",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/of.ts#13"
+            },
+            {
+                "name": "of",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} instead `scheduled([a, b, c], scheduler)`",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/of.ts#15"
+            },
+            {
+                "name": "of",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} instead `scheduled([a, b, c], scheduler)`",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/of.ts#17"
+            },
+            {
+                "name": "of",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} instead `scheduled([a, b, c], scheduler)`",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/of.ts#19"
+            },
+            {
+                "name": "of",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} instead `scheduled([a, b, c], scheduler)`",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/of.ts#21"
+            },
+            {
+                "name": "of",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} instead `scheduled([a, b, c], scheduler)`",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/of.ts#24"
+            },
+            {
+                "name": "of",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} instead `scheduled([a, b, c], scheduler)`",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/observable/of.ts#27"
+            },
+            {
+                "name": "Observable._trySubscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Observable.ts#236"
+            },
+            {
+                "name": "Observable.if",
+                "type": "ClassProperty",
+                "deprecationMsg": "In favor of iif creation function: import { iif } from 'rxjs';",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Observable.ts#291"
+            },
+            {
+                "name": "Observable.throw",
+                "type": "ClassProperty",
+                "deprecationMsg": "In favor of throwError creation function: import { throwError } from 'rxjs';",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/Observable.ts#296"
+            },
+            {
+                "name": "SubscriptionDelayObservable._subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/delayWhen.ts#187"
+            },
+            {
+                "name": "endWith",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link concatAll} (e.g. `scheduled([source, [a, b, c]], scheduler).pipe(concatAll())`)",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/endWith.ts#8"
+            },
+            {
+                "name": "endWith",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link concatAll} (e.g. `scheduled([source, [a, b, c]], scheduler).pipe(concatAll())`)",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/endWith.ts#10"
+            },
+            {
+                "name": "endWith",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link concatAll} (e.g. `scheduled([source, [a, b, c]], scheduler).pipe(concatAll())`)",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/endWith.ts#12"
+            },
+            {
+                "name": "endWith",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link concatAll} (e.g. `scheduled([source, [a, b, c]], scheduler).pipe(concatAll())`)",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/endWith.ts#14"
+            },
+            {
+                "name": "endWith",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link concatAll} (e.g. `scheduled([source, [a, b, c]], scheduler).pipe(concatAll())`)",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/endWith.ts#16"
+            },
+            {
+                "name": "endWith",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link concatAll} (e.g. `scheduled([source, [a, b, c]], scheduler).pipe(concatAll())`)",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/endWith.ts#18"
+            },
+            {
+                "name": "endWith",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link concatAll} (e.g. `scheduled([source, [a, b, c]], scheduler).pipe(concatAll())`)",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/endWith.ts#20"
+            },
+            {
+                "name": "endWith",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link concatAll} (e.g. `scheduled([source, [a, b, c]], scheduler).pipe(concatAll())`)",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/endWith.ts#30"
+            },
+            {
+                "name": "GroupDurationSubscriber._unsubscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/groupBy.ts#261"
+            },
+            {
+                "name": "GroupedObservable.constructor",
+                "type": "MethodDefinition",
+                "deprecationMsg": "Do not construct this type. Internal use only",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/groupBy.ts#280"
+            },
+            {
+                "name": "GroupedObservable._subscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/groupBy.ts#287"
+            },
+            {
+                "name": "mergeMapTo",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/mergeMapTo.ts#8"
+            },
+            {
+                "name": "partition",
+                "type": "FunctionDeclaration",
+                "deprecationMsg": "use `partition` static creation function instead",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/partition.ts#56"
+            },
+            {
+                "name": "RepeatWhenSubscriber._unsubscribe",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/repeatWhen.ts#104"
+            },
+            {
+                "name": "RepeatWhenSubscriber._unsubscribeAndRecycle",
+                "type": "MethodDefinition",
+                "deprecationMsg": "This is an internal implementation detail, do not use.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/repeatWhen.ts#118"
+            },
+            {
+                "name": "startWith",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link concatAll} (e.g. `scheduled([[a, b, c], source], scheduler).pipe(concatAll())`)",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/startWith.ts#8"
+            },
+            {
+                "name": "startWith",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link concatAll} (e.g. `scheduled([[a, b, c], source], scheduler).pipe(concatAll())`)",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/startWith.ts#10"
+            },
+            {
+                "name": "startWith",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link concatAll} (e.g. `scheduled([[a, b, c], source], scheduler).pipe(concatAll())`)",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/startWith.ts#12"
+            },
+            {
+                "name": "startWith",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link concatAll} (e.g. `scheduled([[a, b, c], source], scheduler).pipe(concatAll())`)",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/startWith.ts#14"
+            },
+            {
+                "name": "startWith",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link concatAll} (e.g. `scheduled([[a, b, c], source], scheduler).pipe(concatAll())`)",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/startWith.ts#16"
+            },
+            {
+                "name": "startWith",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link concatAll} (e.g. `scheduled([[a, b, c], source], scheduler).pipe(concatAll())`)",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/startWith.ts#18"
+            },
+            {
+                "name": "startWith",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link concatAll} (e.g. `scheduled([[a, b, c], source], scheduler).pipe(concatAll())`)",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/startWith.ts#20"
+            },
+            {
+                "name": "startWith",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "use {@link scheduled} and {@link concatAll} (e.g. `scheduled([[a, b, c], source], scheduler).pipe(concatAll())`)",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/startWith.ts#30"
+            },
+            {
+                "name": "switchMapTo",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is no longer supported. Switch to using switchMap with an inner map",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/switchMapTo.ts#7"
+            },
+            {
+                "name": "switchMapTo",
+                "type": "TSDeclareFunction",
+                "deprecationMsg": "resultSelector is no longer supported. Switch to using switchMap with an inner map",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/switchMapTo.ts#9"
+            },
+            {
+                "name": "TimeInterval",
+                "type": "ClassDeclaration",
+                "deprecationMsg": "exposed API, use as interface only.",
+                "sourceLink": "https://github.com/ReactiveX/rxjs/blob/master/src/internal/operators/timeInterval.ts#72"
+            }
+        ]
+    }
+]
