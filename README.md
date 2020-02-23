@@ -12,4 +12,5 @@
 # Setup Target Repository
 
 1. git clone <gitHubUrl> [TARGET_LOCAL_FOLDER]
-2. Run `npm run crawl` to search for deprecations.
+2. Run `npm run crawl` to search for deprecations. This creates a `output.json` in the output folder.
+3. Run `npm run prefill` to pre-fill data for migration timeline. . This creates a `filled-output.json` in the output folder.
