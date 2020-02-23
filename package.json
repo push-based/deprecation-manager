@@ -7,6 +7,7 @@
     "prebuild": "npx rimraf ./dist",
     "build": "tsc",
     "crawl": "npm run build && node ./dist",
+    "prefill": "node ./dist/prefill",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
