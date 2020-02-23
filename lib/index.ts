@@ -7,6 +7,7 @@ import {
   AST_TOKEN_TYPES
 } from "@typescript-eslint/experimental-utils";
 import * as parser from "@typescript-eslint/parser";
+import { updatePublicReleases } from "./fetch-public-releases";
 
 // Configuration
 interface Config {
@@ -133,6 +134,7 @@ linter.defineRule("find-deprecations", {
 });
 
 (async () => {
+  const releases = await updatePublicReleases();
   const cfg: Config = await fs.promises.readFile('./local.config.json').then(buffer => JSON.parse(buffer.toString()));
   process.chdir(cfg.localePath);
   const output = [] as [string, Hit[]][];
@@ -174,7 +176,7 @@ linter.defineRule("find-deprecations", {
   }
   process.chdir(cfg.outputPath);
 
-  const outputContent = output.map(([version, deprecations], index) => {
+  const outputContent: CrawledRelease[] = output.map(([version, deprecations], index) => {
     let [_, previousDeprecations] = output[index - 1] || [];
     previousDeprecations = previousDeprecations || [];
     const newDeprecations = deprecations
@@ -195,6 +197,7 @@ linter.defineRule("find-deprecations", {
 
     return {
       version,
+      date: releases[version],
       numberOfDeprecations: deprecations.length,
       numberOfNewDeprecations: newDeprecations.length,
       deprecations: newDeprecations
