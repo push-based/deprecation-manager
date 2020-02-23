@@ -7,13 +7,16 @@ import {
   AST_TOKEN_TYPES
 } from "@typescript-eslint/experimental-utils";
 import * as parser from "@typescript-eslint/parser";
+import { updatePublicReleases } from "./fetch-public-releases";
 
 // Configuration
-const gitHubUrl = "https://github.com/ReactiveX/rxjs";
-const localePath = String.raw`C:\Users\tdeschryver\dev\forks\rxjs`;
-const outputPath = String.raw`C:\Users\tdeschryver\dev\poc\deprecations\output`;
-const numberOfVersionsToGoBack = 3;
-
+interface Config {
+  gitHubUrl: string;
+  localePath: string;
+  outputPath: string;
+  fileName: string;
+  numberOfVersionsToGoBack: number;
+}
 // Globals
 // can this be done with messages?
 let hits = [] as Hit[];
@@ -131,14 +134,15 @@ linter.defineRule("find-deprecations", {
 });
 
 (async () => {
-  process.chdir(localePath);
-
+  const releases = await updatePublicReleases();
+  const cfg: Config = await fs.promises.readFile('./local.config.json').then(buffer => JSON.parse(buffer.toString()));
+  process.chdir(cfg.localePath);
   const output = [] as [string, Hit[]][];
   const tagsString = await git([`tag`]);
   const tags = tagsString
     .split("\n")
     .filter(Boolean)
-    .slice(-numberOfVersionsToGoBack)
+    .slice(-cfg.numberOfVersionsToGoBack)
     .concat("master");
 
   for (const tag of tags) {
@@ -167,12 +171,12 @@ linter.defineRule("find-deprecations", {
   // const totalHits = hits.length
   // console.log(`[Hits per file]\n`, hitsPerFile)
 
-  if (!fs.existsSync(outputPath)) {
-    fs.mkdirSync(outputPath);
+  if (!fs.existsSync(cfg.outputPath)) {
+    fs.mkdirSync(cfg.outputPath);
   }
-  process.chdir(outputPath);
+  process.chdir(cfg.outputPath);
 
-  const outputContent = output.map(([version, deprecations], index) => {
+  const outputContent: CrawledRelease[] = output.map(([version, deprecations], index) => {
     let [_, previousDeprecations] = output[index - 1] || [];
     previousDeprecations = previousDeprecations || [];
     const newDeprecations = deprecations
@@ -180,7 +184,7 @@ linter.defineRule("find-deprecations", {
         name: d.name,
         type: d.type,
         deprecationMsg: d.deprecationMsg,
-        sourceLink: `${gitHubUrl}/blob/${currentTag}/${d.filename}#${d.lineNumber}`,
+        sourceLink: `${cfg.gitHubUrl}/blob/${currentTag}/${d.filename}#${d.lineNumber}`,
         isKnownDeprecation: previousDeprecations.some(
           p =>
             p.name === d.name &&
@@ -193,13 +197,14 @@ linter.defineRule("find-deprecations", {
 
     return {
       version,
+      date: releases[version],
       numberOfDeprecations: deprecations.length,
       numberOfNewDeprecations: newDeprecations.length,
       deprecations: newDeprecations
     };
   });
 
-  fs.writeFileSync(`./output.json`, JSON.stringify(outputContent, null, 4));
+  fs.writeFileSync(cfg.fileName, JSON.stringify(outputContent, null, 4));
 })();
 
 // Utils
