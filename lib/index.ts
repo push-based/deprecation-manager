@@ -8,15 +8,15 @@ import {
 } from "@typescript-eslint/experimental-utils";
 import * as parser from "@typescript-eslint/parser";
 import { updatePublicReleases } from "./fetch-public-releases";
+import {
+  CrawledDeprecation,
+  CrawledRelease, NodeTypes,
+  RawDeprecation,
+  RawMigrationReleaseItem
+} from "./crawled-releases.interface";
+import { fillDeprecation, fillRelease } from "./utils";
+import { Config } from "./config.interface";
 
-// Configuration
-interface Config {
-  gitHubUrl: string;
-  localePath: string;
-  outputPath: string;
-  fileName: string;
-  numberOfVersionsToGoBack: number;
-}
 // Globals
 // can this be done with messages?
 let hits = [] as Hit[];
@@ -176,13 +176,14 @@ linter.defineRule("find-deprecations", {
   }
   process.chdir(cfg.outputPath);
 
-  const outputContent: CrawledRelease[] = output.map(([version, deprecations], index) => {
+  const outputContent: CrawledRelease[] = output
+    .map(([version, deprecations], index) => {
     let [_, previousDeprecations] = output[index - 1] || [];
     previousDeprecations = previousDeprecations || [];
-    const newDeprecations = deprecations
+    const newDeprecations: CrawledDeprecation[] = deprecations
       .map(d => ({
         name: d.name,
-        type: d.type,
+        type: d.type as NodeTypes,
         deprecationMsg: d.deprecationMsg,
         sourceLink: `${cfg.gitHubUrl}/blob/${currentTag}/${d.filename}#${d.lineNumber}`,
         isKnownDeprecation: previousDeprecations.some(
@@ -203,9 +204,8 @@ linter.defineRule("find-deprecations", {
       deprecations: newDeprecations
     };
   });
-
   fs.writeFileSync(cfg.fileName, JSON.stringify(outputContent, null, 4));
-})();
+  })();
 
 // Utils
 function lint() {
