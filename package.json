@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prebuild": "rm -rf ./dist",
+    "prebuild": "npx rimraf ./dist",
     "build": "tsc",
     "crawl": "npm run build && node ./dist",
     "test": "echo \"Error: no test specified\" && exit 1"

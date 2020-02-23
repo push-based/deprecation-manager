@@ -1,0 +1,7 @@
+{
+  "gitHubUrl" : "https://github.com/ReactiveX/rxjs",
+  "localePath" : "C:\\Users\\michael\\git\\rxjs-find-deprecations",
+  "outputPath" : "C:\\Users\\michael\\git\\find-deprecations\\output",
+  "fileName":  "output.json",
+  "numberOfVersionsToGoBack" : 1
+}
