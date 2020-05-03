@@ -6,6 +6,7 @@
   "scripts": {
     "prebuild": "rm -rf ./dist",
     "build": "tsc",
+    "crawl-deprecations": "ts-node lib --gitHubUrl=https://github.com/ReactiveX/rxjs",
     "crawl": "npm run build && node ./dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,8 +14,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/yargs": "^15.0.4",
     "@typescript-eslint/eslint-plugin": "^2.18.0",
-    "@typescript-eslint/parser": "^2.18.0"
+    "@typescript-eslint/parser": "^2.18.0",
+    "ts-node": "^8.10.1",
+    "yargs": "^15.3.1"
   },
   "devDependencies": {
     "@types/eslint": "^6.1.7",

@@ -7,13 +7,26 @@ import {
   AST_TOKEN_TYPES
 } from "@typescript-eslint/experimental-utils";
 import * as parser from "@typescript-eslint/parser";
+// @Notice create ./crawl.config.local.json in lib folder
+import { default as jsonCfg} from "./crawl.config.local.json";
+import { ensureCliParams } from "./ensure-cli-params";
 
 // Configuration
-const gitHubUrl = "https://github.com/ReactiveX/rxjs";
-const localePath = String.raw`C:\Users\tdeschryver\dev\forks\rxjs`;
-const outputPath = String.raw`C:\Users\tdeschryver\dev\poc\deprecations\output`;
-const numberOfVersionsToGoBack = 3;
+interface CrawlParams {
+  "gitHubUrl": string,
+  "localePath": string,
+  "outputPath": string,
+  "numGoBack": number
+}
+const staticConfig: Partial<CrawlParams> = jsonCfg;
+const cfg = ensureCliParams<CrawlParams>([
+  {key: 'gitHubUrl', fallBack: staticConfig.gitHubUrl || 'https://github.com/ReactiveX/rxjs'},
+  {key: 'localePath', fallBack: staticConfig.localePath || './'},
+  {key: 'outputPath', fallBack: staticConfig.outputPath || 'output'},
+  {key: 'numGoBack', fallBack: staticConfig.numGoBack || 3}
+]);
 
+console.log('cfg', cfg);
 // Globals
 // can this be done with messages?
 let hits = [] as Hit[];
@@ -131,14 +144,14 @@ linter.defineRule("find-deprecations", {
 });
 
 (async () => {
-  process.chdir(localePath);
+  process.chdir(cfg.localePath);
 
   const output = [] as [string, Hit[]][];
   const tagsString = await git([`tag`]);
   const tags = tagsString
     .split("\n")
     .filter(Boolean)
-    .slice(-numberOfVersionsToGoBack)
+    .slice(-cfg.numGoBack)
     .concat("master");
 
   for (const tag of tags) {
@@ -167,10 +180,10 @@ linter.defineRule("find-deprecations", {
   // const totalHits = hits.length
   // console.log(`[Hits per file]\n`, hitsPerFile)
 
-  if (!fs.existsSync(outputPath)) {
-    fs.mkdirSync(outputPath);
+  if (!fs.existsSync(cfg.outputPath)) {
+    fs.mkdirSync(cfg.outputPath);
   }
-  process.chdir(outputPath);
+  process.chdir(cfg.outputPath);
 
   const outputContent = output.map(([version, deprecations], index) => {
     let [_, previousDeprecations] = output[index - 1] || [];
@@ -180,7 +193,7 @@ linter.defineRule("find-deprecations", {
         name: d.name,
         type: d.type,
         deprecationMsg: d.deprecationMsg,
-        sourceLink: `${gitHubUrl}/blob/${currentTag}/${d.filename}#${d.lineNumber}`,
+        sourceLink: `${cfg.gitHubUrl}/blob/${currentTag}/${d.filename}#${d.lineNumber}`,
         isKnownDeprecation: previousDeprecations.some(
           p =>
             p.name === d.name &&
