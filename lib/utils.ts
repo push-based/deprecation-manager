@@ -5,9 +5,8 @@ import {
   RawDeprecation,
   RawMigrationReleaseItem,
   SubjectActionSymbol,
-  SubjectSymbols
-} from "./crawled-releases.interface";
-
+  SubjectSymbols,
+} from "./models";
 
 export function fillRelease(
   r: CrawledRelease = {} as CrawledRelease,
@@ -18,9 +17,10 @@ export function fillRelease(
     deprecations: [],
     date: "@TODO",
     sourceLink: "@TODO",
-    ...defaultOverrides
+    ...defaultOverrides,
   };
-  r.date && (parsedRelease.date = r.date) || (parsedRelease.date = new Date("2021-01-01").toISOString());
+  (r.date && (parsedRelease.date = r.date)) ||
+    (parsedRelease.date = new Date("2021-01-01").toISOString());
   r.version && (parsedRelease.version = r.version);
   parsedRelease.deprecations || (parsedRelease.deprecations = []);
   return parsedRelease;
@@ -44,7 +44,7 @@ export function fillDeprecation(
     breakingChangeMsg: "@TODO",
     exampleAfter: "@TODO",
     exampleBefore: "@TODO",
-    ...defaultOverrides
+    ...defaultOverrides,
   };
 
   const subjectSymbol = getSubjectSymbolFormTSType(d.type);
@@ -54,11 +54,15 @@ export function fillDeprecation(
 
   parsedDeprecation.subject = d.name.split(".")[0];
   parsedDeprecation.subjectSymbol = subjectSymbol;
-  parsedDeprecation.subjectAction = [subjectActionSymbol, subSubject, subjectAction]
-    .filter(v => !!v)
+  parsedDeprecation.subjectAction = [
+    subjectActionSymbol,
+    subSubject,
+    subjectAction,
+  ]
+    .filter((v) => !!v)
     .map(trimReservedUrlChars)
     .map(trimReservedLinkChars)
-    .join('-');
+    .join("-");
   parsedDeprecation.sourceLink = d.sourceLink;
   parsedDeprecation.deprecationMsgCode = d.deprecationMsg;
   return parsedDeprecation;
@@ -76,15 +80,22 @@ function getSubjectSymbolFormTSType(type: string): string {
 
 function trimReservedUrlChars(str: string): string {
   // https://www.ietf.org/rfc/rfc2396.txt
-  const unreservedChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' +
-    '0123456789' +
-    "-_.!~*'()".split('');
-  return str.split('').filter(i => unreservedChars.includes(i)).join('');
+  const unreservedChars =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+    "0123456789" +
+    "-_.!~*'()".split("");
+  return str
+    .split("")
+    .filter((i) => unreservedChars.includes(i))
+    .join("");
 }
 
 function trimReservedLinkChars(str: string): string {
-  const reservedChars = '_'.split('');
-  return str.split('').filter(i => !(reservedChars.includes(i))).join('');
+  const reservedChars = "_".split("");
+  return str
+    .split("")
+    .filter((i) => !reservedChars.includes(i))
+    .join("");
 }
 
 function getSubjectActionSymbolFormTSType(type: string): string {
@@ -95,4 +106,3 @@ function getSubjectActionSymbolFormTSType(type: string): string {
       return "~subjectActionSymbol~";
   }
 }
-

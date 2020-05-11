@@ -3,3 +3,4 @@ dist
 node_modules
 local.config.json
 output
+crawl.config.local.json
