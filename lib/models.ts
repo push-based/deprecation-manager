@@ -1,10 +1,16 @@
+export interface CrawlConfig {
+  gitHubUrl: string;
+  localePath: string;
+  outputFile: string;
+  numGoBack: number;
+}
+
 export enum NodeTypes {
   ClassDeclaration = "ClassDeclaration",
   Identifier = "Identifier",
   ClassBody = "ClassBody",
-  MethodDefinition = "MethodDefinition"
+  MethodDefinition = "MethodDefinition",
 }
-
 
 export interface MigrationItemSubjectUIDFields {
   itemType: string;
@@ -31,15 +37,13 @@ export enum SubjectSymbols {
   typeAlias = "type-alias",
 }
 
-
 export enum SubjectActionSymbol {
   all = "all",
   argument = "argument",
   property = "property",
   genericArgument = "generic-argument",
-  method = "method"
+  method = "method",
 }
-
 
 export interface RawDeprecation extends MigrationItemSubjectUIDFields {
   itemType: string;
@@ -50,9 +54,9 @@ export interface RawDeprecation extends MigrationItemSubjectUIDFields {
   breakingChangeMsg: string;
   reason: string;
   implication: string;
-  exampleBeforeDependencies?: { [lib: string]: string },
+  exampleBeforeDependencies?: { [lib: string]: string };
   exampleBefore?: string;
-  exampleAfterDependencies?: { [lib: string]: string },
+  exampleAfterDependencies?: { [lib: string]: string };
   exampleAfter?: string;
   notes?: string;
 }
@@ -63,13 +67,12 @@ export interface RawMigrationReleaseItem extends MigrationReleaseUIDFields {
   deprecations: RawDeprecation[];
 }
 
-
 export interface CrawledRelease {
   version: string;
   date: string;
   numberOfDeprecations: number;
   numberOfNewDeprecations: number;
-  deprecations: CrawledDeprecation[]
+  deprecations: CrawledDeprecation[];
 }
 
 export interface CrawledDeprecation {
@@ -79,6 +82,10 @@ export interface CrawledDeprecation {
   sourceLink: string;
 }
 
-
-// ===
-
+export interface FoundDeprecation {
+  name: string;
+  filename: string;
+  lineNumber: number;
+  deprecationMsg: string;
+  type: string;
+}
