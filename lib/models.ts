@@ -1,8 +1,10 @@
 export interface CrawlConfig {
-  gitHubUrl: string;
-  localePath: string;
-  outputFile: string;
-  numGoBack: number;
+  // gitHubUrl: string;
+  // localePath: string;
+  // outputFile: string;
+  gitTag: string;
+  tsConfigPath: string;
+  outputDirectory: string;
 }
 
 export enum NodeTypes {
@@ -70,8 +72,8 @@ export interface RawMigrationReleaseItem extends MigrationReleaseUIDFields {
 export interface CrawledRelease {
   version: string;
   date: string;
-  numberOfDeprecations: number;
-  numberOfNewDeprecations: number;
+  // numberOfDeprecations: number;
+  // numberOfNewDeprecations: number;
   deprecations: CrawledDeprecation[];
 }
 
