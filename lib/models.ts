@@ -1,7 +1,4 @@
 export interface CrawlConfig {
-  // gitHubUrl: string;
-  // localePath: string;
-  // outputFile: string;
   gitTag: string;
   tsConfigPath: string;
   outputDirectory: string;
@@ -72,8 +69,6 @@ export interface RawMigrationReleaseItem extends MigrationReleaseUIDFields {
 export interface CrawledRelease {
   version: string;
   date: string;
-  // numberOfDeprecations: number;
-  // numberOfNewDeprecations: number;
   deprecations: CrawledDeprecation[];
 }
 
@@ -90,4 +85,14 @@ export interface FoundDeprecation {
   lineNumber: number;
   deprecationMsg: string;
   type: string;
+}
+
+export interface Deprecation {
+  path: string;
+  name: string;
+  kind: string;
+  lineNumber: number;
+  code: string;
+  deprecationMessage: string;
+  deprecationPos: [number, number];
 }
