@@ -1,7 +1,7 @@
-import { getConfig } from "./config";
-
 import { crawlDeprecation } from "./morph";
 import { checkout } from "./checkout";
+import { CrawlConfig } from "./models";
+import { normalize } from "path";
 import {
   addCommentToRepository,
   generateMarkdown,
@@ -9,7 +9,11 @@ import {
 } from "./output-formatters/";
 
 (async () => {
-  const config = await getConfig();
+  const config: CrawlConfig = {
+    gitTag: "master",
+    outputDirectory: "./deprecations",
+    tsConfigPath: normalize("..\\..\\..\\rxjs\\src\\tsconfig.base.json"),
+  };
   const tagDate = await checkout(config);
 
   const deprecations = crawlDeprecation(config);
