@@ -1,11 +1,12 @@
 import * as fs from "fs";
+import * as os from "os";
 import * as yargs from "yargs";
 import inquirer from "inquirer";
 import { CrawlConfig } from "./models";
 import { normalize } from "path";
 
 const version = "1";
-const localConfigPath = `./crawl.config.local.${version}.json`;
+const localConfigPath = `${os.homedir}/crawl.config.local.${version}.json`;
 
 export async function getConfig(): Promise<CrawlConfig> {
   const staticConfig: CrawlConfig = fs.existsSync(localConfigPath)
