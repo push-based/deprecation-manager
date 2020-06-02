@@ -6,11 +6,11 @@ import { CrawlConfig } from "./models";
 import { normalize } from "path";
 
 const version = "1";
-const localConfigPath = `${os.homedir}/crawl.config.local.${version}.json`;
+const configPath = `${os.homedir}/deprecation-crawler.config.${version}.json`;
 
 export async function getConfig(): Promise<CrawlConfig> {
-  const staticConfig: CrawlConfig = fs.existsSync(localConfigPath)
-    ? JSON.parse(fs.readFileSync(localConfigPath).toString())
+  const staticConfig: CrawlConfig = fs.existsSync(configPath)
+    ? JSON.parse(fs.readFileSync(configPath).toString())
     : {};
 
   const getConfig = (option: string, defaultValue: string) => ({
@@ -19,15 +19,15 @@ export async function getConfig(): Promise<CrawlConfig> {
 
   const defaultConfig = {
     ...getConfig("gitTag", "master"),
-    ...getConfig("outputDirectory", "./src/tsconfig.base.json"),
-    ...getConfig("tsConfigPath", "./deprecations"),
+    ...getConfig("tsConfigPath", "./src/tsconfig.base.json"),
+    ...getConfig("outputDirectory", "./deprecations"),
   };
 
   const questions = [
     {
       type: "input",
       name: "gitTag",
-      message: "What's git tag to crawl?",
+      message: "What git tag do you want to crawl?",
       default: defaultConfig.gitTag,
     },
     {
@@ -42,12 +42,12 @@ export async function getConfig(): Promise<CrawlConfig> {
       message: "What's the output directory?",
       default: defaultConfig.outputDirectory,
     },
-  ].filter((q) => defaultConfig[q.name] === undefined);
+  ];
 
   return inquirer.prompt(questions).then(async (answers) => {
     let config = { ...defaultConfig, ...answers } as CrawlConfig;
     config.tsConfigPath = normalize(config.tsConfigPath);
-    fs.writeFileSync(localConfigPath, JSON.stringify(config));
+    fs.writeFileSync(configPath, JSON.stringify(config));
     return config;
   });
 }
