@@ -9,11 +9,13 @@ import {
 import { isConstructorDeclaration, isVariableStatement } from "typescript";
 import { CrawlConfig, Deprecation } from "./models";
 import { DEPRECATION, DEPRECATIONLINK } from "./utils";
+import { cwd } from "process";
+import { resolve } from "path";
 
 // What about https://ts-morph.com/details/documentation#js-docs ?
 // Problem: can't find top level deprecations? e.g. merge
 
-export function crawlDeprecation(config: CrawlConfig) {
+export function crawlDeprecations(config: CrawlConfig) {
   const project = new Project({
     tsConfigFilePath: config.tsConfigPath,
   });
@@ -24,7 +26,7 @@ export function crawlDeprecation(config: CrawlConfig) {
     // TODO: seems like these files cannot be parsed correctly?
     .filter((file) => !file.getFilePath().includes("/Observable.ts"))
     .map((file) => {
-      const path = file.getFilePath();
+      const path = resolve(file.getFilePath()).replace(resolve(cwd()), "");
       console.log(`🔎 Looking for deprecations in ${path}`);
 
       const statements = file
@@ -92,13 +94,13 @@ export function crawlDeprecation(config: CrawlConfig) {
           }
 
           return {
-            path: path,
+            path,
             lineNumber: p.node.getStartLineNumber(),
             name: [p.parent, text].filter(Boolean).join("."),
             kind: p.node.getKindName(),
             code: p.node.getText(),
             deprecationMessage: p.comment.text,
-            deprecationPos: [
+            pos: [
               p.comment.range.compilerObject.pos,
               p.comment.range.compilerObject.end,
             ],

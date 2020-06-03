@@ -1,6 +1,8 @@
 import { Project } from "ts-morph";
 import { CrawlConfig, Deprecation } from "../models";
 import { hash, EOL, DEPRECATIONLINK, DEPRECATION } from "../utils";
+import { cwd } from "process";
+import { join } from "path";
 
 export function addCommentToRepository(
   config: CrawlConfig,
@@ -25,12 +27,12 @@ export function addCommentToRepository(
 
     let addedPosForText = 0;
 
-    const sorted = deprecations.sort((a, b) =>
-      a.deprecationPos[0] > b.deprecationPos[0] ? 1 : -1
-    );
+    const sorted = deprecations.sort((a, b) => (a.pos[0] > b.pos[0] ? 1 : -1));
 
     sorted.forEach((deprecation) => {
-      const sourceFile = project.getSourceFile(path);
+      const filePath = join(cwd(), path);
+
+      const sourceFile = project.getSourceFile(filePath);
       const deprecationDetails = ` Details: {@link ${DEPRECATIONLINK}#${hash(
         deprecation.code
       )}}`;
@@ -52,10 +54,7 @@ export function addCommentToRepository(
         .join(EOL);
 
       sourceFile.replaceText(
-        deprecation.deprecationPos.map((pos) => pos + addedPosForText) as [
-          number,
-          number
-        ],
+        deprecation.pos.map((pos) => pos + addedPosForText) as [number, number],
         newText
       );
       addedPosForText += deprecationDetails.length;

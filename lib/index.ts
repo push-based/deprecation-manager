@@ -1,6 +1,6 @@
 import { getConfig } from "./config";
 
-import { crawlDeprecation } from "./morph";
+import { crawlDeprecations } from "./crawler";
 import { checkout } from "./checkout";
 import {
   addCommentToRepository,
@@ -12,7 +12,7 @@ import {
   const config = await getConfig();
   const tagDate = await checkout(config);
 
-  const deprecations = crawlDeprecation(config);
+  const deprecations = crawlDeprecations(config);
 
   addCommentToRepository(config, deprecations);
   generateMarkdown(config, deprecations, { tagDate });

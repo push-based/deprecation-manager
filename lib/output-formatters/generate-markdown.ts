@@ -25,7 +25,7 @@ export function generateMarkdown(
   const pagesInMd = Object.entries(deprecationsByFile).map(
     ([path, deprecations]) => {
       const sorted = deprecations.sort((a, b) =>
-        a.deprecationPos[0] > b.deprecationPos[0] ? 1 : -1
+        a.pos[0] > b.pos[0] ? 1 : -1
       );
 
       return [`## ${basename(path)}`, ""]

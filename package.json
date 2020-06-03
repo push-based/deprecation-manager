@@ -8,7 +8,8 @@
     "prebuild": "rimraf ./dist",
     "build": "tsc",
     "postbuild": "cpy ./package.json ./dist && cpy ./cli.js ./dist",
-    "local": "ts-node lib/local.ts"
+    "local": "ts-node lib/local.ts",
+    "build-and-pack": "npm run build && cd dist && npm pack && cd .."
   },
   "keywords": [],
   "author": "",

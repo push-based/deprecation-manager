@@ -88,11 +88,11 @@ export interface FoundDeprecation {
 }
 
 export interface Deprecation {
-  path: string;
   name: string;
   kind: string;
+  path: string;
   lineNumber: number;
   code: string;
   deprecationMessage: string;
-  deprecationPos: [number, number];
+  pos: [number, number];
 }

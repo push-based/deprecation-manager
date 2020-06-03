@@ -22,7 +22,7 @@ export function generateRawJson(
     date: options.tagDate,
     deprecations: rawDeprecations,
   };
-  const json = JSON.stringify(content);
+  const json = JSON.stringify(content, null, 4);
 
   ensureDirExists(config.outputDirectory);
   writeFileSync(join(config.outputDirectory, `${config.gitTag}.json`), json);
