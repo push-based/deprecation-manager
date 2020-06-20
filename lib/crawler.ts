@@ -27,7 +27,7 @@ export function crawlDeprecations(config: CrawlConfig) {
     .filter((file) => !file.getFilePath().includes("/Observable.ts"))
     .map((file) => {
       const path = resolve(file.getFilePath()).replace(resolve(cwd()), "");
-      console.log(`🔎 Looking for deprecations in ${path}`);
+      console.log(`🔎 Looking for deprecations in ${path.substr(1)}`);
 
       const statements = file
         .getStatementsWithComments()
@@ -73,6 +73,12 @@ export function crawlDeprecations(config: CrawlConfig) {
           (c) =>
             c.comment.text.includes(DEPRECATION) &&
             !c.comment.text.includes(DEPRECATIONLINK)
+        )
+        .filter(
+          (c) =>
+            !c.comment.text.includes(
+              "This is an internal implementation detail"
+            )
         );
 
       return deprecationsInFile.map(

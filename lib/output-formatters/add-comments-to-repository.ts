@@ -23,7 +23,7 @@ export function addCommentToRepository(
   }, {} as { [filePath: string]: Deprecation[] });
 
   Object.entries(deprecationsByFile).forEach(([path, deprecations]) => {
-    console.log(`🔧 ${path}`);
+    console.log(`🔧 ${path.substr(1)}`);
 
     let addedPosForText = 0;
 
