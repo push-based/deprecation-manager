@@ -73,12 +73,6 @@ export function crawlDeprecations(config: CrawlConfig) {
           (c) =>
             c.comment.text.includes(DEPRECATION) &&
             !c.comment.text.includes(DEPRECATIONLINK)
-        )
-        .filter(
-          (c) =>
-            !c.comment.text.includes(
-              "This is an internal implementation detail"
-            )
         );
 
       return deprecationsInFile.map(

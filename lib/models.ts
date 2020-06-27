@@ -95,4 +95,5 @@ export interface Deprecation {
   code: string;
   deprecationMessage: string;
   pos: [number, number];
+  group?: string;
 }
