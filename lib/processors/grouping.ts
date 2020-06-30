@@ -1,6 +1,6 @@
-import { CrawlConfig, Deprecation } from "../models";
-import { prompt } from "enquirer";
 import { EOL } from "os";
+import { prompt } from "enquirer";
+import { CrawlConfig, Deprecation } from "../models";
 
 export async function addGrouping(
   config: CrawlConfig,
@@ -11,45 +11,45 @@ export async function addGrouping(
   }
 
   console.log("Adding grouping to deprecations...");
-  let groups: { key: string; regexp: RegExp[] }[] = [
+  let groups: { key: string; matches: RegExp[] }[] = [
     {
       key: "Internal implementation detail",
-      regexp: [/internal implementation detail/i, /exposed API/i],
+      matches: [/internal implementation detail/i, /exposed API/i],
     },
     {
       key: "Result selector",
-      regexp: [
+      matches: [
         /resultSelector is no longer supported/i,
         /resultSelector no longer supported/i,
       ],
     },
     {
       key: "Observer callback",
-      regexp: [/complete callback/i, /error callback/i],
+      matches: [/complete callback/i, /error callback/i],
     },
     {
       key: "With",
-      regexp: [
+      matches: [
         /use {@link (zipWith|combineLatestWith|concatWith|mergeWith|raceWith)}/i,
       ],
     },
     {
       key: "Removal in future",
-      regexp: [/will be removed at some point in the future/i],
+      matches: [/will be removed at some point in the future/i],
     },
     {
       key: "Scheduler",
-      regexp: [/Passing a scheduler here is deprecated/i],
+      matches: [/Passing a scheduler here is deprecated/i],
     },
     {
       key: "Array",
-      regexp: [/Pass arguments in a single array instead/i],
+      matches: [/Pass arguments in a single array instead/i],
     },
   ];
 
   for (const deprecation of rawDeprecations) {
     const groupKey = groups.find((group) => {
-      return group.regexp.some((reg) =>
+      return group.matches.some((reg) =>
         reg.test(deprecation.deprecationMessage)
       );
     })?.key;
@@ -79,11 +79,11 @@ export async function addGrouping(
 
     const group = groups.find((g) => g.key === answer["key"]);
     if (group) {
-      group.regexp.push(new RegExp(answer["regexp"], "i"));
+      group.matches.push(new RegExp(answer["regexp"], "i"));
     } else {
       groups.push({
         key: answer["key"],
-        regexp: [new RegExp(answer["regexp"], "i")],
+        matches: [new RegExp(answer["regexp"], "i")],
       });
     }
     deprecation.group = answer["key"];
