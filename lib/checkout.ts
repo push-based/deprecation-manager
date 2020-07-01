@@ -4,7 +4,7 @@ import { CrawlConfig } from "./models";
 export async function checkout(config: CrawlConfig) {
   await git([`checkout`, config.gitTag]);
   const date = await git([`log -1 --format=%ai ${config.gitTag}`]);
-  return date;
+  return date.replace("\r\n", '').replace("\n", '');
 }
 
 function git(args: string[]): Promise<string> {

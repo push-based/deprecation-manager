@@ -3,7 +3,7 @@ import { join } from "path";
 import { CrawlConfig, Deprecation } from "../models";
 import { ensureDirExists } from "../utils";
 
-export function generateRawJson(
+export async function generateRawJson(
   config: CrawlConfig,
   rawDeprecations: Deprecation[],
   options: { tagDate: string }

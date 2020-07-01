@@ -26,8 +26,11 @@ export function crawlDeprecations(config: CrawlConfig) {
     // TODO: seems like these files cannot be parsed correctly?
     .filter((file) => !file.getFilePath().includes("/Observable.ts"))
     .map((file) => {
-      const path = resolve(file.getFilePath()).replace(resolve(cwd()), "");
-      console.log(`🔎 Looking for deprecations in ${path.substr(1)}`);
+      const path = resolve(file.getFilePath())
+        .replace(resolve(cwd()), "")
+        // remove slash
+        .substr(1);
+      console.log(`🔎 Looking for deprecations in ${path}`);
 
       const statements = file
         .getStatementsWithComments()
@@ -77,26 +80,12 @@ export function crawlDeprecations(config: CrawlConfig) {
 
       return deprecationsInFile.map(
         (p): Deprecation => {
-          let text = "DEPRECATION-TODO";
-
-          if (
-            "name" in p.node.compilerNode &&
-            typeof p.node.compilerNode.name.getText === "function"
-          ) {
-            text = p.node.compilerNode.name.getText();
-          } else if (
-            isVariableStatement(p.node.compilerNode) &&
-            p.node.compilerNode.declarationList.declarations[0]
-          ) {
-            text = p.node.compilerNode.declarationList.declarations[0].name.getText();
-          } else if (isConstructorDeclaration(p.node.compilerNode)) {
-            text = "constructor";
-          }
+          let nodeText = getHumanReadableNameForNode();
 
           return {
             path,
             lineNumber: p.node.getStartLineNumber(),
-            name: [p.parent, text].filter(Boolean).join("."),
+            name: [p.parent, nodeText].filter(Boolean).join("."),
             kind: p.node.getKindName(),
             code: p.node.getText(),
             deprecationMessage: p.comment.text,
@@ -105,6 +94,26 @@ export function crawlDeprecations(config: CrawlConfig) {
               p.comment.range.compilerObject.end,
             ],
           };
+
+          function getHumanReadableNameForNode() {
+            let text = "DEPRECATION-TODO";
+
+            if (
+              "name" in p.node.compilerNode &&
+              typeof p.node.compilerNode.name.getText === "function"
+            ) {
+              text = p.node.compilerNode.name.getText();
+            } else if (
+              isVariableStatement(p.node.compilerNode) &&
+              p.node.compilerNode.declarationList.declarations[0]
+            ) {
+              text = p.node.compilerNode.declarationList.declarations[0].name.getText();
+            } else if (isConstructorDeclaration(p.node.compilerNode)) {
+              text = "constructor";
+            }
+
+            return text;
+          }
         }
       );
     })
