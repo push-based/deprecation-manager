@@ -1,10 +1,10 @@
 import { Project } from "ts-morph";
 import { CrawlConfig, Deprecation } from "../models";
-import { hash, EOL, DEPRECATIONLINK, DEPRECATION } from "../utils";
+import { EOL, DEPRECATIONLINK, DEPRECATION } from "../utils";
 import { cwd } from "process";
 import { join } from "path";
 
-export function addCommentToRepository(
+export async function addCommentToRepository(
   config: CrawlConfig,
   rawDeprecations: Deprecation[]
 ) {
@@ -23,7 +23,7 @@ export function addCommentToRepository(
   }, {} as { [filePath: string]: Deprecation[] });
 
   Object.entries(deprecationsByFile).forEach(([path, deprecations]) => {
-    console.log(`🔧 ${path.substr(1)}`);
+    console.log(`🔧 ${path}`);
 
     let addedPosForText = 0;
 
@@ -33,9 +33,7 @@ export function addCommentToRepository(
       const filePath = join(cwd(), path);
 
       const sourceFile = project.getSourceFile(filePath);
-      const deprecationDetails = ` Details: {@link ${DEPRECATIONLINK}#${hash(
-        deprecation.code
-      )}}`;
+      const deprecationDetails = ` Details: {@link ${DEPRECATIONLINK}#${deprecation.uuid}}`;
 
       const lines = deprecation.deprecationMessage.split(EOL);
       const newText = lines

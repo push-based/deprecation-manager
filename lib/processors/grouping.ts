@@ -5,9 +5,9 @@ import { CrawlConfig, Deprecation } from "../models";
 export async function addGrouping(
   config: CrawlConfig,
   rawDeprecations: Deprecation[]
-) {
+): Promise<Deprecation[]> {
   if (rawDeprecations.length === 0) {
-    return;
+    return rawDeprecations;
   }
 
   console.log("Adding grouping to deprecations...");
@@ -47,14 +47,17 @@ export async function addGrouping(
     },
   ];
 
+  let deprecationsWithGroup: Deprecation[] = [];
+
   for (const deprecation of rawDeprecations) {
     const groupKey = groups.find((group) => {
       return group.matches.some((reg) =>
         reg.test(deprecation.deprecationMessage)
       );
     })?.key;
+
     if (groupKey) {
-      deprecation.group = groupKey;
+      deprecationsWithGroup.push({ ...deprecation, group: groupKey });
       continue;
     }
 
@@ -63,12 +66,10 @@ export async function addGrouping(
         type: "input",
         name: "key",
         message:
-          `Add group to deprecation ./${deprecation.path.replace(
-            "\\\\",
-            "/"
-          )}: ` +
+          `Add group to deprecation ${deprecation.path}#${deprecation.lineNumber}` +
           EOL +
-          deprecation.deprecationMessage,
+          deprecation.deprecationMessage +
+          EOL,
       },
       {
         type: "input",
@@ -86,6 +87,12 @@ export async function addGrouping(
         matches: [new RegExp(answer["regexp"], "i")],
       });
     }
-    deprecation.group = answer["key"];
+
+    deprecationsWithGroup.push({
+      ...deprecation,
+      group: answer["key"],
+    });
   }
+
+  return deprecationsWithGroup;
 }

@@ -1,9 +1,11 @@
 import { getConfig } from "./config";
 
+import { Deprecation } from "./models";
 import { crawlDeprecations } from "./crawler";
 import { checkout } from "./checkout";
 
 import { addGrouping } from "./processors/grouping";
+import { addUniqueKey } from "./processors/unique";
 import {
   addCommentToRepository,
   generateMarkdown,
@@ -16,10 +18,16 @@ import {
 
   const deprecations = crawlDeprecations(config);
 
-  addCommentToRepository(config, deprecations);
+  await addCommentToRepository(config, deprecations);
 
-  await addGrouping(config, deprecations);
+  const processors = [addGrouping, addUniqueKey];
+  const processedDeprecations = (await processors.reduce(
+    async (deps, processor) => await processor(config, await deps),
+    Promise.resolve(deprecations)
+  )) as Deprecation[];
 
-  generateMarkdown(config, deprecations, { tagDate });
-  generateRawJson(config, deprecations, { tagDate });
+  const outputs = [generateMarkdown, generateRawJson];
+  for (const output of outputs) {
+    await output(config, processedDeprecations, { tagDate });
+  }
 })();
