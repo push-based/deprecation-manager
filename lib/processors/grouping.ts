@@ -1,7 +1,7 @@
 import { EOL } from "os";
 import { prompt } from "enquirer";
 import { CrawlConfig, Deprecation } from "../models";
-import { updateRepoConfig } from "../config";
+import { updateRepoConfig } from "../utils";
 
 export async function addGrouping(
   config: CrawlConfig,
@@ -18,8 +18,8 @@ export async function addGrouping(
 
   for (const deprecation of rawDeprecations) {
     const deprecationHasExistingGroup = groups.find((group) => {
-      return group.matchers.some((reg) =>
-        new RegExp(reg).test(deprecation.deprecationMessage)
+      return group.matchers.some(
+        (reg) => reg && new RegExp(reg).test(deprecation.deprecationMessage)
       );
     })?.key;
 
@@ -33,6 +33,8 @@ export async function addGrouping(
 
     const answer: { key: string; regexp: string } = await prompt([
       {
+        // TODO: use autocomplete here? https://github.com/enquirer/enquirer/tree/master/examples/autocomplete
+        // Problem: can't have a custom input that is not in choices
         type: "input",
         name: "key",
         message:

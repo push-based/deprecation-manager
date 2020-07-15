@@ -1,4 +1,7 @@
-import { existsSync, mkdirSync } from "fs";
+import { existsSync, mkdirSync, writeFileSync, readFileSync } from "fs";
+import { CrawlConfig } from "./models";
+import { format, resolveConfig } from "prettier";
+import { REPO_CONFIG_PATH } from "./constants";
 
 // TODO: make these configurable
 export const DEPRECATION = "@deprecated";
@@ -25,6 +28,23 @@ export function ensureDirExists(dir: string) {
   if (!existsSync(dir)) {
     mkdirSync(dir);
   }
+}
+
+export function updateRepoConfig(config: CrawlConfig) {
+  const { gitTag, ...writableConfig } = config;
+  const prettiedConfig = format(JSON.stringify(writableConfig), {
+    parser: "json",
+    ...resolveConfig.sync("./"),
+  });
+
+  writeFileSync(REPO_CONFIG_PATH, prettiedConfig);
+}
+
+export function readFile(path: string) {
+  if (existsSync(path)) {
+    return readFileSync(path, "utf-8");
+  }
+  return "";
 }
 
 // import {
