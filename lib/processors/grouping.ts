@@ -3,6 +3,8 @@ import { prompt } from "enquirer";
 import { CrawlConfig, Deprecation } from "../models";
 import { updateRepoConfig } from "../utils";
 
+
+const ungrouped = 'ungrouped';
 export async function addGrouping(
   config: CrawlConfig,
   rawDeprecations: Deprecation[]
@@ -18,9 +20,11 @@ export async function addGrouping(
 
   for (const deprecation of rawDeprecations) {
     const deprecationHasExistingGroup = groups.find((group) => {
-      return group.matchers.some(
+      // If matchers are present test them else return false
+      return group.matchers.length ?
+        group.matchers.some(
         (reg) => reg && new RegExp(reg).test(deprecation.deprecationMessage)
-      );
+      ) : false;
     })?.key;
 
     if (deprecationHasExistingGroup) {
@@ -42,6 +46,7 @@ export async function addGrouping(
           EOL +
           deprecation.deprecationMessage +
           EOL,
+        initial: ungrouped
       },
       {
         type: "input",
@@ -54,11 +59,14 @@ export async function addGrouping(
 
     // Don't store RegExp because they are not serializable
     if (group) {
-      group.matchers.push(answer.regexp);
+      // don't push empts regex
+      if(answer.regexp !== '') {
+        group.matchers.push(answer.regexp);
+      }
     } else {
       groups.push({
-        key: answer["key"],
-        matchers: [answer.regexp],
+        key: answer["key"] || ungrouped ,
+        matchers: answer.regexp !== '' ? [answer.regexp] : [],
       });
     }
 

@@ -31,7 +31,7 @@ export async function getConfig(): Promise<CrawlConfig> {
       format(value) {
         return value ? normalize(value) : "";
       },
-      initial: repoConfig.tsConfigPath,
+      initial: repoConfig.tsConfigPath || './tsconfig.json',
       skip: !!repoConfig.tsConfigPath || !!repoConfig.excludeGlob,
     },
   ]);
