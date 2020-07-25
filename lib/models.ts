@@ -2,7 +2,6 @@ export interface CrawlConfig {
   gitTag: string;
   outputDirectory: string;
   tsConfigPath: string;
-  excludeGlob: string[];
   groups: { key: string; matchers: string[] }[];
 }
 

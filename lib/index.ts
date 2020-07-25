@@ -16,7 +16,7 @@ import {
   const config = await getConfig();
   const tagDate = await checkout(config);
 
-  const deprecations = crawlDeprecations(config);
+  const deprecations = await crawlDeprecations(config);
 
   await addCommentToRepository(config, deprecations);
 

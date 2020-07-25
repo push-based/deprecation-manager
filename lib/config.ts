@@ -1,5 +1,6 @@
 import { normalize } from "path";
 import { prompt } from "enquirer";
+import { glob } from "glob";
 import { CrawlConfig } from "./models";
 import { REPO_CONFIG_PATH } from "./constants";
 import { readFile, updateRepoConfig } from "./utils";
@@ -24,37 +25,24 @@ export async function getConfig(): Promise<CrawlConfig> {
       skip: !!repoConfig.outputDirectory,
     },
     {
-      type: "input",
+      type: "select",
       name: "tsConfigPath",
-      message:
-        "What's the location of the ts config file? (leave empty to crawl all files)",
+      message: "What's the location of the ts config file?",
+      choices: findTsConfigFiles(),
       format(value) {
         return value ? normalize(value) : "";
       },
-      initial: repoConfig.tsConfigPath || './tsconfig.json',
-      skip: !!repoConfig.tsConfigPath || !!repoConfig.excludeGlob,
+      initial: repoConfig.tsConfigPath || "./tsconfig.json",
+      skip: !!repoConfig.tsConfigPath,
     },
   ]);
-
-  if (!userConfig.tsConfigPath) {
-    const globAnswer: { excludeGlob: string } = await prompt([
-      {
-        type: "input",
-        name: "excludeGlob",
-        message: `Glob to exclude files or folders (default ignores node_modules and path in .gitignore)`,
-        initial: repoConfig.excludeGlob ? repoConfig.excludeGlob.join(" ") : "",
-        skip: !!repoConfig.tsConfigPath || !!repoConfig.excludeGlob,
-      },
-    ]);
-
-    userConfig.excludeGlob = globAnswer.excludeGlob
-      ? [...globAnswer.excludeGlob.split(" ").map((p) => p.trim())].filter(
-          Boolean
-        )
-      : [];
-  }
 
   const config = { groups: [], ...repoConfig, ...userConfig };
   updateRepoConfig(config);
   return config;
+}
+
+export function findTsConfigFiles() {
+  const tsConfigs = glob.sync("**/*tsconfig*.json");
+  return tsConfigs;
 }

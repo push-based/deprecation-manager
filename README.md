@@ -38,7 +38,7 @@ By default `master` is set. This will crawl deprecations from `master` on.
 _√ What's the output directory?_
 By default `./depercations` is set. This will put the resulting data into the named folder.
 
-_√ What's the location of the ts config file? (leave empty to crawl all files)_
+_√ What's the location of the ts config file?_
 By default `./tsconfig.json` is set. These locations should represent the projects ts config settings used to determine the folders to crawl.
 
 After that, the process should start crawling and every crawled file should get logged to the console.

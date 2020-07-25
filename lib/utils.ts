@@ -7,8 +7,6 @@ import { REPO_CONFIG_PATH } from "./constants";
 export const DEPRECATION = "@deprecated";
 export const DEPRECATIONLINK = "https://rxjs.dev/deprecations";
 
-export const EOL = "\r\n";
-
 export function hash(str: string) {
   let s = str.replace(/ /g, "");
   let hash = 5381;

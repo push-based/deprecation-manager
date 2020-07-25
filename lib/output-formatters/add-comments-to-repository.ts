@@ -1,8 +1,9 @@
 import { Project } from "ts-morph";
 import { CrawlConfig, Deprecation } from "../models";
-import { EOL, DEPRECATIONLINK, DEPRECATION } from "../utils";
+import { DEPRECATIONLINK, DEPRECATION } from "../utils";
 import { cwd } from "process";
 import { join } from "path";
+import { EOL } from "os";
 
 export async function addCommentToRepository(
   config: CrawlConfig,

@@ -11,13 +11,16 @@ import { isConstructorDeclaration, isVariableStatement } from "typescript";
 import { CrawlConfig, Deprecation } from "./models";
 import { DEPRECATION, DEPRECATIONLINK, readFile } from "./utils";
 import { cwd } from "process";
-import { resolve } from "path";
+import { resolve, normalize } from "path";
+import { existsSync } from "fs";
+import { prompt } from "enquirer";
+import { findTsConfigFiles } from "./config";
 
 // What about https://ts-morph.com/details/documentation#js-docs ?
 // Problem: can't find top level deprecations? e.g. merge
 
-export function crawlDeprecations(config: CrawlConfig) {
-  const sourceFiles = getSourceFiles(config);
+export async function crawlDeprecations(config: CrawlConfig) {
+  const sourceFiles = await getSourceFiles(config);
 
   const deprecations = sourceFiles
     // TODO: seems like these files cannot be parsed correctly?
@@ -99,8 +102,6 @@ function crawlFileForDeprecations(file: SourceFile) {
       }
     );
   } catch (err) {
-    // TODO: UnhandledPromiseRejectionWarning: Error: EISDIR: illegal operation on a directory
-    // Only occurs when we're not using a tsconfig file
     console.error(err);
   }
 }
@@ -132,15 +133,28 @@ function getNodesWithCommentsForFile(file: SourceFile) {
   return commentsInFile;
 }
 
-function getSourceFiles(config: CrawlConfig) {
+async function getSourceFiles(config: CrawlConfig) {
   const project = new Project();
 
-  if (config.tsConfigPath) {
+  if (!config.tsConfigPath) {
+    throw Error("We need a ts config path to be able to crawl");
+  }
+
+  if (existsSync(config.tsConfigPath)) {
     project.addSourceFilesFromTsConfig(config.tsConfigPath);
   } else {
-    const defaults = getDefaultGlob();
-    const excludeGlob = config.excludeGlob || [];
-    project.addSourceFilesAtPaths(excludeGlob.concat(defaults));
+    const { tsConfigPath } = await prompt([
+      {
+        type: "select",
+        name: "tsConfigPath",
+        message: `tsconfig "${config.tsConfigPath}" does not exist, let's try again`,
+        choices: findTsConfigFiles(),
+        format(value) {
+          return value ? normalize(value) : "";
+        },
+      },
+    ]);
+    project.addSourceFilesFromTsConfig(tsConfigPath);
   }
 
   return project.getSourceFiles();
