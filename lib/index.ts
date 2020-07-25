@@ -18,15 +18,13 @@ import {
 
   const deprecations = await crawlDeprecations(config);
 
-  await addCommentToRepository(config, deprecations);
-
   const processors = [addGrouping, addUniqueKey];
   const processedDeprecations = (await processors.reduce(
     async (deps, processor) => await processor(config, await deps),
     Promise.resolve(deprecations)
   )) as Deprecation[];
 
-  const outputs = [generateMarkdown, generateRawJson];
+  const outputs = [addCommentToRepository, generateMarkdown, generateRawJson];
   for (const output of outputs) {
     await output(config, processedDeprecations, { tagDate });
   }

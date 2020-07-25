@@ -35,6 +35,21 @@ export async function getConfig(): Promise<CrawlConfig> {
       initial: repoConfig.tsConfigPath || "./tsconfig.json",
       skip: !!repoConfig.tsConfigPath,
     },
+    {
+      type: "input",
+      name: "deprecationComment",
+      message: "What's the deprecation keyword to look for?",
+      initial: repoConfig.deprecationComment || "@deprecated",
+      skip: !!repoConfig.deprecationComment,
+    },
+    {
+      type: "input",
+      name: "deprecationLink",
+      message:
+        "What's the deprecation link to the docs (the deprecation uuid will be appended to this)?",
+      initial: repoConfig.deprecationLink || "https://rxjs.dev/deprecations",
+      skip: !!repoConfig.deprecationLink,
+    },
   ]);
 
   const config = { groups: [], ...repoConfig, ...userConfig };

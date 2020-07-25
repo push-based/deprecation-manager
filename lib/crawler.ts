@@ -9,7 +9,7 @@ import {
 } from "ts-morph";
 import { isConstructorDeclaration, isVariableStatement } from "typescript";
 import { CrawlConfig, Deprecation } from "./models";
-import { DEPRECATION, DEPRECATIONLINK, readFile } from "./utils";
+import { readFile } from "./utils";
 import { cwd } from "process";
 import { resolve, normalize } from "path";
 import { existsSync } from "fs";
@@ -25,13 +25,13 @@ export async function crawlDeprecations(config: CrawlConfig) {
   const deprecations = sourceFiles
     // TODO: seems like these files cannot be parsed correctly?
     .filter((file) => !file.getFilePath().includes("/Observable.ts"))
-    .map((file) => crawlFileForDeprecations(file))
+    .map((file) => crawlFileForDeprecations(file, config))
     .reduce((acc, val) => acc.concat(val), []);
 
   return deprecations;
 }
 
-function crawlFileForDeprecations(file: SourceFile) {
+function crawlFileForDeprecations(file: SourceFile, config: CrawlConfig) {
   try {
     const path = resolve(file.getFilePath())
       .replace(resolve(cwd()), "")
@@ -56,44 +56,40 @@ function crawlFileForDeprecations(file: SourceFile) {
           .reduce((acc, val) => acc.concat(val), [])
       )
       .reduce((acc, val) => acc.concat(val), [])
-      .filter(
-        (c) =>
-          c.comment.text.includes(DEPRECATION) &&
-          !c.comment.text.includes(DEPRECATIONLINK)
-      );
+      .filter((c) => isNewDeprecation(c.comment.text));
 
     return deprecationsInFile.map(
-      (p): Deprecation => {
+      (deprecation): Deprecation => {
         let nodeText = getHumanReadableNameForNode();
 
         return {
           path,
-          lineNumber: p.node.getStartLineNumber(),
-          name: [p.parent, nodeText].filter(Boolean).join("."),
-          kind: p.node.getKindName(),
-          code: p.node.getText(),
-          deprecationMessage: p.comment.text,
+          lineNumber: deprecation.node.getStartLineNumber(),
+          name: [deprecation.parent, nodeText].filter(Boolean).join("."),
+          kind: deprecation.node.getKindName(),
+          code: deprecation.node.getText(),
+          deprecationMessage: deprecation.comment.text,
           pos: [
-            p.comment.range.compilerObject.pos,
-            p.comment.range.compilerObject.end,
+            deprecation.comment.range.compilerObject.pos,
+            deprecation.comment.range.compilerObject.end,
           ],
         };
 
         function getHumanReadableNameForNode() {
           let text =
-            "DEPRECATION-TODO, open an issue at https://github.com/timdeschryver/find-deprecations/issues/new";
+            "DEPRECATION-TODO, unknown node, open an issue at https://github.com/timdeschryver/find-deprecations/issues/new";
 
           if (
-            "name" in p.node.compilerNode &&
-            typeof p.node.compilerNode.name.getText === "function"
+            "name" in deprecation.node.compilerNode &&
+            typeof deprecation.node.compilerNode.name.getText === "function"
           ) {
-            text = p.node.compilerNode.name.getText();
+            text = deprecation.node.compilerNode.name.getText();
           } else if (
-            isVariableStatement(p.node.compilerNode) &&
-            p.node.compilerNode.declarationList.declarations[0]
+            isVariableStatement(deprecation.node.compilerNode) &&
+            deprecation.node.compilerNode.declarationList.declarations[0]
           ) {
-            text = p.node.compilerNode.declarationList.declarations[0].name.getText();
-          } else if (isConstructorDeclaration(p.node.compilerNode)) {
+            text = deprecation.node.compilerNode.declarationList.declarations[0].name.getText();
+          } else if (isConstructorDeclaration(deprecation.node.compilerNode)) {
             text = "constructor";
           }
 
@@ -103,6 +99,13 @@ function crawlFileForDeprecations(file: SourceFile) {
     );
   } catch (err) {
     console.error(err);
+  }
+
+  function isNewDeprecation(comment: string) {
+    return (
+      comment.includes(config.deprecationComment) &&
+      !comment.includes(config.deprecationLink)
+    );
   }
 }
 
@@ -154,20 +157,11 @@ async function getSourceFiles(config: CrawlConfig) {
         },
       },
     ]);
+    config.tsConfigPath = tsConfigPath;
     project.addSourceFilesFromTsConfig(tsConfigPath);
   }
 
   return project.getSourceFiles();
-}
-
-function getDefaultGlob() {
-  let ignore = ["!./node_modules/**"];
-  const gitignore = readFile("./.gitignore");
-  ignore.push(
-    // remove empty entries and comments
-    ...gitignore.split(/\r?\n/).filter((p) => p && !p.startsWith("#"))
-  );
-  return ["./**/*{.ts,.js}", ...ignore];
 }
 
 interface NodesWithComment {

@@ -3,10 +3,6 @@ import { CrawlConfig } from "./models";
 import { format, resolveConfig } from "prettier";
 import { REPO_CONFIG_PATH } from "./constants";
 
-// TODO: make these configurable
-export const DEPRECATION = "@deprecated";
-export const DEPRECATIONLINK = "https://rxjs.dev/deprecations";
-
 export function hash(str: string) {
   let s = str.replace(/ /g, "");
   let hash = 5381;

@@ -2,6 +2,8 @@ export interface CrawlConfig {
   gitTag: string;
   outputDirectory: string;
   tsConfigPath: string;
+  deprecationComment: string;
+  deprecationLink: string;
   groups: { key: string; matchers: string[] }[];
 }
 

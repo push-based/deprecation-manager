@@ -25,9 +25,7 @@
     { "key": "const", "matchers": [] },
     {
       "key": "ungrouped",
-      "matchers": [
-        "\\*\\* @deprecated \\*"
-      ]
+      "matchers": ["\\*\\* @deprecated \\*"]
     },
     { "key": "xWith", "matchers": ["With", " use static"] },
     { "key": "interface", "matchers": ["use as interface only"] },
@@ -35,5 +33,7 @@
     { "key": "VirtualTimeScheduler", "matchers": ["VirtualTimeScheduler"] }
   ],
   "outputDirectory": "./deprecations",
-  "tsConfigPath": "tsconfig.json"
+  "tsConfigPath": "tsconfig.json",
+  "deprecationComment": "@deprecated",
+  "deprecationLink": "https://rxjs.dev/deprecations"
 }
