@@ -9,6 +9,11 @@ export async function getConfig(): Promise<CrawlConfig> {
   const repoConfigFile = readFile(REPO_CONFIG_PATH) || "{}";
   const repoConfig = JSON.parse(repoConfigFile);
 
+  const tsConfigFiles = findTsConfigFiles();
+  if (tsConfigFiles.length === 0) {
+    throw Error("We need a tsconfig file to crawl");
+  }
+
   const userConfig: CrawlConfig = await prompt([
     {
       type: "input",
@@ -32,8 +37,11 @@ export async function getConfig(): Promise<CrawlConfig> {
       format(value) {
         return value ? normalize(value) : "";
       },
-      initial: repoConfig.tsConfigPath || "./tsconfig.json",
-      skip: !!repoConfig.tsConfigPath,
+      initial:
+        repoConfig.tsConfigPath ||
+        tsConfigFiles.find((p) => p === "tsconfig.json") ||
+        tsConfigFiles[0],
+      skip: !!repoConfig.tsConfigPath || tsConfigFiles.length === 1,
     },
     {
       type: "input",
