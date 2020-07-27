@@ -1,7 +1,8 @@
 import { writeFileSync } from "fs";
 import { basename, join } from "path";
 import { CrawlConfig, Deprecation } from "../models";
-import { ensureDirExists, EOL } from "../utils";
+import { ensureDirExists } from "../utils";
+import { EOL } from "os";
 
 export async function generateMarkdown(
   config: CrawlConfig,

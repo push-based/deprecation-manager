@@ -1,8 +1,8 @@
 import { Project } from "ts-morph";
 import { CrawlConfig, Deprecation } from "../models";
-import { EOL, DEPRECATIONLINK, DEPRECATION } from "../utils";
 import { cwd } from "process";
 import { join } from "path";
+import { EOL } from "os";
 
 export async function addCommentToRepository(
   config: CrawlConfig,
@@ -33,22 +33,11 @@ export async function addCommentToRepository(
       const filePath = join(cwd(), path);
 
       const sourceFile = project.getSourceFile(filePath);
-      const deprecationDetails = ` Details: {@link ${DEPRECATIONLINK}#${deprecation.uuid}}`;
+      const deprecationDetails = ` Details: {@link ${config.deprecationLink}#${deprecation.uuid}}`;
 
       const lines = deprecation.deprecationMessage.split(EOL);
       const newText = lines
-        .map((text) => {
-          if (text.includes(DEPRECATION)) {
-            if (text.endsWith(" */")) {
-              return text.replace(" */", `${deprecationDetails} */`);
-            }
-            if (text.endsWith("*/")) {
-              return text.replace("*/", `${deprecationDetails}*/`);
-            }
-            return text + deprecationDetails;
-          }
-          return text;
-        })
+        .map((comment) => addDeprecationLinkToComment(comment))
         .join(EOL);
 
       sourceFile.replaceText(
@@ -58,6 +47,20 @@ export async function addCommentToRepository(
       addedPosForText += deprecationDetails.length;
 
       sourceFile.saveSync();
+
+      function addDeprecationLinkToComment(comment: string) {
+        if (comment.includes(config.deprecationComment)) {
+          // preserve structure of the comment
+          if (comment.endsWith(" */")) {
+            return comment.replace(" */", `${deprecationDetails} */`);
+          }
+          if (comment.endsWith("*/")) {
+            return comment.replace("*/", `${deprecationDetails}*/`);
+          }
+          return comment + deprecationDetails;
+        }
+        return comment;
+      }
     });
   });
 }

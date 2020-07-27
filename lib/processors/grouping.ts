@@ -1,7 +1,10 @@
 import { EOL } from "os";
 import { prompt } from "enquirer";
 import { CrawlConfig, Deprecation } from "../models";
+import { updateRepoConfig } from "../utils";
 
+
+const ungrouped = 'ungrouped';
 export async function addGrouping(
   config: CrawlConfig,
   rawDeprecations: Deprecation[]
@@ -11,58 +14,31 @@ export async function addGrouping(
   }
 
   console.log("Adding grouping to deprecations...");
-  let groups: { key: string; matches: RegExp[] }[] = [
-    {
-      key: "Internal implementation detail",
-      matches: [/internal implementation detail/i, /exposed API/i],
-    },
-    {
-      key: "Result selector",
-      matches: [
-        /resultSelector is no longer supported/i,
-        /resultSelector no longer supported/i,
-      ],
-    },
-    {
-      key: "Observer callback",
-      matches: [/complete callback/i, /error callback/i],
-    },
-    {
-      key: "With",
-      matches: [
-        /use {@link (zipWith|combineLatestWith|concatWith|mergeWith|raceWith)}/i,
-      ],
-    },
-    {
-      key: "Removal in future",
-      matches: [/will be removed at some point in the future/i],
-    },
-    {
-      key: "Scheduler",
-      matches: [/Passing a scheduler here is deprecated/i],
-    },
-    {
-      key: "Array",
-      matches: [/Pass arguments in a single array instead/i],
-    },
-  ];
+  let { groups } = config;
 
   let deprecationsWithGroup: Deprecation[] = [];
 
   for (const deprecation of rawDeprecations) {
-    const groupKey = groups.find((group) => {
-      return group.matches.some((reg) =>
-        reg.test(deprecation.deprecationMessage)
-      );
+    const deprecationHasExistingGroup = groups.find((group) => {
+      // If matchers are present test them else return false
+      return group.matchers.length ?
+        group.matchers.some(
+        (reg) => reg && new RegExp(reg).test(deprecation.deprecationMessage)
+      ) : false;
     })?.key;
 
-    if (groupKey) {
-      deprecationsWithGroup.push({ ...deprecation, group: groupKey });
+    if (deprecationHasExistingGroup) {
+      deprecationsWithGroup.push({
+        ...deprecation,
+        group: deprecationHasExistingGroup,
+      });
       continue;
     }
 
-    const answer = await prompt([
+    const answer: { key: string; regexp: string } = await prompt([
       {
+        // TODO: use autocomplete here? https://github.com/enquirer/enquirer/tree/master/examples/autocomplete
+        // Problem: can't have a custom input that is not in choices
         type: "input",
         name: "key",
         message:
@@ -70,6 +46,7 @@ export async function addGrouping(
           EOL +
           deprecation.deprecationMessage +
           EOL,
+        initial: ungrouped
       },
       {
         type: "input",
@@ -78,13 +55,18 @@ export async function addGrouping(
       },
     ]);
 
-    const group = groups.find((g) => g.key === answer["key"]);
+    const group = groups.find((g) => g.key === answer.key);
+
+    // Don't store RegExp because they are not serializable
     if (group) {
-      group.matches.push(new RegExp(answer["regexp"], "i"));
+      // don't push empts regex
+      if(answer.regexp !== '') {
+        group.matchers.push(answer.regexp);
+      }
     } else {
       groups.push({
-        key: answer["key"],
-        matches: [new RegExp(answer["regexp"], "i")],
+        key: answer["key"] || ungrouped ,
+        matchers: answer.regexp !== '' ? [answer.regexp] : [],
       });
     }
 
@@ -94,5 +76,6 @@ export async function addGrouping(
     });
   }
 
+  updateRepoConfig({ ...config, groups });
   return deprecationsWithGroup;
 }

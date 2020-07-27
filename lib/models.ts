@@ -1,7 +1,10 @@
 export interface CrawlConfig {
   gitTag: string;
-  tsConfigPath: string;
   outputDirectory: string;
+  tsConfigPath: string;
+  deprecationComment: string;
+  deprecationLink: string;
+  groups: { key: string; matchers: string[] }[];
 }
 
 export enum NodeTypes {

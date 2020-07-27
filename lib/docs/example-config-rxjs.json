@@ -1,0 +1,39 @@
+{
+  "groups": [
+    {
+      "key": "internal-implementation",
+      "matchers": ["([Ii])nternal", "private API", "Not for public use"]
+    },
+    { "key": "NotificationKind", "matchers": ["NotificationKind"] },
+    {
+      "key": "Observable-statics",
+      "matchers": [" use new Subject() instead", "NEVER"]
+    },
+    {
+      "key": "InteropObservable",
+      "matchers": ["InteropObservable", "ObservedValueUnionFromArray"]
+    },
+    { "key": "observer", "matchers": ["observer instead"] },
+    { "key": "resultSelector", "matchers": ["resultSelector"] },
+    { "key": "Passing-scheduler", "matchers": ["Passing a scheduler"] },
+    {
+      "key": "array",
+      "matchers": ["a single array", "an array of Observables"]
+    },
+    { "key": "constant", "matchers": ["constant,"] },
+    { "key": "scheduled", "matchers": ["scheduled"] },
+    { "key": "const", "matchers": [] },
+    {
+      "key": "ungrouped",
+      "matchers": ["\\*\\* @deprecated \\*"]
+    },
+    { "key": "xWith", "matchers": ["With", " use static"] },
+    { "key": "interface", "matchers": ["use as interface only"] },
+    { "key": "partition", "matchers": ["partition", "and optional chaining"] },
+    { "key": "VirtualTimeScheduler", "matchers": ["VirtualTimeScheduler"] }
+  ],
+  "outputDirectory": "./deprecations",
+  "tsConfigPath": "tsconfig.json",
+  "deprecationComment": "@deprecated",
+  "deprecationLink": "https://rxjs.dev/deprecations"
+}

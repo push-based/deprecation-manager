@@ -3,7 +3,7 @@
     "declaration": true,
     "downlevelIteration": true,
     "importHelpers": true,
-    "lib": ["dom", "es2017"],
+    "lib": ["es2017"],
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmitHelpers": true,
@@ -15,7 +15,8 @@
     "suppressImplicitAnyIndexErrors": true,
     "target": "es5",
     "resolveJsonModule": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "types": ["node"]
   },
   "include": ["./lib/**/*.ts"]
 }
