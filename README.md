@@ -19,7 +19,7 @@ cd rxjs
 ## Usage
 
 
-### Crawling
+### Setup
 
 1. In the root of the repository run the following command.
 
@@ -49,6 +49,8 @@ By default `@deprecated` is set. Looks for comments with this keyword to add to 
 _√ What's the deprecation link to the docs (the deprecation uuid will be appended to this)?_
 By default `https://rxjs.dev/deprecations` is set. Used to add a link in the sourcecode to this location.
 If a deprecation comment already has this link, it will be skipped.
+
+### Crawling
 
 After that, the process should start crawling and every crawled file should get logged to the console.
 `Looking for deprecations in path/to/file`
