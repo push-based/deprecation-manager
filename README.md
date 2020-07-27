@@ -18,6 +18,9 @@ cd rxjs
 
 ## Usage
 
+
+### Crawling
+
 1. In the root of the repository run the following command.
 
 ```bash
@@ -49,6 +52,8 @@ If a deprecation comment already has this link, it will be skipped.
 
 After that, the process should start crawling and every crawled file should get logged to the console.
 `Looking for deprecations in path/to/file`
+
+### Grouping
 
 2.2 Grouping the results
 
