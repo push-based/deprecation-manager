@@ -1,7 +1,7 @@
 import { deprecate } from "util";
 
-// @deprecated test Details: {@link https://rxjs.dev/deprecations#undefined}
+// @deprecated test Details:
 const t = 0;
 
-// @deprecated Test Details: {@link https://rxjs.dev/deprecations#undefined}
+// @deprecated Test Details:
 const t1 = 0;
