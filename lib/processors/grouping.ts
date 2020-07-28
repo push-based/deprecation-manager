@@ -61,17 +61,18 @@ export async function addGrouping(
     ]);
 
     const group = groups.find((g) => g.key === answer.key);
-
+    const parsedRegex = answer.regexp.toLowerCase();
     // Don't store RegExp because they are not serializable
     if (group) {
+
       // don't push empts regex
-      if (answer.regexp !== "") {
-        group.matchers.push(answer.regexp);
+      if (parsedRegex !== "") {
+        group.matchers.push(parsedRegex);
       }
     } else {
       groups.push({
         key: answer["key"] || ungrouped,
-        matchers: answer.regexp !== "" ? [answer.regexp] : []
+        matchers: parsedRegex !== "" ? [parsedRegex] : []
       });
     }
 
