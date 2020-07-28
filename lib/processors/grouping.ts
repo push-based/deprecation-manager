@@ -4,7 +4,8 @@ import { CrawlConfig, Deprecation } from "../models";
 import { updateRepoConfig } from "../utils";
 
 
-const ungrouped = 'ungrouped';
+const ungrouped = "ungrouped";
+
 export async function addGrouping(
   config: CrawlConfig,
   rawDeprecations: Deprecation[]
@@ -23,14 +24,14 @@ export async function addGrouping(
       // If matchers are present test them else return false
       return group.matchers.length ?
         group.matchers.some(
-        (reg) => reg && new RegExp(reg).test(deprecation.deprecationMessage)
-      ) : false;
+          (reg) => reg && new RegExp(reg).test(deprecation.deprecationMessage)
+        ) : false;
     })?.key;
 
     if (deprecationHasExistingGroup) {
       deprecationsWithGroup.push({
         ...deprecation,
-        group: deprecationHasExistingGroup,
+        group: deprecationHasExistingGroup
       });
       continue;
     }
@@ -55,8 +56,10 @@ export async function addGrouping(
       {
         type: "input",
         name: "regexp",
-        message: "Add regexp to group",
-      },
+        message: `Which part of the deprecation message do you want to use as a matcher?` +
+          EOL +
+          ` Hint: regex string is allowed too.`
+      }
     ]);
 
     const group = groups.find((g) => g.key === answer.key);
@@ -64,19 +67,19 @@ export async function addGrouping(
     // Don't store RegExp because they are not serializable
     if (group) {
       // don't push empts regex
-      if(answer.regexp !== '') {
+      if (answer.regexp !== "") {
         group.matchers.push(answer.regexp);
       }
     } else {
       groups.push({
-        key: answer["key"] || ungrouped ,
-        matchers: answer.regexp !== '' ? [answer.regexp] : [],
+        key: answer["key"] || ungrouped,
+        matchers: answer.regexp !== "" ? [answer.regexp] : []
       });
     }
 
     deprecationsWithGroup.push({
       ...deprecation,
-      group: answer["key"],
+      group: answer["key"]
     });
   }
 
