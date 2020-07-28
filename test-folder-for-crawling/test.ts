@@ -1,7 +1,5 @@
-import { deprecate } from "util";
-
-// @deprecated test Details:
+// * @deprecated internal use only
 const t = 0;
 
-// @deprecated Test Details:
+// * @deprecated Internal use only
 const t1 = 0;
