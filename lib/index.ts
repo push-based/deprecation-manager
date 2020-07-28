@@ -18,14 +18,20 @@ import {
 
   const deprecations = await crawlDeprecations(config);
 
-  const processors = [addGrouping, addUniqueKey];
-  const processedDeprecations = (await processors.reduce(
+  // Crawling Phase
+  const crawlingPhaseProcessors = [addUniqueKey, addCommentToRepository];
+  const processedCrawledDeprecations = (await crawlingPhaseProcessors.reduce(
     async (deps, processor) => await processor(config, await deps),
     Promise.resolve(deprecations)
   )) as Deprecation[];
+  await generateRawJson(config, processedCrawledDeprecations, { tagDate });
 
-  const outputs = [addCommentToRepository, generateMarkdown, generateRawJson];
-  for (const output of outputs) {
-    await output(config, processedDeprecations, { tagDate });
-  }
+  // Grouping Phase
+  const groupingPhaseProcessors = [addGrouping];
+  const processedGroupedDeprecations = (await groupingPhaseProcessors.reduce(
+    async (deps, processor) => await processor(config, await deps),
+    Promise.resolve(deprecations)
+  )) as Deprecation[];
+  await generateMarkdown(config, processedGroupedDeprecations, { tagDate });
+
 })();
