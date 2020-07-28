@@ -23,9 +23,7 @@ export async function addGrouping(
     const deprecationHasExistingGroup = groups.find((group) => {
       // If matchers are present test them else return false
       return group.matchers.length ?
-        group.matchers.some(
-          (reg) => reg && new RegExp(reg).test(deprecation.deprecationMessage)
-        ) : false;
+        group.matchers.some((reg) => testMessage(reg, deprecation.deprecationMessage)) : false;
     })?.key;
 
     if (deprecationHasExistingGroup) {
@@ -85,4 +83,13 @@ export async function addGrouping(
 
   updateRepoConfig({ ...config, groups });
   return deprecationsWithGroup;
+}
+
+function testMessage(reg: string, deprecationMessage: string): boolean {
+  const preparedMassage = deprecationMessage
+    // check against lowercase to avoid multiple patterns
+    .toLowerCase()
+    // normalize multiple whitespaces to one
+    .split(' ').filter(s => !!s).join(' ');
+  return reg && new RegExp(reg).test(preparedMassage);
 }
