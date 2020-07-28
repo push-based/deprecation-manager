@@ -1,17 +1,16 @@
 import {
-  Project,
-  TypeElementTypes,
-  CommentTypeElement,
   ClassMemberTypes,
   CommentClassElement,
-  Statement,
+  CommentTypeElement,
+  Project,
   SourceFile,
+  Statement,
+  TypeElementTypes
 } from "ts-morph";
 import { isConstructorDeclaration, isVariableStatement } from "typescript";
 import { CrawlConfig, Deprecation } from "./models";
-import { readFile } from "./utils";
 import { cwd } from "process";
-import { resolve, normalize } from "path";
+import { normalize, resolve } from "path";
 import { existsSync } from "fs";
 import { prompt } from "enquirer";
 import { findTsConfigFiles } from "./config";
@@ -49,8 +48,8 @@ function crawlFileForDeprecations(file: SourceFile, config: CrawlConfig) {
               node: n,
               comment: {
                 range,
-                text: range.getText(),
-              },
+                text: range.getText()
+              }
             }))
           )
           .reduce((acc, val) => acc.concat(val), [])
@@ -71,8 +70,8 @@ function crawlFileForDeprecations(file: SourceFile, config: CrawlConfig) {
           deprecationMessage: deprecation.comment.text,
           pos: [
             deprecation.comment.range.compilerObject.pos,
-            deprecation.comment.range.compilerObject.end,
-          ],
+            deprecation.comment.range.compilerObject.end
+          ]
         };
 
         function getHumanReadableNameForNode() {
@@ -117,21 +116,21 @@ function getNodesWithCommentsForFile(file: SourceFile) {
   const classMembers = file.getClasses().map(
     (c): NodesWithComment => ({
       parent: c.getName(),
-      nodes: c.getMembersWithComments(),
+      nodes: c.getMembersWithComments()
     })
   );
 
   const interfaceMembers = file.getInterfaces().map(
     (c): NodesWithComment => ({
       parent: c.getName(),
-      nodes: c.getMembersWithComments(),
+      nodes: c.getMembersWithComments()
     })
   );
 
   const commentsInFile: NodesWithComment[] = [
     ...statements,
     ...classMembers,
-    ...interfaceMembers,
+    ...interfaceMembers
   ];
   return commentsInFile;
 }
@@ -154,8 +153,8 @@ async function getSourceFiles(config: CrawlConfig) {
         choices: findTsConfigFiles(),
         format(value) {
           return value ? normalize(value) : "";
-        },
-      },
+        }
+      }
     ]);
     config.tsConfigPath = tsConfigPath;
     project.addSourceFilesFromTsConfig(tsConfigPath);
@@ -172,5 +171,5 @@ interface NodesWithComment {
     | CommentTypeElement
     | ClassMemberTypes
     | CommentClassElement
-  )[];
+    )[];
 }
