@@ -5,11 +5,15 @@
   "main": "index.js",
   "bin": "cli.js",
   "scripts": {
+    "start": "npx ./dist/index.js",
     "prebuild": "rimraf ./dist",
     "build": "tsc",
     "postbuild": "cpy ./package.json ./dist && cpy ./cli.js ./dist",
     "local": "ts-node lib/local.ts",
-    "build-and-pack": "npm run build && cd dist && npm pack && cd .."
+    "build-and-pack": "npm run build && cd dist && npm pack && cd ..",
+    "cleanup": "rimraf ./deprecations ./deprecation-crawler.config.json",
+    "build-and-pack-and-run": "npm run build-and-pack && npm start",
+    "build-and-pack-and-run-clean": "npm run build-and-pack-and-run && npm run cleanup"
   },
   "keywords": [],
   "author": "",
