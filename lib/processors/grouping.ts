@@ -42,9 +42,13 @@ export async function addGrouping(
         type: "input",
         name: "key",
         message:
-          `Add group to deprecation ${deprecation.path}#${deprecation.lineNumber}` +
+          `Add group name to deprecation ${deprecation.path}#${deprecation.lineNumber}` +
           EOL +
           deprecation.deprecationMessage +
+          EOL +
+          `Think of the headline of the grouping file. The string will be kebab cased and used as file name for the group.` +
+          EOL +
+          `An example for a name could be 'Internal implementation detail' the filename will be 'internal-implementation-detail.md` +
           EOL,
         initial: ungrouped
       },
