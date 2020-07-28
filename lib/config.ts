@@ -4,6 +4,7 @@ import { glob } from "glob";
 import { CrawlConfig } from "./models";
 import { REPO_CONFIG_PATH } from "./constants";
 import { readFile, updateRepoConfig } from "./utils";
+import {execSync} from 'child_process';
 
 export async function getConfig(): Promise<CrawlConfig> {
   const repoConfigFile = readFile(REPO_CONFIG_PATH) || "{}";
@@ -16,11 +17,11 @@ export async function getConfig(): Promise<CrawlConfig> {
 
   const userConfig: CrawlConfig = await prompt([
     {
-      type: "input",
+      type: "select",
       name: "gitTag",
       message: `What git tag do you want to crawl?`,
-      initial: process.argv.slice(2)[0] || "master",
       skip: !!process.argv.slice(2)[0],
+      choices: getGitHubTags()
     },
     {
       type: "input",
@@ -68,4 +69,8 @@ export async function getConfig(): Promise<CrawlConfig> {
 export function findTsConfigFiles() {
   const tsConfigs = glob.sync("**/*tsconfig*.json");
   return tsConfigs;
+}
+
+export function getGitHubTags(): string[] {
+  return execSync('git tag').toString().trim().split('\n');
 }
