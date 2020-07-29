@@ -76,5 +76,8 @@ export function getGitHubTags(): string[] {
 }
 
 export function getGitHubBranches(): string[] {
-  return execSync('git branch').toString().trim().split('\n').reverse();
+  return execSync('git branch').toString().trim().split('\n')
+    // @TODO remove ugly hack for the `*` char of the current branch
+    .map(i => i.split('* ').join(''))
+    .reverse();
 }
