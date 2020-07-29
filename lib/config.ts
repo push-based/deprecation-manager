@@ -72,5 +72,7 @@ export function findTsConfigFiles() {
 }
 
 export function getGitHubTags(): string[] {
-  return execSync('git tag').toString().trim().split('\n').reverse();
+  const tags = execSync('git tag').toString().trim().split('\n').reverse();
+  tags.unshift('master');
+  return tags;
 }
