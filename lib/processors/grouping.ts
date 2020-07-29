@@ -6,6 +6,11 @@ import { updateRepoConfig } from "../utils";
 
 const ungrouped = "ungrouped";
 
+interface Group {
+  key: string,
+  matchers: string[]
+}
+
 export async function addGrouping(
   config: CrawlConfig,
   rawDeprecations: Deprecation[]
@@ -15,7 +20,7 @@ export async function addGrouping(
   }
 
   console.log("Adding grouping to deprecations...");
-  let { groups } = config;
+  let { groups } = config as {groups: Group[]};
 
   let deprecationsWithGroup: Deprecation[] = [];
 
@@ -38,7 +43,7 @@ export async function addGrouping(
       {
         // TODO: use autocomplete here? https://github.com/enquirer/enquirer/tree/master/examples/autocomplete
         // Problem: can't have a custom input that is not in choices
-        type: "input",
+        type: "select",
         name: "key",
         message:
           `Add group name to deprecation ${deprecation.path}#${deprecation.lineNumber}` +
@@ -49,7 +54,7 @@ export async function addGrouping(
           EOL +
           `An example for a name could be 'Internal implementation detail' the filename will be 'internal-implementation-detail.md` +
           EOL,
-        initial: ungrouped
+        choices: getGroupChoices(groups)
       },
       {
         type: "input",
@@ -91,6 +96,10 @@ function testMessage(reg: string, deprecationMessage: string): boolean {
     // check against lowercase to avoid multiple patterns
     .toLowerCase()
     // normalize multiple whitespaces to one
-    .split(' ').filter(s => !!s).join(' ');
+    .split(" ").filter(s => !!s).join(" ");
   return reg && new RegExp(reg).test(preparedMassage);
+}
+
+function getGroupChoices(groups: Group[]): string[] {
+  return ['ungrouped', ...groups.map(g => g.key)];
 }
