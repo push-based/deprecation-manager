@@ -66,6 +66,6 @@ export async function getConfig(): Promise<CrawlConfig> {
 }
 
 export function findTsConfigFiles() {
-  const tsConfigs = glob.sync("**/*tsconfig*.json");
+  const tsConfigs = glob.sync("**/*tsconfig*.json", { ignore: "**/node_modules/**" });
   return tsConfigs;
 }
