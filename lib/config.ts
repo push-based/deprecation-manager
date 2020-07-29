@@ -21,7 +21,7 @@ export async function getConfig(): Promise<CrawlConfig> {
       name: "gitTag",
       message: `What git tag do you want to crawl?`,
       skip: !!process.argv.slice(2)[0],
-      choices: getGitHubTags()
+      choices: [...getGitHubBranches(), ...getGitHubTags()]
     },
     {
       type: "input",
@@ -72,7 +72,9 @@ export function findTsConfigFiles() {
 }
 
 export function getGitHubTags(): string[] {
-  const tags = execSync('git tag').toString().trim().split('\n').reverse();
-  tags.unshift('master');
-  return tags;
+  return execSync('git tag').toString().trim().split('\n').reverse();
+}
+
+export function getGitHubBranches(): string[] {
+  return execSync('git branch').toString().trim().split('\n').reverse();
 }
