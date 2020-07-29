@@ -82,7 +82,6 @@ Examples for message `The full deprecation message for {@link test} thingy!`:
 - Partial message/Includes `full deprecation`
 - Partial message `/^(?=.*deprecation message)(?=.*thingy!).../`
 
-
 @NOTICE ATM a deprecation can only belong to one group.
 
 If you just hit enter no regular expression gets saved.
