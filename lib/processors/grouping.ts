@@ -65,25 +65,27 @@ export async function addGrouping(
       }
     ]);
 
-    const group = groups.find((g) => g.key === answer.key);
+    const groupKey = answer.key.trim();
     const parsedRegex = parseDeprecationMessageOrRegex(answer.regexp);
+    const group = groups.find((g) => g.key === groupKey);
+
     // Don't store RegExp because they are not serializable
     if (group) {
 
-      // don't push empts regex
+      // don't push empty regex
       if (parsedRegex !== "") {
         group.matchers.push(parsedRegex);
       }
     } else {
       groups.push({
-        key: answer["key"] || ungrouped,
+        key: groupKey || ungrouped,
         matchers: parsedRegex !== "" ? [parsedRegex] : []
       });
     }
 
     deprecationsWithGroup.push({
       ...deprecation,
-      group: answer["key"]
+      group: groupKey
     });
   }
 
