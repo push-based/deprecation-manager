@@ -42,8 +42,8 @@ export async function addGrouping(
     const answer: { key: string; regexp: string } = await prompt([
       {
         // TODO: use autocomplete here? https://github.com/enquirer/enquirer/tree/master/examples/autocomplete
-        // Problem: can't have a custom input that is not in choices
-        type: "select",
+        // @Notice Problem: can't have a custom input that is not in choices
+        type: "input",
         name: "key",
         message:
           `Add group name to deprecation ${deprecation.path}#${deprecation.lineNumber}` +
@@ -54,7 +54,7 @@ export async function addGrouping(
           EOL +
           `An example for a name could be 'Internal implementation detail' the filename will be 'internal-implementation-detail.md` +
           EOL,
-        choices: getGroupChoices(groups)
+        initial: ungrouped
       },
       {
         type: "input",
@@ -98,8 +98,4 @@ function testMessage(reg: string, deprecationMessage: string): boolean {
     // normalize multiple whitespaces to one
     .split(" ").filter(s => !!s).join(" ");
   return reg && new RegExp(reg).test(preparedMassage);
-}
-
-function getGroupChoices(groups: Group[]): string[] {
-  return ['ungrouped', ...groups.map(g => g.key)];
 }
