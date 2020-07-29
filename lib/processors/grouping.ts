@@ -20,7 +20,7 @@ export async function addGrouping(
   }
 
   console.log("Adding grouping to deprecations...");
-  let { groups } = config as {groups: Group[]};
+  let { groups } = config as { groups: Group[] };
 
   let deprecationsWithGroup: Deprecation[] = [];
 
@@ -66,7 +66,7 @@ export async function addGrouping(
     ]);
 
     const group = groups.find((g) => g.key === answer.key);
-    const parsedRegex = answer.regexp.toLowerCase();
+    const parsedRegex = parseDeprecationMessageOrRegex(answer.regexp);
     // Don't store RegExp because they are not serializable
     if (group) {
 
@@ -92,10 +92,17 @@ export async function addGrouping(
 }
 
 function testMessage(reg: string, deprecationMessage: string): boolean {
-  const preparedMassage = deprecationMessage
+  return reg && new RegExp(reg).test(parseDeprecationMessageOrRegex(deprecationMessage));
+}
+
+// Used for both, message and regex string.
+// Otherwise it could happen that will never match
+function parseDeprecationMessageOrRegex(deprecationMessage: string): string {
+  return deprecationMessage
     // check against lowercase to avoid multiple patterns
     .toLowerCase()
     // normalize multiple whitespaces to one
-    .split(" ").filter(s => !!s).join(" ");
-  return reg && new RegExp(reg).test(preparedMassage);
+    .split(" ").filter(s => !!s).join(" ")
+    // tri trailing and leading white spaces
+    .trim();
 }
