@@ -6,6 +6,7 @@
   "bin": "cli.js",
   "scripts": {
     "start": "npx ./dist/index.js",
+    "start-clean": "npm run cleanup && npm start",
     "prebuild": "rimraf ./dist",
     "build": "tsc",
     "postbuild": "cpy ./package.json ./dist && cpy ./cli.js ./dist",

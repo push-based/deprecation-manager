@@ -8,7 +8,7 @@ export async function generateMarkdown(
   config: CrawlConfig,
   rawDeprecations: Deprecation[],
   options: { tagDate: string }
-) {
+): Promise<Deprecation[]> {
   if (rawDeprecations.length === 0) {
     console.log(
       "🎉 All deprecations are resolved, no markdown have to be generated"
@@ -71,6 +71,7 @@ export async function generateMarkdown(
     join(config.outputDirectory, `${config.gitTag}.md`),
     markdownContent
   );
+  return rawDeprecations;
 }
 
 function stripComment(message: string) {
