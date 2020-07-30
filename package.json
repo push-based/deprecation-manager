@@ -13,8 +13,8 @@
     "local": "ts-node lib/local.ts",
     "build-and-pack": "npm run build && cd dist && npm pack && cd ..",
     "cleanup": "rimraf ./deprecations ./deprecation-crawler.config.json && git checkout -- ./test-folder-for-crawling/**",
-    "build-and-pack-and-run": "npm run build-and-pack && npm start",
-    "build-and-pack-and-run-clean": "npm run cleanup && npm run build-and-pack && npm start"
+    "build-and-pack-and-run": "npm run build-and-pack && npm run crawl",
+    "build-and-pack-and-run-clean": "npm run cleanup && npm run build-and-pack && npm run crawl"
   },
   "keywords": [],
   "author": "",

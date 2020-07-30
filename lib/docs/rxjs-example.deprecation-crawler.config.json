@@ -1,0 +1,60 @@
+{
+  "groups": [
+    {
+      "key": "internal implementation ",
+      "matchers": ["internal implementation d", "internal use only", "no longer checked"]
+    },
+    { "key": "ungrouped", "matchers": [] },
+    { "key": "NotificationKind", "matchers": ["notificationkind"] },
+    {
+      "key": "Observable",
+      "matchers": [
+        "use new subject() instead",
+        "interopobservable",
+        "observedvalueunionfromarray"
+      ]
+    },
+    {
+      "key": "observer callback",
+      "matchers": ["^(?=.*observer)(?=.*callback)..."]
+    },
+    { "key": "resultSelector", "matchers": ["resultselector"] },
+    {
+      "key": "scheduler deprecated",
+      "matchers": ["^(?=.*scheduler)(?=.*deprecated)...", "^(?=.*scheduled)(?=.*instead)..."]
+    },
+    { "key": "single array instead", "matchers": ["single array instead"] },
+    { "key": "constants", "matchers": ["^(?=.*in favor of)(?=.*constant)...", "in favor of"] },
+    { "key": "array", "matchers": ["array of observables instead"] },
+    {
+      "key": "static-flattening",
+      "matchers": ["^(?=.*scheduled)(?=.*all)(?=.*)...", "use static"]
+    },
+    {
+      "key": "allow inference or cast with `as`",
+      "matchers": ["allow inference or cast with `as`"]
+    },
+    {
+      "key": "xWith",
+      "matchers": [
+        "combinelatestwith",
+        "concatwith",
+        "mergewith",
+        "racewith",
+        "zipwith"
+      ]
+    },
+    { "key": "empty notifiers", "matchers": ["empty notifiers"] },
+    { "key": "mapTo signature", "matchers": ["mapto"] },
+    { "key": "static", "matchers": ["static creation function instead"] },
+    { "key": "v8", "matchers": ["v8"] },
+    { "key": "interface", "matchers": ["use as interface only"] },
+    { "key": "iterator", "matchers": ["iterator"] },
+    { "key": "rxSubscriber", "matchers": ["rxsubscriber"] },
+    { "key": "WebSocketSubject", "matchers": ["deserializer"] }
+  ],
+  "outputDirectory": "./deprecations",
+  "tsConfigPath": "src/tsconfig.base.json",
+  "deprecationComment": "@deprecated",
+  "deprecationLink": "https://rxjs.dev/deprecations"
+}
