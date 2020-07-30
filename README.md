@@ -70,7 +70,17 @@ By default `ungrouped` is suggested. These strings serve as a reverence to the g
 
 _√ Add regexp to group_
 This question asks for a regular expression used to check every new deprecation against it is to see if it matches the group's conditions/regexes.
-Every group can have multiple regular expressions to test a deprecation for.
+Every group can have multiple regular expressions to test a deprecation for. 
+
+The deprecation message as well as the passed reges string will get normalized
+- trim white spaces
+- transform multiple white space to one
+- all lowercase
+
+Examples for message `The full deprecation message for {@link test} thingy!`:
+- Full message `The full deprecation message for {@link test} thingy!`
+- Partial message/Includes `full deprecation`
+- Partial message `/^(?=.*deprecation message)(?=.*thingy!).../`
 
 @NOTICE ATM a deprecation can only belong to one group.
 
