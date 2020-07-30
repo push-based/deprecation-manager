@@ -85,6 +85,6 @@ export function getGitHubBranches(defaultTag: string): string[] {
     ...execSync("git branch").toString().trim().split("\n")
       // @TODO remove ugly hack for the `*` char of the current branch
       .map(i => i.split("* ").join(""))
-      .filter(v => v === defaultTag)
+      .filter(v => v !== defaultTag)
   ].reverse();
 }
