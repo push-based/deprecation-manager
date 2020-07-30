@@ -50,9 +50,9 @@ export async function addGrouping(
           EOL +
           deprecation.deprecationMessage +
           EOL +
-          `Think of the headline of the grouping file. The string will be kebab cased and used as file name for the group.` +
+          `Think of a human readable name of the group.` +
           EOL +
-          `An example for a name could be 'Internal implementation detail' the filename will be 'internal-implementation-detail.md` +
+          `An example for a name could be 'Internal implementation detail'` +
           EOL,
         initial: ungrouped
       },
