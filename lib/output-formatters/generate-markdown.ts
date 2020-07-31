@@ -8,7 +8,7 @@ export async function generateMarkdown(
   config: CrawlConfig,
   rawDeprecations: Deprecation[],
   options: { tagDate: string }
-) {
+): Promise<void> {
   if (rawDeprecations.length === 0) {
     console.log(
       "🎉 All deprecations are resolved, no markdown have to be generated"

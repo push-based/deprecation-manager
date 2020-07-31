@@ -7,11 +7,13 @@ import { EOL } from "os";
 export async function addCommentToRepository(
   config: CrawlConfig,
   rawDeprecations: Deprecation[]
-) {
+): Promise<void> {
   if (rawDeprecations.length === 0) {
     console.log("🎉 All deprecations are resolved, no changes have to be made");
     return;
   }
+
+  console.log("Writing deprecation ids to your repository...");
 
   const project = new Project({
     tsConfigFilePath: config.tsConfigPath,
@@ -63,4 +65,6 @@ export async function addCommentToRepository(
       }
     });
   });
+
+  console.log("🎉 All deprecations are resolved, your repository is ready for a commit!");
 }

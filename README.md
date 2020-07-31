@@ -135,5 +135,10 @@ cd path/to/the/root/folder
 ```bash
 npx path/to/find-deprecations/dist/index.js
 ```
+or while developing in the actual branch run:
+
+```bash
+npm run build-and-pack-and-run-clean -- current branch
+```
 
 5. go on with the step 2 form section [Usage](#Usage)

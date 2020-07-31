@@ -14,15 +14,8 @@ export enum NodeTypes {
   MethodDefinition = "MethodDefinition",
 }
 
-export interface MigrationItemSubjectUIDFields {
-  itemType: string;
-  subject: string;
-  subjectSymbol: string;
-  subjectAction: string;
-}
-
-export interface MigrationReleaseUIDFields {
-  version: string;
+export interface CrawlerProcess<I, O> {
+  (crawledReleases: I): Promise<O>
 }
 
 export enum SubjectSymbols {
@@ -47,7 +40,8 @@ export enum SubjectActionSymbol {
   method = "method",
 }
 
-export interface RawDeprecation extends MigrationItemSubjectUIDFields {
+// @TODO move to custom formatters => HTML view
+export interface RawDeprecation {
   itemType: string;
   sourceLink: string;
   breakingChangeVersion: string;
@@ -63,31 +57,10 @@ export interface RawDeprecation extends MigrationItemSubjectUIDFields {
   notes?: string;
 }
 
-export interface RawMigrationReleaseItem extends MigrationReleaseUIDFields {
-  date: string;
-  sourceLink: string;
-  deprecations: RawDeprecation[];
-}
-
 export interface CrawledRelease {
   version: string;
   date: string;
-  deprecations: CrawledDeprecation[];
-}
-
-export interface CrawledDeprecation {
-  type: NodeTypes;
-  name: string;
-  deprecationMsg: string;
-  sourceLink: string;
-}
-
-export interface FoundDeprecation {
-  name: string;
-  filename: string;
-  lineNumber: number;
-  deprecationMsg: string;
-  type: string;
+  deprecations: Deprecation[];
 }
 
 export interface Deprecation {
@@ -98,7 +71,6 @@ export interface Deprecation {
   code: string;
   deprecationMessage: string;
   pos: [number, number];
-
   group?: string;
   uuid?: string;
 }
