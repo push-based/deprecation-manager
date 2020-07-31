@@ -3,7 +3,6 @@ import { prompt } from "enquirer";
 import { CrawlConfig, Deprecation } from "../models";
 import { updateRepoConfig } from "../utils";
 
-
 const ungrouped = "ungrouped";
 
 interface Group {
