@@ -2,7 +2,7 @@ import { normalize } from "path";
 import { prompt } from "enquirer";
 import { glob } from "glob";
 import { CrawlConfig } from "./models";
-import { REPO_CONFIG_PATH } from "./constants";
+import { REPO_CONFIG_PATH, TSCONFIG_PATH } from "./constants";
 import { readFile, updateRepoConfig } from "./utils";
 import { execSync } from "child_process";
 
@@ -44,7 +44,7 @@ export async function getConfig(): Promise<CrawlConfig> {
       },
       initial:
         repoConfig.tsConfigPath ||
-        tsConfigFiles.find((p) => p === "tsconfig.json") ||
+        tsConfigFiles.find((p) => p === TSCONFIG_PATH) ||
         tsConfigFiles[0],
       skip: !!repoConfig.tsConfigPath || tsConfigFiles.length === 1
     },
@@ -72,7 +72,11 @@ export async function getConfig(): Promise<CrawlConfig> {
 
 export function findTsConfigFiles() {
   const tsConfigs = glob.sync("**/*tsconfig*.json", { ignore: "**/node_modules/**" });
-  return tsConfigs;
+  return [
+    TSCONFIG_PATH,
+    ...tsConfigs
+    .filter(i => i.indexOf(TSCONFIG_PATH) === -1)
+    ];
 }
 
 export function getGitHubTags(): string[] {

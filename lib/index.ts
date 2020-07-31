@@ -1,13 +1,13 @@
 import { getConfig } from "./config";
 
-import { CrawledRelease, CrawlerProcess } from "./models";
+import { CrawledRelease } from "./models";
 import { crawlDeprecations } from "./crawler";
 import { checkout } from "./checkout";
 
 import { addGrouping } from "./processors/grouping";
 import { addUniqueKey } from "./processors/unique";
 import { addCommentToRepository, generateMarkdown, generateRawJson } from "./output-formatters/";
-import { prompt } from "enquirer";
+import { askToSkip, concat, tap } from "./utils";
 
 (async () => {
   const config = await getConfig();
@@ -21,69 +21,39 @@ import { prompt } from "enquirer";
     deprecations
   };
 
-  const crawlingPhaseProcessors = [
+  const processors = [
     // Crawling Phase
-    async (r: CrawledRelease): Promise<CrawledRelease> => ({
-      ...crawledRelease,
-      deprecations: await addUniqueKey(config, crawledRelease.deprecations)
-    }),
-    // Persistence Phase
-    awaitTap((r: CrawledRelease) => generateRawJson(config, r.deprecations, { tagDate: r.date })),
+    concat([
+      async (r: CrawledRelease): Promise<CrawledRelease> => ({
+        ...crawledRelease,
+        deprecations: await addUniqueKey(config, crawledRelease.deprecations)
+      }),
+      tap((r: CrawledRelease) => generateRawJson(config, r.deprecations, { tagDate: r.date }))
+    ]),
     // Repo Update
     askToSkip(
       "Repo Update?",
-      awaitTap((r: CrawledRelease) => addCommentToRepository(config, r.deprecations)),
-
+      tap((r: CrawledRelease) => addCommentToRepository(config, r.deprecations))
     ),
     // Grouping Phase
     askToSkip(
       "Grouping?",
-      async (r: CrawledRelease) => ({
-        ...r,
-        deprecations: await addGrouping(config, r.deprecations)
-      })
+      concat([
+        async (r: CrawledRelease) => ({
+          ...r,
+          deprecations: await addGrouping(config, r.deprecations)
+        }),
+        tap((r: CrawledRelease) => generateRawJson(config, r.deprecations, { tagDate: r.date }))
+      ])
     ),
-    // Persistence Phase
-    awaitTap((r: CrawledRelease) => generateRawJson(config, r.deprecations, { tagDate: r.date })),
     // Formatting Phase
     askToSkip(
       "Markdown?",
-      awaitTap((r: CrawledRelease) => generateMarkdown(config, r.deprecations, { tagDate: date }))
+      tap((r: CrawledRelease) => generateMarkdown(config, r.deprecations, { tagDate: date }))
     )
   ];
 
-  // Run Processes
-  const processedCrawledDeprecations = (await crawlingPhaseProcessors.reduce(
-    async (deps, processor) => await processor(await deps),
-    Promise.resolve(crawledRelease)
-  )) as CrawledRelease;
+  // Run all processors
+  concat(processors)(crawledRelease);
 
 })();
-
-function awaitTap<I>(process: CrawlerProcess<I, I | void>): CrawlerProcess<I, I> {
-  return async function(d: I): Promise<I> {
-    await process(d);
-    return Promise.resolve(d);
-  };
-}
-
-function askToSkip<I>(question: string, process: CrawlerProcess<I, I>): CrawlerProcess<I, I> {
-  return async function(d: I): Promise<I> {
-
-    const answer: {skip: string} = await prompt([{
-      type: "select",
-      name: "skip",
-      message: question,
-      choices: [
-      { name: 'Y' },
-      { name: 'n', value: false }
-      ]
-    } as any]);
-
-    console.log('answer.skip',answer.skip);
-    if (answer.skip == 'n') {
-      return Promise.resolve(d);
-    }
-    return await process(d);
-  };
-}
