@@ -44,7 +44,7 @@ export async function generateRawJson(
   writeFileSync(join(config.outputDirectory, `${config.gitTag}.json`), json);
 }
 
-function upsetrDeprecations(oldDeprecations: Deprecation[], newDeprecations: Deprecation[]): Deprecation[] {
+function upsertDeprecations(oldDeprecations: Deprecation[], newDeprecations: Deprecation[]): Deprecation[] {
   const upsertedDeprecations = [...oldDeprecations];
   upsertedDeprecations.forEach(d => upsetrDeprecation(upsertedDeprecations, d));
   return upsertedDeprecations;
