@@ -7,7 +7,7 @@ import { EOL } from "os";
 export async function addCommentToRepository(
   config: CrawlConfig,
   rawDeprecations: Deprecation[]
-): Promise<Deprecation[]> {
+): Promise<void> {
   if (rawDeprecations.length === 0) {
     console.log("🎉 All deprecations are resolved, no changes have to be made");
     return;
@@ -63,6 +63,4 @@ export async function addCommentToRepository(
       }
     });
   });
-
-  return rawDeprecations;
 }

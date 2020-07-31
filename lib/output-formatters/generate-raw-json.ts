@@ -7,7 +7,7 @@ export async function generateRawJson(
   config: CrawlConfig,
   rawDeprecations: Deprecation[],
   options: { tagDate: string }
-) {
+): Promise<void> {
   if (rawDeprecations.length === 0) {
     console.log(
       "🎉 All deprecations are resolved, no raw JSON has to be generated"
@@ -44,14 +44,14 @@ export async function generateRawJson(
   writeFileSync(join(config.outputDirectory, `${config.gitTag}.json`), json);
 }
 
-function upsertDeprecations(oldDeprecations: Deprecation[], newDeprecations: Deprecation[]): Deprecation[] {
-  const upsertedDeprecations = [...oldDeprecations];
-  upsertedDeprecations.forEach(d => upsetrDeprecation(upsertedDeprecations, d));
+function upsertDeprecations(existingDeprecations: Deprecation[], newDeprecations: Deprecation[]): Deprecation[] {
+  const upsertedDeprecations = [...existingDeprecations];
+  newDeprecations.forEach(newDeprecation => upsertDeprecation(upsertedDeprecations, newDeprecation));
   return upsertedDeprecations;
 }
 
-function upsertDeprecation(oldDeprecations: Deprecation[], deprecation: Deprecation) {
-  const i = oldDeprecations.findIndex(_deprecation => deprecation.path+deprecation.lineNumber === _deprecation.path+_deprecation.lineNumber);
-  if (i > -1) oldDeprecations[i] = deprecation;
-  else oldDeprecations.push(deprecation);
+function upsertDeprecation(existingDeprecations: Deprecation[], deprecationToUpsert: Deprecation) {
+  const i = existingDeprecations.findIndex(_deprecation => deprecationToUpsert.path+deprecationToUpsert.lineNumber === _deprecation.path+_deprecation.lineNumber);
+  if (i > -1) existingDeprecations[i] = deprecationToUpsert;
+  else existingDeprecations.push(deprecationToUpsert);
 }
