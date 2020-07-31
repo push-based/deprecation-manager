@@ -1,6 +1,6 @@
 import { getConfig } from "./config";
 
-import { BooleanPrompt, CrawledRelease, CrawlerProcess } from "./models";
+import { CrawledRelease, CrawlerProcess } from "./models";
 import { crawlDeprecations } from "./crawler";
 import { checkout } from "./checkout";
 

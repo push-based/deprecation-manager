@@ -30,7 +30,7 @@ export async function generateRawJson(
   if (existingData) {
     content = {
       ...existingData,
-      deprecations: upsetrDeprecations(existingData.deprecations, rawDeprecations)
+      deprecations: upsertDeprecations(existingData.deprecations, rawDeprecations)
     };
   } else {
     content = {
