@@ -13,6 +13,8 @@ export async function addCommentToRepository(
     return;
   }
 
+  console.log("Writing deprecation ids to your repository...");
+
   const project = new Project({
     tsConfigFilePath: config.tsConfigPath,
   });
@@ -63,4 +65,6 @@ export async function addCommentToRepository(
       }
     });
   });
+
+  console.log("🎉 All deprecations are resolved, your repository is ready for a commit!");
 }
