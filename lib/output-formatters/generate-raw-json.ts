@@ -50,7 +50,7 @@ function upsetrDeprecations(oldDeprecations: Deprecation[], newDeprecations: Dep
   return upsertedDeprecations;
 }
 
-function upsetrDeprecation(oldDeprecations: Deprecation[], deprecation: Deprecation) {
+function upsertDeprecation(oldDeprecations: Deprecation[], deprecation: Deprecation) {
   const i = oldDeprecations.findIndex(_deprecation => deprecation.path+deprecation.lineNumber === _deprecation.path+_deprecation.lineNumber);
   if (i > -1) oldDeprecations[i] = deprecation;
   else oldDeprecations.push(deprecation);
