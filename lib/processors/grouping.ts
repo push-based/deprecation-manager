@@ -13,10 +13,10 @@ interface Group {
 
 export async function addGrouping(
   config: CrawlConfig,
-  rawDeprecations: Deprecation[]
+  crawledDeprecations: Deprecation[]
 ): Promise<Deprecation[]> {
-  if (rawDeprecations.length === 0) {
-    return rawDeprecations;
+  if (crawledDeprecations.length === 0) {
+    return crawledDeprecations;
   }
 
   console.log("Adding grouping to deprecations...");
@@ -24,7 +24,7 @@ export async function addGrouping(
 
   let deprecationsWithGroup: Deprecation[] = [];
 
-  for (const deprecation of rawDeprecations) {
+  for (const deprecation of crawledDeprecations) {
     const deprecationHasExistingGroup = groups.find((group) => {
       // If matchers are present test them else return false
       return group.matchers.length ?
