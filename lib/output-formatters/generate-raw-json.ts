@@ -15,7 +15,7 @@ export async function generateRawJson(
     return;
   }
 
-  console.log("📝 Generating raw JSON");
+  console.log("📝 Regenerating raw JSON");
 
   ensureDirExists(config.outputDirectory);
 
@@ -41,7 +41,10 @@ export async function generateRawJson(
   }
 
   const json = JSON.stringify(content, null, 4);
-  writeFileSync(join(config.outputDirectory, `${config.gitTag}.json`), json);
+  const path = join(config.outputDirectory, `${config.gitTag}.json`);
+  writeFileSync(path, json);
+
+  console.log(`📝 Raw JSON data up to date under ${path}`);
 }
 
 function upsertDeprecations(existingDeprecations: Deprecation[], newDeprecations: Deprecation[]): Deprecation[] {
