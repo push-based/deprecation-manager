@@ -2,7 +2,7 @@
   "groups": [
     {
       "key": "internal implementation ",
-      "matchers": ["internal implementation d", "internal use only", "no longer checked"]
+      "matchers": ["internal implementation", "internal use only", "no longer checked"]
     },
     { "key": "ungrouped", "matchers": [] },
     { "key": "NotificationKind", "matchers": ["notificationkind"] },
