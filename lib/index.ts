@@ -21,46 +21,53 @@ import { prompt } from "enquirer";
     deprecations
   };
 
-  const crawlingPhaseProcessors = [
+  const processors = [
     // Crawling Phase
-    async (r: CrawledRelease): Promise<CrawledRelease> => ({
-      ...crawledRelease,
-      deprecations: await addUniqueKey(config, crawledRelease.deprecations)
-    }),
-    // Persistence Phase
-    awaitTap((r: CrawledRelease) => generateRawJson(config, r.deprecations, { tagDate: r.date })),
+    concat([
+      async (r: CrawledRelease): Promise<CrawledRelease> => ({
+        ...crawledRelease,
+        deprecations: await addUniqueKey(config, crawledRelease.deprecations)
+      }),
+      tap((r: CrawledRelease) => generateRawJson(config, r.deprecations, { tagDate: r.date }))
+    ]),
     // Repo Update
     askToSkip(
       "Repo Update?",
-      awaitTap((r: CrawledRelease) => addCommentToRepository(config, r.deprecations)),
-
+      tap((r: CrawledRelease) => addCommentToRepository(config, r.deprecations))
     ),
     // Grouping Phase
     askToSkip(
       "Grouping?",
-      async (r: CrawledRelease) => ({
-        ...r,
-        deprecations: await addGrouping(config, r.deprecations)
-      })
+      concat([
+        async (r: CrawledRelease) => ({
+          ...r,
+          deprecations: await addGrouping(config, r.deprecations)
+        }),
+        tap((r: CrawledRelease) => generateRawJson(config, r.deprecations, { tagDate: r.date }))
+      ])
     ),
-    // Persistence Phase
-    awaitTap((r: CrawledRelease) => generateRawJson(config, r.deprecations, { tagDate: r.date })),
     // Formatting Phase
     askToSkip(
       "Markdown?",
-      awaitTap((r: CrawledRelease) => generateMarkdown(config, r.deprecations, { tagDate: date }))
+      tap((r: CrawledRelease) => generateMarkdown(config, r.deprecations, { tagDate: date }))
     )
   ];
 
-  // Run Processes
-  const processedCrawledDeprecations = (await crawlingPhaseProcessors.reduce(
-    async (deps, processor) => await processor(await deps),
-    Promise.resolve(crawledRelease)
-  )) as CrawledRelease;
+  // Run all processors
+  concat(processors)(crawledRelease);
 
 })();
 
-function awaitTap<I>(process: CrawlerProcess<I, I | void>): CrawlerProcess<I, I> {
+function concat<I>(processes: CrawlerProcess<I, I>[]): CrawlerProcess<I, I> {
+  return async function(d: I): Promise<I> {
+    return await processes.reduce(
+      async (deps, processor) => await processor(await deps),
+      Promise.resolve(d)
+    );
+  };
+}
+
+function tap<I>(process: CrawlerProcess<I, I | void>): CrawlerProcess<I, I> {
   return async function(d: I): Promise<I> {
     await process(d);
     return Promise.resolve(d);
@@ -70,18 +77,18 @@ function awaitTap<I>(process: CrawlerProcess<I, I | void>): CrawlerProcess<I, I>
 function askToSkip<I>(question: string, process: CrawlerProcess<I, I>): CrawlerProcess<I, I> {
   return async function(d: I): Promise<I> {
 
-    const answer: {skip: string} = await prompt([{
+    const answer: { skip: string } = await prompt([{
       type: "select",
       name: "skip",
       message: question,
       choices: [
-      { name: 'Y' },
-      { name: 'n', value: false }
+        { name: "Y" },
+        { name: "n", value: false }
       ]
     } as any]);
 
-    console.log('answer.skip',answer.skip);
-    if (answer.skip == 'n') {
+    console.log("answer.skip", answer.skip);
+    if (answer.skip == "n") {
       return Promise.resolve(d);
     }
     return await process(d);
