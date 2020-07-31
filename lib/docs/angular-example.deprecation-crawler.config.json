@@ -1,0 +1,42 @@
+{
+  "groups": [
+    {
+      "key": "LoadChildrenCallback over string",
+      "matchers": ["LoadChildrenCallback", "loadChildren"]
+    },
+    { "key": "router", "matchers": ["queryparam"] },
+    { "key": "compiler", "matchers": ["no effect"] },
+    { "key": "from v10", "matchers": ["10"] },
+    { "key": "from v9", "matchers": ["9"] },
+    { "key": "from v6", "matchers": ["6"] },
+    { "key": "from v5", "matchers": ["5"] },
+    { "key": "from v4", "matchers": ["4"] },
+    { "key": "AngularJS", "matchers": ["angularjs"] },
+    { "key": "internal", "matchers": ["internal"] },
+    { "key": "loadChildren", "matchers": ["loadchildren"] },
+    { "key": "No replacement", "matchers": ["no replacement"] },
+    {
+      "key": "number of pending request",
+      "matchers": ["number of pending request"]
+    },
+    { "key": "renderer3", "matchers": ["templatefixture"] },
+    {
+      "key": "ungrouped",
+      "matchers": [
+        "ɵprov",
+        "incorrectly uses declared name",
+        "analyze",
+        "canParse"
+      ]
+    },
+    {
+      "key": "No longer being generated",
+      "matchers": ["no longer being generated"]
+    },
+    { "key": "canparse", "matchers": ["canparse"] }
+  ],
+  "outputDirectory": "./deprecations",
+  "tsConfigPath": "packages/tsconfig.json",
+  "deprecationComment": "@deprecated",
+  "deprecationLink": "https://rxjs.dev/deprecations"
+}
