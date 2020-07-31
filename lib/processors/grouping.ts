@@ -18,17 +18,12 @@ export async function addGrouping(
     return crawledDeprecations;
   }
 
-  console.log("Adding grouping to deprecations...");
+  console.log("Start grouping deprecations...");
   let { groups } = config as { groups: Group[] };
-
   let deprecationsWithGroup: Deprecation[] = [];
 
   for (const deprecation of crawledDeprecations) {
-    const deprecationHasExistingGroup = groups.find((group) => {
-      // If matchers are present test them else return false
-      return group.matchers.length ?
-        group.matchers.some((reg) => testMessage(reg, deprecation.deprecationMessage)) : false;
-    })?.key;
+    const deprecationHasExistingGroup = checkForExistingGroup(groups, deprecation);
 
     if (deprecationHasExistingGroup) {
       deprecationsWithGroup.push({
@@ -38,39 +33,13 @@ export async function addGrouping(
       continue;
     }
 
-    const answer: { key: string; regexp: string } = await prompt([
-      {
-        // TODO: use autocomplete here? https://github.com/enquirer/enquirer/tree/master/examples/autocomplete
-        // @Notice Problem: can't have a custom input that is not in choices
-        type: "input",
-        name: "key",
-        message:
-          `Add group name to deprecation ${deprecation.path}#${deprecation.lineNumber}` +
-          EOL +
-          deprecation.deprecationMessage +
-          EOL +
-          `Think of a human readable name of the group.` +
-          EOL +
-          `An example for a name could be 'Internal implementation detail'` +
-          EOL,
-        initial: ungrouped
-      },
-      {
-        type: "input",
-        name: "regexp",
-        message: `Which part of the deprecation message do you want to use as a matcher?` +
-          EOL +
-          ` Hint: regex string is allowed too.`
-      }
-    ]);
-
-    const groupKey = answer.key.trim();
-    const parsedRegex = parseDeprecationMessageOrRegex(answer.regexp);
-    const group = groups.find((g) => g.key === groupKey);
+    const groupKey = await getGroupNameFromExistingOrInputQuestion(deprecation, getGroupNames(groups, ungrouped))
+    const answerRegex: {regexp: string} = await prompt([getGroupRegexQuestion()]);
+    const parsedRegex = answerRegex.regexp;
+    const group = groups.find(g => g.key === groupKey);
 
     // Don't store RegExp because they are not serializable
     if (group) {
-
       // don't push empty regex
       if (parsedRegex !== "") {
         group.matchers.push(parsedRegex);
@@ -90,6 +59,71 @@ export async function addGrouping(
 
   updateRepoConfig({ ...config, groups });
   return deprecationsWithGroup;
+}
+
+function getGroupNames(groups: { key: string }[], ungroupedKey: string): string[] {
+  return [ungroupedKey, ...groups.map(g => g.key).filter(k => k !== ungroupedKey)]
+}
+
+function checkForExistingGroup(groups: Group[], deprecation: Deprecation) {
+  return groups.find((group) => {
+    // If matchers are present test them else return false
+    return group.matchers.length ?
+      group.matchers.some((reg) => testMessage(reg, deprecation.deprecationMessage)) : false;
+  })?.key;
+}
+
+async function getGroupNameFromExistingOrInputQuestion(deprecation: Deprecation, groups: string[], newGroupChoice:string = 'Create new group'): Promise<string> {
+  const answerNameFromExisting: { existingKey: string; } = await prompt([
+    getGroupNameFromExistingQuestion(deprecation, [newGroupChoice, ...groups], newGroupChoice)
+  ]);
+  const isExistingGroup = answerNameFromExisting.existingKey !== newGroupChoice;
+  return isExistingGroup ? answerNameFromExisting.existingKey : await prompt([getGroupNameQuestion(deprecation)]).then((s: { key: string}) => s.key);
+}
+
+function getGroupNameFromExistingQuestion(deprecation: Deprecation, groupChoices: string[], defaultKey: string) {
+  return {
+    // TODO: use autocomplete here? https://github.com/enquirer/enquirer/tree/master/examples/autocomplete
+    // @Notice Problem: can't have a custom input that is not in choices
+    type: "select",
+    name: "existingKey",
+    message:
+      `Add human readable group name to deprecation` +
+      EOL +
+      `${deprecation.path}#${deprecation.lineNumber}` +
+      EOL +
+      deprecation.deprecationMessage +
+      EOL,
+    initial: defaultKey,
+    choices: groupChoices
+  };
+}
+
+function getGroupNameQuestion(deprecation: Deprecation) {
+  return {
+    // TODO: use autocomplete here? https://github.com/enquirer/enquirer/tree/master/examples/autocomplete
+    // @Notice Problem: can't have a custom input that is not in choices
+    type: "input",
+    name: "key",
+    message:
+      `Add human readable group name to deprecation` +
+      EOL +
+      `${deprecation.path}#${deprecation.lineNumber}` +
+      EOL +
+      deprecation.deprecationMessage +
+      EOL,
+    initial: ungrouped
+  };
+}
+
+function getGroupRegexQuestion() {
+  return {
+    type: "input",
+    name: "regexp",
+    message: `Which part of the deprecation message do you want to use as a matcher?` +
+      EOL +
+      ` Hint: regex string is allowed too.`
+  };
 }
 
 function testMessage(reg: string, deprecationMessage: string): boolean {
