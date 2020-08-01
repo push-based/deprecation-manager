@@ -1,9 +1,7 @@
 import { getConfig } from './config';
-
 import { CrawledRelease } from './models';
 import { crawlDeprecations } from './crawler';
 import { checkout } from './checkout';
-
 import { addGrouping } from './processors/grouping';
 import { addUniqueKey } from './processors/unique';
 import {
@@ -15,7 +13,6 @@ import { askToSkip, concat, tap } from './utils';
 
 (async () => {
   const config = await getConfig();
-
   const date = await checkout(config);
   const deprecations = await crawlDeprecations(config);
 

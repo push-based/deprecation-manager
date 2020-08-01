@@ -1,0 +1,18 @@
+{
+  "groups": [
+    { "key": "all-lowercase", "matchers": ["iNternal use onLy"] },
+    {
+      "key": "whitespace-normalisation",
+      "matchers": ["This  const is  deprecated"]
+    },
+    {
+      "key": "multiple-string-patterns-at-once",
+      "matchers": ["/^(?=.*This const named!)(?=.*deprecated!)(?=.*xyz!).../"]
+    },
+    { "key": "catch-all", "matchers": ["(.*?)"] }
+  ],
+  "outputDirectory": "./deprecations",
+  "tsConfigPath": "tsconfig.sandbox.json",
+  "deprecationComment": "@deprecated",
+  "deprecationLink": "sandbox-deprecation-link"
+}

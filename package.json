@@ -6,7 +6,7 @@
     "nx": "nx",
     "start": "nx serve",
     "build": "nx run-many --target=build --all",
-    "test": "nx test",
+    "test": "npm run build && nx run-many --target=test --all",
     "lint": "nx workspace-lint && nx lint",
     "e2e": "nx e2e",
     "affected:apps": "nx affected:apps",

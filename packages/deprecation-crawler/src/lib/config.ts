@@ -2,12 +2,12 @@ import { normalize } from 'path';
 import { prompt } from 'enquirer';
 import { glob } from 'glob';
 import { CrawlConfig } from './models';
-import { REPO_CONFIG_PATH, TSCONFIG_PATH } from './constants';
+import { CRAWLER_CONFIG_PATH, TSCONFIG_PATH } from './constants';
 import { readFile, updateRepoConfig } from './utils';
 import { execSync } from 'child_process';
 
 export async function getConfig(): Promise<CrawlConfig> {
-  const repoConfigFile = readFile(REPO_CONFIG_PATH) || '{}';
+  const repoConfigFile = readFile(CRAWLER_CONFIG_PATH) || '{}';
   const repoConfig = JSON.parse(repoConfigFile);
 
   const tsConfigFiles = findTsConfigFiles();

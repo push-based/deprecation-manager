@@ -1,5 +1,6 @@
 module.exports = {
   name: 'deprecation-crawler',
+  displayName: 'deprecation-crawler',
   preset: '../../jest.config.js',
   globals: {
     'ts-jest': {

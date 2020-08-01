@@ -2,7 +2,6 @@ import { Project } from 'ts-morph';
 import { CrawlConfig, Deprecation } from '../models';
 import { cwd } from 'process';
 import { join } from 'path';
-import { EOL } from 'os';
 
 export async function addCommentToRepository(
   config: CrawlConfig,
@@ -37,10 +36,10 @@ export async function addCommentToRepository(
       const sourceFile = project.getSourceFile(filePath);
       const deprecationDetails = ` Details: {@link ${config.deprecationLink}#${deprecation.uuid}}`;
 
-      const lines = deprecation.deprecationMessage.split(EOL);
+      const lines = deprecation.deprecationMessage.split('\n');
       const newText = lines
         .map((comment) => addDeprecationLinkToComment(comment))
-        .join(EOL);
+        .join('\n');
 
       sourceFile.replaceText(
         deprecation.pos.map((pos) => pos + addedPosForText) as [number, number],

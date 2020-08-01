@@ -1,7 +1,8 @@
+import * as cp from 'child_process';
 import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
 import { CrawlConfig, CrawlerProcess } from './models';
 import { format, resolveConfig } from 'prettier';
-import { REPO_CONFIG_PATH } from './constants';
+import { CRAWLER_CONFIG_PATH } from './constants';
 import { prompt } from 'enquirer';
 
 export function hash(str: string) {
@@ -32,7 +33,7 @@ export function updateRepoConfig(config: CrawlConfig) {
     ...resolveConfig.sync('./'),
   });
 
-  writeFileSync(REPO_CONFIG_PATH, prettiedConfig);
+  writeFileSync(CRAWLER_CONFIG_PATH, prettiedConfig);
 }
 
 export function readFile(path: string) {
@@ -64,9 +65,13 @@ export function tap<I>(
 
 export function askToSkip<I>(
   question: string,
-  process: CrawlerProcess<I, I>
+  crawlerProcess: CrawlerProcess<I, I>
 ): CrawlerProcess<I, I> {
   return async function (d: I): Promise<I> {
+    if (sandBoxMode()) {
+      return await crawlerProcess(d);
+    }
+
     const answer: { skip: string } = await prompt([
       {
         type: 'select',
@@ -76,10 +81,35 @@ export function askToSkip<I>(
       } as any,
     ]);
 
-    console.log('answer.skip', answer.skip);
     if (answer.skip == 'n') {
       return Promise.resolve(d);
     }
-    return await process(d);
+    return await crawlerProcess(d);
   };
+}
+
+export function git(args: string[]): Promise<string> {
+  return cmd('git', args);
+}
+
+export function cmd(command: string, args: string[]): Promise<string> {
+  return exec(command, args);
+}
+
+export function exec(command: string, args: string[]): Promise<string> {
+  return new Promise((resolve, reject) => {
+    cp.exec(command + ' ' + args.join(' '), (err, stdout) => {
+      if (err) {
+        return reject(err);
+      }
+
+      resolve(stdout.toString());
+    });
+  });
+}
+
+// used to determine if tests are running in sandbox mode
+// otherwise the test will get stuck on cli questions
+export function sandBoxMode() {
+  return process.env.CRAWLER_SANDBOX_MODE === 'true';
 }

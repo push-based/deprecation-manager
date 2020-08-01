@@ -161,7 +161,9 @@ function getGroupRegexQuestion() {
 function testMessage(reg: string, deprecationMessage: string): boolean {
   return (
     reg &&
-    new RegExp(reg).test(parseDeprecationMessageOrRegex(deprecationMessage))
+    new RegExp(parseDeprecationMessageOrRegex(reg)).test(
+      parseDeprecationMessageOrRegex(deprecationMessage)
+    )
   );
 }
 
