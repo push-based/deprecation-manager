@@ -1,7 +1,5 @@
 import { Project } from 'ts-morph';
 import { CrawlConfig, Deprecation } from '../models';
-import { cwd } from 'process';
-import { join } from 'path';
 
 export async function addCommentToRepository(
   config: CrawlConfig,
@@ -28,12 +26,12 @@ export async function addCommentToRepository(
 
     let addedPosForText = 0;
 
+    // important to process deprecations based on the position
+    // when a note is added, it affects the position of the next note (original position + added note length)
     const sorted = deprecations.sort((a, b) => (a.pos[0] > b.pos[0] ? 1 : -1));
 
     sorted.forEach((deprecation) => {
-      const filePath = join(cwd(), path);
-
-      const sourceFile = project.getSourceFile(filePath);
+      const sourceFile = project.getSourceFile(path);
       const deprecationDetails = ` Details: {@link ${config.deprecationLink}#${deprecation.uuid}}`;
 
       const lines = deprecation.deprecationMessage.split('\n');

@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as cp from 'child_process';
 import * as path from 'path';
+import * as rimraf from 'rimraf';
 
 const SANDBOX_PATH = path.join(__dirname, '..', 'sandbox');
 
@@ -23,6 +24,11 @@ const testcases = fs
 beforeAll(async () => {
   testcases.forEach((testcase) => {
     fs.copyFileSync(testcase.input, testcase.crawled);
+    rimraf(path.join(SANDBOX_PATH, 'deprecations'), (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
   });
 });
 
@@ -43,7 +49,6 @@ test('sandbox', async () => {
     const crawledContent = fs.readFileSync(testcase.crawled, 'utf8');
     const expectedContent = fs.readFileSync(testcase.output, 'utf8');
     expect(crawledContent).toBe(expectedContent);
-    console.log(crawledContent);
   });
 
   // verify json
@@ -53,8 +58,6 @@ test('sandbox', async () => {
       'utf8'
     )
   );
-
-  console.log(jsonOutput);
 
   expect(jsonOutput.deprecations).toHaveLength(9);
   expect(

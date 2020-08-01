@@ -88,6 +88,20 @@
         },
         {
             "path": "whitespace-normalisation\\crawled.ts",
+            "lineNumber": 12,
+            "name": "whitespacesNormalisation1",
+            "kind": "VariableStatement",
+            "code": "const whitespacesNormalisation1 = 0;",
+            "deprecationMessage": "/**\n * @deprecated This const is deprecated\n * Example: single whitespaces\n * Group name: whitespace normalisation\n * Regex: This  const is  deprecated\n */",
+            "pos": [
+                141,
+                296
+            ],
+            "uuid": "3186155811",
+            "group": "whitespace-normalisation"
+        },
+        {
+            "path": "whitespace-normalisation\\crawled.ts",
             "lineNumber": 18,
             "name": "whitespacesNormalisation2",
             "kind": "VariableStatement",
@@ -112,20 +126,6 @@
                 596
             ],
             "uuid": "3130163297",
-            "group": "whitespace-normalisation"
-        },
-        {
-            "path": "whitespace-normalisation\\crawled.ts",
-            "lineNumber": 12,
-            "name": "whitespacesNormalisation1",
-            "kind": "VariableStatement",
-            "code": "const whitespacesNormalisation1 = 0;",
-            "deprecationMessage": "/**\n * @deprecated This const is deprecated\n * Example: single whitespaces\n * Group name: whitespace normalisation\n * Regex: This  const is  deprecated\n */",
-            "pos": [
-                141,
-                296
-            ],
-            "uuid": "3186155811",
             "group": "whitespace-normalisation"
         }
     ]

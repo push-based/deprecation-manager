@@ -9,8 +9,7 @@ import {
 } from 'ts-morph';
 import { isConstructorDeclaration, isVariableStatement } from 'typescript';
 import { CrawlConfig, Deprecation } from './models';
-import { cwd } from 'process';
-import { normalize, resolve } from 'path';
+import { normalize, relative } from 'path';
 import { existsSync } from 'fs';
 import { prompt } from 'enquirer';
 import { findTsConfigFiles } from './config';
@@ -32,10 +31,7 @@ export async function crawlDeprecations(config: CrawlConfig) {
 
 function crawlFileForDeprecations(file: SourceFile, config: CrawlConfig) {
   try {
-    const path = resolve(file.getFilePath())
-      .replace(resolve(cwd()), '')
-      // remove slash
-      .substr(1);
+    const path = relative(process.cwd(), file.getFilePath());
     console.log(`🔎 Looking for deprecations in ${path}`);
 
     const commentsInFile = getNodesWithCommentsForFile(file);
