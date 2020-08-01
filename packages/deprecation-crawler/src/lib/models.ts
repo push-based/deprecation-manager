@@ -8,36 +8,36 @@ export interface CrawlConfig {
 }
 
 export enum NodeTypes {
-  ClassDeclaration = "ClassDeclaration",
-  Identifier = "Identifier",
-  ClassBody = "ClassBody",
-  MethodDefinition = "MethodDefinition",
+  ClassDeclaration = 'ClassDeclaration',
+  Identifier = 'Identifier',
+  ClassBody = 'ClassBody',
+  MethodDefinition = 'MethodDefinition',
 }
 
 export interface CrawlerProcess<I, O> {
-  (crawledReleases: I): Promise<O>
+  (crawledReleases: I): Promise<O>;
 }
 
 export enum SubjectSymbols {
-  all = "all",
-  class = "class",
-  interface = "interface",
-  function = "function",
-  enum = "enum",
-  const = "enum",
-  let = "let",
-  var = "var",
-  symbol = "symbol",
-  import = "import",
-  typeAlias = "type-alias",
+  all = 'all',
+  class = 'class',
+  interface = 'interface',
+  function = 'function',
+  enum = 'enum',
+  const = 'enum',
+  let = 'let',
+  var = 'var',
+  symbol = 'symbol',
+  import = 'import',
+  typeAlias = 'type-alias',
 }
 
 export enum SubjectActionSymbol {
-  all = "all",
-  argument = "argument",
-  property = "property",
-  genericArgument = "generic-argument",
-  method = "method",
+  all = 'all',
+  argument = 'argument',
+  property = 'property',
+  genericArgument = 'generic-argument',
+  method = 'method',
 }
 
 // @TODO move to custom formatters => HTML view

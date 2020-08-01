@@ -1,8 +1,8 @@
-import { writeFileSync } from "fs";
-import { basename, join } from "path";
-import { CrawlConfig, Deprecation } from "../models";
-import { ensureDirExists } from "../utils";
-import { EOL } from "os";
+import { writeFileSync } from 'fs';
+import { basename, join } from 'path';
+import { CrawlConfig, Deprecation } from '../models';
+import { ensureDirExists } from '../utils';
+import { EOL } from 'os';
 
 export async function generateMarkdown(
   config: CrawlConfig,
@@ -11,15 +11,15 @@ export async function generateMarkdown(
 ): Promise<void> {
   if (rawDeprecations.length === 0) {
     console.log(
-      "🎉 All deprecations are resolved, no markdown have to be generated"
+      '🎉 All deprecations are resolved, no markdown have to be generated'
     );
     return;
   }
 
-  console.log("📝 Generating markdown");
+  console.log('📝 Generating markdown');
 
   const deprecationsByGroup = rawDeprecations.reduce((acc, val) => {
-    const group = val.group || "";
+    const group = val.group || '';
     acc[group] = (acc[group] || []).concat(val);
     return acc;
   }, {} as { [group: string]: Deprecation[] });
@@ -37,17 +37,17 @@ export async function generateMarkdown(
             a.pos[0] > b.pos[0] ? 1 : -1
           );
 
-          return ["", `### ${basename(path)}`].concat(
+          return ['', `### ${basename(path)}`].concat(
             ...sorted.map((deprecation) => {
               return [
-                "",
+                '',
                 `#### ${deprecation.name} (${deprecation.kind}) {#${deprecation.uuid}}`,
-                "",
+                '',
                 stripComment(deprecation.deprecationMessage),
-                "",
-                "```ts",
+                '',
+                '```ts',
                 deprecation.code,
-                "```",
+                '```',
               ];
             })
           );
@@ -62,7 +62,7 @@ export async function generateMarkdown(
 
   const markdownContent = [
     `# ${config.gitTag} (${options.tagDate})`,
-    "",
+    '',
     ...pagesInMd,
   ].join(EOL);
 
@@ -74,5 +74,5 @@ export async function generateMarkdown(
 }
 
 function stripComment(message: string) {
-  return message.replace("/**", "").replace("*/", "").replace(/\*/g, "").trim();
+  return message.replace('/**', '').replace('*/', '').replace(/\*/g, '').trim();
 }

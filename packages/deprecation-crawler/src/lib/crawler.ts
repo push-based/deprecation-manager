@@ -5,15 +5,15 @@ import {
   Project,
   SourceFile,
   Statement,
-  TypeElementTypes
-} from "ts-morph";
-import { isConstructorDeclaration, isVariableStatement } from "typescript";
-import { CrawlConfig, Deprecation } from "./models";
-import { cwd } from "process";
-import { normalize, resolve } from "path";
-import { existsSync } from "fs";
-import { prompt } from "enquirer";
-import { findTsConfigFiles } from "./config";
+  TypeElementTypes,
+} from 'ts-morph';
+import { isConstructorDeclaration, isVariableStatement } from 'typescript';
+import { CrawlConfig, Deprecation } from './models';
+import { cwd } from 'process';
+import { normalize, resolve } from 'path';
+import { existsSync } from 'fs';
+import { prompt } from 'enquirer';
+import { findTsConfigFiles } from './config';
 
 // What about https://ts-morph.com/details/documentation#js-docs ?
 // Problem: can't find top level deprecations? e.g. merge
@@ -23,7 +23,7 @@ export async function crawlDeprecations(config: CrawlConfig) {
 
   const deprecations = sourceFiles
     // TODO: seems like these files cannot be parsed correctly?
-    .filter((file) => !file.getFilePath().includes("/Observable.ts"))
+    .filter((file) => !file.getFilePath().includes('/Observable.ts'))
     .map((file) => crawlFileForDeprecations(file, config))
     .reduce((acc, val) => acc.concat(val), []);
 
@@ -33,7 +33,7 @@ export async function crawlDeprecations(config: CrawlConfig) {
 function crawlFileForDeprecations(file: SourceFile, config: CrawlConfig) {
   try {
     const path = resolve(file.getFilePath())
-      .replace(resolve(cwd()), "")
+      .replace(resolve(cwd()), '')
       // remove slash
       .substr(1);
     console.log(`🔎 Looking for deprecations in ${path}`);
@@ -48,8 +48,8 @@ function crawlFileForDeprecations(file: SourceFile, config: CrawlConfig) {
               node: n,
               comment: {
                 range,
-                text: range.getText()
-              }
+                text: range.getText(),
+              },
             }))
           )
           .reduce((acc, val) => acc.concat(val), [])
@@ -59,28 +59,28 @@ function crawlFileForDeprecations(file: SourceFile, config: CrawlConfig) {
 
     return deprecationsInFile.map(
       (deprecation): Deprecation => {
-        let nodeText = getHumanReadableNameForNode();
+        const nodeText = getHumanReadableNameForNode();
 
         return {
           path,
           lineNumber: deprecation.node.getStartLineNumber(),
-          name: [deprecation.parent, nodeText].filter(Boolean).join("."),
+          name: [deprecation.parent, nodeText].filter(Boolean).join('.'),
           kind: deprecation.node.getKindName(),
           code: deprecation.node.getText(),
           deprecationMessage: deprecation.comment.text,
           pos: [
             deprecation.comment.range.compilerObject.pos,
-            deprecation.comment.range.compilerObject.end
-          ]
+            deprecation.comment.range.compilerObject.end,
+          ],
         };
 
         function getHumanReadableNameForNode() {
           let text =
-            "DEPRECATION-TODO, unknown node, open an issue at https://github.com/timdeschryver/find-deprecations/issues/new";
+            'DEPRECATION-TODO, unknown node, open an issue at https://github.com/timdeschryver/find-deprecations/issues/new';
 
           if (
-            "name" in deprecation.node.compilerNode &&
-            typeof deprecation.node.compilerNode.name.getText === "function"
+            'name' in deprecation.node.compilerNode &&
+            typeof deprecation.node.compilerNode.name.getText === 'function'
           ) {
             text = deprecation.node.compilerNode.name.getText();
           } else if (
@@ -89,7 +89,7 @@ function crawlFileForDeprecations(file: SourceFile, config: CrawlConfig) {
           ) {
             text = deprecation.node.compilerNode.declarationList.declarations[0].name.getText();
           } else if (isConstructorDeclaration(deprecation.node.compilerNode)) {
-            text = "constructor";
+            text = 'constructor';
           }
 
           return text;
@@ -111,26 +111,26 @@ function crawlFileForDeprecations(file: SourceFile, config: CrawlConfig) {
 function getNodesWithCommentsForFile(file: SourceFile) {
   const statements = file
     .getStatementsWithComments()
-    .map((c): NodesWithComment => ({ parent: "", nodes: [c] }));
+    .map((c): NodesWithComment => ({ parent: '', nodes: [c] }));
 
   const classMembers = file.getClasses().map(
     (c): NodesWithComment => ({
       parent: c.getName(),
-      nodes: c.getMembersWithComments()
+      nodes: c.getMembersWithComments(),
     })
   );
 
   const interfaceMembers = file.getInterfaces().map(
     (c): NodesWithComment => ({
       parent: c.getName(),
-      nodes: c.getMembersWithComments()
+      nodes: c.getMembersWithComments(),
     })
   );
 
   const commentsInFile: NodesWithComment[] = [
     ...statements,
     ...classMembers,
-    ...interfaceMembers
+    ...interfaceMembers,
   ];
   return commentsInFile;
 }
@@ -139,7 +139,7 @@ async function getSourceFiles(config: CrawlConfig) {
   const project = new Project();
 
   if (!config.tsConfigPath) {
-    throw Error("We need a ts config path to be able to crawl");
+    throw Error('We need a ts config path to be able to crawl');
   }
 
   if (existsSync(config.tsConfigPath)) {
@@ -147,14 +147,14 @@ async function getSourceFiles(config: CrawlConfig) {
   } else {
     const { tsConfigPath } = await prompt([
       {
-        type: "select",
-        name: "tsConfigPath",
+        type: 'select',
+        name: 'tsConfigPath',
         message: `tsconfig "${config.tsConfigPath}" does not exist, let's try again`,
         choices: findTsConfigFiles(),
         format(value) {
-          return value ? normalize(value) : "";
-        }
-      }
+          return value ? normalize(value) : '';
+        },
+      },
     ]);
     config.tsConfigPath = tsConfigPath;
     project.addSourceFilesFromTsConfig(tsConfigPath);
@@ -171,5 +171,5 @@ interface NodesWithComment {
     | CommentTypeElement
     | ClassMemberTypes
     | CommentClassElement
-    )[];
+  )[];
 }
