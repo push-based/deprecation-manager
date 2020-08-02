@@ -1,0 +1,25 @@
+{
+  "name": "deprecation-crawler",
+  "version": "0.0.0-development",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/timdeschryver/deprecation-manager.git"
+  },
+  "bugs": {
+    "url": "https://github.com/timdeschryver/deprecation-manager/issues"
+  },
+  "homepage": "https://github.com/timdeschryver/deprecation-manager",
+  "main": "index.js",
+  "bin": "cli.js",
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "enquirer": "^2.3.5",
+    "glob": "^7.1.6",
+    "prettier": "^2.0.5",
+    "ts-morph": "^7.1.0",
+    "tslib": "^2.0.0"
+  }
+}

@@ -1,3 +1,0 @@
-{
-  "include": ["./test-folder-for-crawling/**/*.ts"]
-}

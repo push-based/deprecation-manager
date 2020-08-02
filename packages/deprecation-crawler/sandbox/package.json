@@ -1,0 +1,6 @@
+{
+  "name": "deprecation-crawler-sandbox",
+  "scripts": {
+    "crawl": "npx ../../../dist/packages/deprecation-crawler/index.js"
+  }
+}
