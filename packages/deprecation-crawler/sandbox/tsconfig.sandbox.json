@@ -1,6 +1,3 @@
 {
-  "compilerOptions": {
-    "baseUrl": "./"
-  },
   "include": ["./**/crawled.ts"]
 }
