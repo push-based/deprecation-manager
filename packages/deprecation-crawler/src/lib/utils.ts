@@ -27,7 +27,9 @@ export function ensureDirExists(dir: string) {
 }
 
 export function updateRepoConfig(config: CrawlConfig) {
-  const { gitTag, ...writableConfig } = config;
+  // exclude gitTag from the persisted config
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { gitTag: _, ...writableConfig } = config;
   const prettiedConfig = format(JSON.stringify(writableConfig), {
     parser: 'json',
     ...resolveConfig.sync('./'),
@@ -72,19 +74,19 @@ export function askToSkip<I>(
       return await crawlerProcess(d);
     }
 
-    const answer: { skip: string } = await prompt([
+    const answer: { proceed: boolean } = await prompt([
       {
-        type: 'select',
-        name: 'skip',
+        type: 'confirm',
+        name: 'proceed',
         message: question,
-        choices: [{ name: 'Y' }, { name: 'n', value: false }],
-      } as any,
+        initial: true,
+      },
     ]);
 
-    if (answer.skip == 'n') {
-      return Promise.resolve(d);
+    if (answer.proceed) {
+      return await crawlerProcess(d);
     }
-    return await crawlerProcess(d);
+    return Promise.resolve(d);
   };
 }
 
