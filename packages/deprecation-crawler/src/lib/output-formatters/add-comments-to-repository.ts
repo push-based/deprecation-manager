@@ -32,7 +32,7 @@ export async function addCommentToRepository(
 
     sorted.forEach((deprecation) => {
       const sourceFile = project.getSourceFile(path);
-      const deprecationDetails = ` Details: {@link ${config.deprecationLink}#${deprecation.uuid}}`;
+      const deprecationDetails = ` Details: {@link ${config.deprecationLink}#${deprecation.ruid}}`;
 
       const lines = deprecation.deprecationMessage.split('\n');
       const newText = lines

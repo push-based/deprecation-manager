@@ -61,7 +61,7 @@ export async function getConfig(): Promise<CrawlConfig> {
       type: 'input',
       name: 'deprecationLink',
       message:
-        "What's the deprecation link to the docs (the deprecation uuid will be appended to this)?",
+        "What's the deprecation link to the docs (the deprecation ruid will be appended to this)?",
       initial: repoConfig.deprecationLink || 'https://rxjs.dev/deprecations',
       skip: !!repoConfig.deprecationLink,
     },

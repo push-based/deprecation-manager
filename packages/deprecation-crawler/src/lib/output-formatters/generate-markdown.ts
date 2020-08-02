@@ -41,7 +41,7 @@ export async function generateMarkdown(
             ...sorted.map((deprecation) => {
               return [
                 '',
-                `#### ${deprecation.name} (${deprecation.kind}) {#${deprecation.uuid}}`,
+                `#### ${deprecation.name} (${deprecation.kind}) {#${deprecation.ruid}}`,
                 '',
                 stripComment(deprecation.deprecationMessage),
                 '',

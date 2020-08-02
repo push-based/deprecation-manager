@@ -39,7 +39,7 @@ test('sandbox', async () => {
 
   // verify output
   expect(cliOutput).toMatch(/Looking for deprecations/i);
-  expect(cliOutput).toMatch(/Adding uuid to deprecations/i);
+  expect(cliOutput).toMatch(/Adding ruid to deprecations/i);
   expect(cliOutput).toMatch(/Regenerating raw JSON/i);
   expect(cliOutput).toMatch(/Start grouping deprecations/i);
   expect(cliOutput).toMatch(/Generating markdown/i);

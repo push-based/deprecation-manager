@@ -72,5 +72,5 @@ export interface Deprecation {
   deprecationMessage: string;
   pos: [number, number];
   group?: string;
-  uuid?: string;
+  ruid?: string;
 }

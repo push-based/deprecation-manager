@@ -9,8 +9,8 @@ export async function addUniqueKey(
     return rawDeprecations;
   }
 
-  console.log('Adding uuid to deprecations...');
+  console.log('Adding ruid to deprecations...');
   return rawDeprecations.map((deprecation) => {
-    return { ...deprecation, uuid: hash(deprecation.code) };
+    return { ...deprecation, ruid: hash(deprecation.code) };
   });
 }
