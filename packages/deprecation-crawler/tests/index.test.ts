@@ -59,7 +59,7 @@ test('sandbox', async () => {
     )
   );
 
-  expect(jsonOutput.deprecations).toHaveLength(9);
+  expect(jsonOutput.deprecations).toHaveLength(13);
   expect(
     jsonOutput.deprecations.filter((d) => d.group === 'all-lowercase')
   ).toHaveLength(3);
