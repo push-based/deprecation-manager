@@ -74,6 +74,7 @@ export interface Deprecation {
   deprecationMessage: string;
   pos: [number, number];
   version: string;
+  remoteUrl: string;
   group?: string;
   ruid?: string;
 }

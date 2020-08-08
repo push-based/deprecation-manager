@@ -1,5 +1,5 @@
 import { CrawlConfig, Deprecation } from "../../models";
-import { readFile } from "../../utils";
+import { git, readFile } from "../../utils";
 import { writeFileSync } from "fs";
 import * as path from "path";
 import { EOL } from "os";
@@ -9,15 +9,15 @@ const MD_GROUP_OPENER = "<!-- ruid-groups";
 const MD_GROUP_CLOSER = "ruid-groups -->";
 
 export async function generateGroupBasedFormatter(config: CrawlConfig,
-                               rawDeprecations: Deprecation[]): Promise<void> {
+                                                  rawDeprecations: Deprecation[]): Promise<void> {
 
-  console.log('📝 Update group-based markdown format');
+  console.log("📝 Update group-based markdown format");
 
   config.groups.forEach(g => {
     updateGroupMd(config, g, rawDeprecations);
   });
 
-  console.log('Updated group-based markdown format');
+  console.log("Updated group-based markdown format");
 }
 
 export async function updateGroupMd(config: CrawlConfig,
@@ -53,7 +53,7 @@ export async function updateGroupMd(config: CrawlConfig,
     MD_GROUP_CLOSER,
     sections.length === 1 ? sections[0] : sections[2],
     // We update already existing
-    sections.length === 1 ? getInitialGroupContent(group.key) : ''
+    sections.length === 1 ? getInitialGroupContent(group.key) : ""
   ];
 
   const newMd = updatedSections.join(EOL + EOL) + newlines;
@@ -98,20 +98,34 @@ the following version specifier are set for the rxjs dependencies in StackBlitz:
 \`\`\`ts
 // code here
 \`\`\`
-`
+`;
 }
 
+
+export async function getRemoteUrl(): Promise<string> {
+  const remotes = arrayFromGitOutput(await git(["remote show"]));
+  return git([`remote get-url ${remotes[0]}`]);
+}
+
+function arrayFromGitOutput(output: string): string[] {
+  return output.toString()
+    .trim()
+    .split("\n").map(s => s.trim())
+    .reverse();
+}
+
+
 async function getDeprecationList(groupedDeprecations: { [version: string]: Deprecation[] }): Promise<string> {
-  const repoUrl = "https://github.com/timdeschryver/deprecation-manager";
   return Object.entries(groupedDeprecations).map(([version, deprecations]) => {
     return `- ${version}: ` +
       EOL +
-      deprecations.map(d => `  - ${getLink(d, repoUrl)}`).join(EOL);
+      deprecations.map(d => `  - ${getLink(d)}`).join(EOL);
   }).join(EOL);
 
-  function getLink(deprecation: Deprecation, repoUrl: string): string {
+  function getLink(deprecation: Deprecation): string {
     const treeName = deprecation.version;
-    return `${repoUrl}/tree/${treeName}/${deprecation.path}#${deprecation.lineNumber}`;
+    const baseUrl = deprecation.remoteUrl.split('.git')[0];
+    return `${baseUrl}/tree/${treeName}/${deprecation.path}#L${deprecation.lineNumber}`;
   }
 }
 
