@@ -133,8 +133,8 @@ function getNodesWithCommentsForFile(file: SourceFile) {
 async function getSourceFiles(config: CrawlConfig) {
   const project = new Project();
 
-  if (existsSync(TSCONFIG_PATH)) {
-    project.addSourceFilesFromTsConfig(TSCONFIG_PATH);
+  if (existsSync(config.tsConfigPath)) {
+    project.addSourceFilesFromTsConfig(config.tsConfigPath);
   } else {
     throw new Error('This should not happen. A tsconfig file should already exist.')
   }

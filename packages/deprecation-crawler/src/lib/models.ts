@@ -3,6 +3,7 @@ export interface CrawlConfig {
   outputDirectory: string;
   deprecationComment: string;
   deprecationLink: string;
+  tsConfigPath: string;
   groups: { key: string; matchers: string[] }[];
 }
 

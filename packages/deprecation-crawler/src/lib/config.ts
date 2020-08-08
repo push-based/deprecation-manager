@@ -2,7 +2,7 @@ import { normalize } from 'path';
 import { prompt } from 'enquirer';
 import { glob } from 'glob';
 import { CrawlConfig } from './models';
-import { CRAWLER_CONFIG_PATH, TSCONFIG_PATH } from './constants';
+import { CRAWLER_CONFIG_PATH } from './constants';
 import { readFile, updateRepoConfig } from './utils';
 import { execSync } from 'child_process';
 import { ensureTsConfigPath } from "./tasks/ensure-crawler-tsconfig";
