@@ -106,5 +106,6 @@
         "linter": "eslint"
       }
     }
-  }
+  },
+  "defaultProject": "deprecation-crawler"
 }
