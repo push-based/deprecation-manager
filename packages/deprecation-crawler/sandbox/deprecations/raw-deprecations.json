@@ -15,7 +15,7 @@
             ],
             "version": "master",
             "ruid": "3998890672",
-            "group": "all-lowercase"
+            "group": "all lowercase"
         },
         {
             "path": "all-lowercase\\crawled.ts",
@@ -30,7 +30,7 @@
             ],
             "version": "master",
             "ruid": "2129363187",
-            "group": "all-lowercase"
+            "group": "all lowercase"
         },
         {
             "path": "all-lowercase\\crawled.ts",
@@ -45,7 +45,7 @@
             ],
             "version": "master",
             "ruid": "2585813938",
-            "group": "all-lowercase"
+            "group": "all lowercase"
         },
         {
             "path": "multiple-string-patterns-at-once\\crawled.ts",
