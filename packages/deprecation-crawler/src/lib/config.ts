@@ -17,8 +17,8 @@ export async function getConfig(): Promise<CrawlConfig> {
     throw Error('We need a tsconfig file to crawl');
   }
 
-  const argTag = (yargs.argv.tag || yargs.argv.t) as string;
-  const defaultTag = argTag || 'master';
+  const argTag = (yargs.argv.tag ? yargs.argv.tag : yargs.argv.t ? yargs.argv.t: '').toString().trim();
+  const defaultTag = argTag !== '' ? argTag : 'master';
   const tagChoices = [...getGitHubBranches(defaultTag), ...getGitHubTags()];
   const userConfig: CrawlConfig = await prompt([
     {
