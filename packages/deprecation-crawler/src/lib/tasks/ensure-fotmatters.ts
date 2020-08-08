@@ -22,6 +22,15 @@ export function ensureFormatter(config: CrawlConfig): [string, (config: CrawlCon
     Update outputFormatters to ${CRAWLER_CONFIG_PATH} with existing formatters.`)
   }
 
+  const wrongFormatter = configuredAndExistingFormatter
+    .filter(([key]) =>  !Object.keys(builtInFormatter).includes(key))
+    .map(([k]) => k);
+  if(wrongFormatter.length > 0) {
+    throw new Error(`Wrong formatter registered! ${EOL}
+    Following formatter are not available: ${Object.keys(wrongFormatter).join(', ')}${EOL}
+    Update outputFormatters to ${CRAWLER_CONFIG_PATH} with correct formatters.`)
+  }
+
   return configuredAndExistingFormatter;
 
 }
