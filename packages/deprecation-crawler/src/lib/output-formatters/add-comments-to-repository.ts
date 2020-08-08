@@ -34,36 +34,54 @@ export async function addCommentToRepository(
       const sourceFile = project.getSourceFile(path);
       const deprecationDetails = ` Details: {@link ${config.deprecationLink}#${deprecation.ruid}}`;
 
-      const lines = deprecation.deprecationMessage.split('\n');
-      const newText = lines
-        .map((comment) => addDeprecationLinkToComment(comment))
-        .join('\n');
-
-      sourceFile.replaceText(
-        deprecation.pos.map((pos) => pos + addedPosForText) as [number, number],
-        newText
+      const linkPosition = calculateLinkInsertPosition(
+        deprecation,
+        config,
+        addedPosForText
       );
+
+      sourceFile.insertText(linkPosition, deprecationDetails);
       addedPosForText += deprecationDetails.length;
 
       sourceFile.saveSync();
-
-      function addDeprecationLinkToComment(comment: string) {
-        if (comment.includes(config.deprecationComment)) {
-          // preserve structure of the comment
-          if (comment.endsWith(' */')) {
-            return comment.replace(' */', `${deprecationDetails} */`);
-          }
-          if (comment.endsWith('*/')) {
-            return comment.replace('*/', `${deprecationDetails}*/`);
-          }
-          return comment + deprecationDetails;
-        }
-        return comment;
-      }
     });
   });
 
   console.log(
     '🎉 All deprecations are resolved, your repository is ready for a commit!'
+  );
+}
+
+function calculateLinkInsertPosition(
+  deprecation: Deprecation,
+  config: CrawlConfig,
+  addedPosForText: number
+) {
+  const positionOfDeprecatedKeyword = deprecation.deprecationMessage.indexOf(
+    config.deprecationComment
+  );
+  const [deprecationLine] = deprecation.deprecationMessage
+    .substr(positionOfDeprecatedKeyword)
+    .split('\n');
+
+  let endOfLineLength = 0;
+
+  // preserve the structure of the comment
+  if (deprecationLine.endsWith(' */')) {
+    endOfLineLength = deprecationLine.length - 3;
+  } else if (deprecationLine.endsWith('*/')) {
+    endOfLineLength = deprecationLine.length - 2;
+  } else {
+    endOfLineLength = deprecationLine.length;
+    if (deprecation.deprecationMessage.includes('\r\n')) {
+      endOfLineLength -= 1;
+    }
+  }
+
+  return (
+    deprecation.pos[0] +
+    positionOfDeprecatedKeyword +
+    addedPosForText +
+    endOfLineLength
   );
 }

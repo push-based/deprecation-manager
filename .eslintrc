@@ -20,6 +20,10 @@
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-parameter-properties": "off",
     "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      { "argsIgnorePattern": "^_" }
+    ],
     "@nrwl/nx/enforce-module-boundaries": [
       "error",
       {
@@ -30,13 +34,5 @@
         ]
       }
     ]
-  },
-  "overrides": [
-    {
-      "files": ["*.tsx"],
-      "rules": {
-        "@typescript-eslint/no-unused-vars": "off"
-      }
-    }
-  ]
+  }
 }
