@@ -68,6 +68,7 @@ function crawlFileForDeprecations(file: SourceFile, config: CrawlConfig) {
             deprecation.comment.range.compilerObject.pos,
             deprecation.comment.range.compilerObject.end,
           ],
+          version: config.gitTag
         };
 
         function getHumanReadableNameForNode() {
