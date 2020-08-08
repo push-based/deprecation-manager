@@ -16,7 +16,7 @@ export async function generateTagBasedFormatter(
     return;
   }
 
-  console.log('📝 Generating markdown');
+  console.log('📝 Update tag-based markdown format');
 
   const deprecationsByGroup = rawDeprecations.reduce((acc, val) => {
     const group = val.group || '';
@@ -72,6 +72,7 @@ export async function generateTagBasedFormatter(
     join(config.outputDirectory, `${config.gitTag}.md`),
     markdownContent
   );
+  console.log('Updated tag-based markdown format');
 }
 
 function stripComment(message: string) {
