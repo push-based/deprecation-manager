@@ -6,7 +6,7 @@ import { CRAWLER_CONFIG_PATH } from './constants';
 import { prompt } from 'enquirer';
 
 export function hash(str: string) {
-  const s = str.replace(/ /g, '');
+  const s = str.replace(/ /g, '').replace(/\r\n/g, '\n');
   let hash = 5381;
   let i = s.length;
 
