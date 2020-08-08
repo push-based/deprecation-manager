@@ -36,7 +36,7 @@ import { logError } from './log';
       }),
       tap((r: CrawledRelease) =>
         generateRawJson(config, r.deprecations, { tagDate: r.date })
-      ),
+      )
     ]),
     // Repo Update
     askToSkip(
@@ -54,6 +54,9 @@ import { logError } from './log';
         tap((r: CrawledRelease) =>
           generateRawJson(config, r.deprecations, { tagDate: r.date })
         ),
+        tap((r: CrawledRelease) => {
+          return Promise.resolve(updateMd(config, r.deprecations));
+        })
       ])
     ),
     // Formatting Phase
