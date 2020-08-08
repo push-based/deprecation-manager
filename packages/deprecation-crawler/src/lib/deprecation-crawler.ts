@@ -5,26 +5,24 @@ import { crawlDeprecations } from './crawler';
 import { checkout } from './checkout';
 import { addGrouping } from './processors/grouping';
 import { addUniqueKey } from './processors/unique';
-import {
-  addCommentToRepository,
-  generateMarkdown,
-  generateRawJson,
-} from './output-formatters/';
+import {addCommentToRepository, generateRawJson} from './output-formatters/';
 import { askToSkip, concat, tap, git, sandBoxMode } from './utils';
 import { DEFAULT_COMMIT_MESSAGE } from './constants';
 import { logError } from './log';
+import { format } from "./processors/format";
+
 
 (async () => {
   await guardAgainstDirtyRepo();
 
   const config = await getConfig();
+
   const date = await checkout(config);
   const deprecations = await crawlDeprecations(config);
-
   const crawledRelease: CrawledRelease = {
     version: config.gitTag,
     date,
-    deprecations,
+    deprecations
   };
 
   const processors = [
@@ -32,7 +30,7 @@ import { logError } from './log';
     concat([
       async (): Promise<CrawledRelease> => ({
         ...crawledRelease,
-        deprecations: await addUniqueKey(config, crawledRelease.deprecations),
+        deprecations: await addUniqueKey(config, crawledRelease.deprecations)
       }),
       tap((r: CrawledRelease) =>
         generateRawJson(config, r.deprecations, { tagDate: r.date })
@@ -40,31 +38,26 @@ import { logError } from './log';
     ]),
     // Repo Update
     askToSkip(
-      'Repo Update?',
+      "Repo Update?",
       tap((r: CrawledRelease) => addCommentToRepository(config, r.deprecations))
     ),
     // Grouping Phase
     askToSkip(
-      'Grouping?',
+      "Grouping?",
       concat([
         async (r: CrawledRelease) => ({
           ...r,
-          deprecations: await addGrouping(config, r.deprecations),
+          deprecations: await addGrouping(config, r.deprecations)
         }),
         tap((r: CrawledRelease) =>
           generateRawJson(config, r.deprecations, { tagDate: r.date })
-        ),
-        tap((r: CrawledRelease) => {
-          return Promise.resolve(updateMd(config, r.deprecations));
-        })
+        )
       ])
     ),
     // Formatting Phase
     askToSkip(
-      'Markdown?',
-      tap((r: CrawledRelease) =>
-        generateMarkdown(config, r.deprecations, { tagDate: date })
-      )
+      "Update Formatted Output?",
+      format(config)
     ),
     askToSkip(
       'Do you want to commit the updates to the codebase?',
