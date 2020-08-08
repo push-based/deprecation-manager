@@ -72,6 +72,7 @@ export async function getConfig(): Promise<CrawlConfig> {
   const config = {
     outputFormatters: ["tagBasedMarkdown", "groupBasedMarkdown"],
     groups: [], ...repoConfig, ...userConfig };
+  console.log('config', config);
   updateRepoConfig(config);
   return config;
 }
