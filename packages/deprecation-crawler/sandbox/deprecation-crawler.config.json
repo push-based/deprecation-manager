@@ -12,7 +12,7 @@
     { "key": "catch-all", "matchers": ["(.*?)"] }
   ],
   "outputDirectory": "./deprecations",
-  "tsConfigPath": "tsconfig.sandbox.json",
+  "tsConfigPath": "tsconfig.deprecation-crawler.json",
   "deprecationComment": "@deprecated",
   "deprecationLink": "sandbox-deprecation-link"
 }
