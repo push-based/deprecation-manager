@@ -2,6 +2,7 @@ import { EOL } from 'os';
 import { prompt } from 'enquirer';
 import { CrawlConfig, Deprecation } from '../models';
 import { updateRepoConfig } from '../utils';
+import { toFileName } from "@nrwl/workspace";
 
 const ungrouped = 'ungrouped';
 
@@ -106,7 +107,7 @@ async function getGroupNameFromExistingOrInputQuestion(
   return isExistingGroup
     ? answerNameFromExisting.existingKey
     : await prompt([getGroupNameQuestion(deprecation)]).then(
-        (s: { key: string }) => s.key
+        (s: { key: string }) => toFileName(s.key)
       );
 }
 
