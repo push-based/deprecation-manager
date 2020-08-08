@@ -5,8 +5,11 @@ import { CrawlConfig } from './models';
 import { CRAWLER_CONFIG_PATH, TSCONFIG_PATH } from './constants';
 import { readFile, updateRepoConfig } from './utils';
 import { execSync } from 'child_process';
+import * as yargs from "yargs";
 
 export async function getConfig(): Promise<CrawlConfig> {
+  const crawlerConfigPath = yargs.argv;
+  console.log('crawlerConfigPath',crawlerConfigPath);
   const repoConfigFile = readFile(CRAWLER_CONFIG_PATH) || '{}';
   const repoConfig = JSON.parse(repoConfigFile);
 

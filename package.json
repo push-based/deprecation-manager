@@ -24,8 +24,8 @@
     "workspace-schematic": "nx workspace-schematic",
     "dep-graph": "nx dep-graph",
     "help": "nx help",
-    "run-build":  "nx build deprecation-crawler && npx ./dist/packages/deprecation-crawler/index.js",
-    "run-sandbox":  "nx build deprecation-crawler && nx test deprecation-crawler"
+    "run-build": "nx build deprecation-crawler && npx ./dist/packages/deprecation-crawler/index.js",
+    "run-sandbox": "nx build deprecation-crawler && nx test deprecation-crawler"
   },
   "dependencies": {
     "common-tags": "^1.8.0",
@@ -33,7 +33,8 @@
     "glob": "^7.1.6",
     "kleur": "^4.0.3",
     "ts-morph": "^7.1.3",
-    "tslib": "^2.0.0"
+    "tslib": "^2.0.0",
+    "yargs": "^15.4.1"
   },
   "devDependencies": {
     "@nrwl/eslint-plugin-nx": "10.0.7",
