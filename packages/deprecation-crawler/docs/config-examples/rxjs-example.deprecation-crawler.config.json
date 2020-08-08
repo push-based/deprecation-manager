@@ -1,60 +1,118 @@
 {
+  "outputFormatters": [
+    "tagBasedMarkdown",
+    "groupBasedMarkdown"
+  ],
   "groups": [
     {
-      "key": "internal implementation ",
-      "matchers": ["internal implementation", "internal use only", "no longer checked"]
-    },
-    { "key": "ungrouped", "matchers": [] },
-    { "key": "NotificationKind", "matchers": ["notificationkind"] },
-    {
-      "key": "Observable",
+      "key": "ungrouped",
       "matchers": [
+        "single array instead",
         "use new subject() instead",
         "interopobservable",
-        "observedvalueunionfromarray"
+        "observedvalueunionfromarray",
+        "allow inference or cast with `as`",
+        "empty notifiers",
+        "use as interface only",
+        "iterator",
+        "rxsubscriber",
+        "subject"
       ]
     },
     {
-      "key": "observer callback",
-      "matchers": ["^(?=.*observer)(?=.*callback)..."]
+      "key": "internal-implementation ",
+      "matchers": [
+        "internal implementation",
+        "internal use only",
+        "no longer checked"
+      ]
     },
-    { "key": "resultSelector", "matchers": ["resultselector"] },
     {
-      "key": "scheduler deprecated",
-      "matchers": ["^(?=.*scheduler)(?=.*deprecated)...", "^(?=.*scheduled)(?=.*instead)..."]
+      "key": "materialize",
+      "matchers": [
+        "notificationkind",
+        "materialize",
+        "dematerialize"
+      ]
     },
-    { "key": "single array instead", "matchers": ["single array instead"] },
-    { "key": "constants", "matchers": ["^(?=.*in favor of)(?=.*constant)...", "in favor of"] },
-    { "key": "array", "matchers": ["array of observables instead"] },
+    {
+      "key": "observer-vs-callback",
+      "matchers": [
+        "^(?=.*observer)(?=.*callback)..."
+      ]
+    },
+    {
+      "key": "resultSelector",
+      "matchers": [
+        "resultselector"
+      ]
+    },
+    {
+      "key": "scheduler-argument",
+      "matchers": [
+        "^(?=.*scheduler)(?=.*deprecated)...",
+        "^(?=.*scheduled)(?=.*instead)..."
+      ]
+    },
+    {
+      "key": "constants",
+      "matchers": [
+        "^(?=.*in favor of)(?=.*constant)...",
+        "in favor of"
+      ]
+    },
+    {
+      "key": "array-vs-props",
+      "matchers": [
+        "array of observables instead"
+      ]
+    },
     {
       "key": "static-flattening",
-      "matchers": ["^(?=.*scheduled)(?=.*all)(?=.*)...", "use static"]
-    },
-    {
-      "key": "allow inference or cast with `as`",
-      "matchers": ["allow inference or cast with `as`"]
-    },
-    {
-      "key": "xWith",
       "matchers": [
+        "^(?=.*scheduled)(?=.*all)(?=.*)...",
+        "use static"
+      ]
+    },
+    {
+      "key": "xwith",
+      "matchers": [
+        "^(?=.*Deprecated use {@link)(?=.*with})(?=.*)...",
         "combinelatestwith",
         "concatwith",
         "mergewith",
         "racewith",
-        "zipwith"
+        "zipwith",
+        "with}"
       ]
     },
-    { "key": "empty notifiers", "matchers": ["empty notifiers"] },
-    { "key": "mapTo signature", "matchers": ["mapto"] },
-    { "key": "static", "matchers": ["static creation function instead"] },
-    { "key": "v8", "matchers": ["v8"] },
-    { "key": "interface", "matchers": ["use as interface only"] },
-    { "key": "iterator", "matchers": ["iterator"] },
-    { "key": "rxSubscriber", "matchers": ["rxsubscriber"] },
-    { "key": "WebSocketSubject", "matchers": ["deserializer"] }
+    {
+      "key": "mapto-signature",
+      "matchers": [
+        "mapto"
+      ]
+    },
+    {
+      "key": "static",
+      "matchers": [
+        "static creation function instead"
+      ]
+    },
+    {
+      "key": "v8",
+      "matchers": [
+        "v8"
+      ]
+    },
+    {
+      "key": "websocketsubject",
+      "matchers": [
+        "deserializer"
+      ]
+    }
   ],
-  "outputDirectory": "./deprecations",
-  "tsConfigPath": "src/tsconfig.base.json",
+  "outputDirectory": "./docs_app/content/deprecations",
   "deprecationComment": "@deprecated",
-  "deprecationLink": "https://rxjs.dev/deprecations"
+  "deprecationLink": "https://rxjs.dev/deprecations",
+  "tsConfigPath": "src/tsconfig.base.json"
 }
