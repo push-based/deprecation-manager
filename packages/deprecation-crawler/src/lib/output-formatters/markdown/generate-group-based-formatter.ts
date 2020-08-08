@@ -11,19 +11,18 @@ const MD_GROUP_CLOSER = "ruid-groups -->";
 export async function generateGroupBasedFormatter(config: CrawlConfig,
                                rawDeprecations: Deprecation[]): Promise<void> {
 
-  console.log("Start update groups", rawDeprecations);
+  console.log('📝 Update group-based markdown format');
 
   config.groups.forEach(g => {
-    updateMd(config, g, rawDeprecations);
+    updateGroupMd(config, g, rawDeprecations);
   });
 
-  console.log("Groups updated");
+  console.log('Updated group-based markdown format');
 }
 
-
-export async function updateMd(config: CrawlConfig,
-                                                  group: { key: string, matchers: string[] },
-                                                  rawDeprecations: Deprecation[]): Promise<void> {
+export async function updateGroupMd(config: CrawlConfig,
+                                    group: { key: string, matchers: string[] },
+                                    rawDeprecations: Deprecation[]): Promise<void> {
 
   const groupedDeprecationsByFileAndTag = rawDeprecations
     .filter(deprecation => deprecation.group === group.key)
