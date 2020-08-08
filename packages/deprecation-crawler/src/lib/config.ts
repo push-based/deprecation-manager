@@ -56,12 +56,6 @@ export async function getConfig(): Promise<CrawlConfig> {
   return config;
 }
 
-export function findTsConfigFiles(): string[] {
-  return  glob.sync('**/*tsconfig*.json', {
-    ignore: '**/node_modules/**',
-  });
-}
-
 export function getGitHubTags(): string[] {
   return execSync('git tag').toString().trim().split('\n').reverse();
 }

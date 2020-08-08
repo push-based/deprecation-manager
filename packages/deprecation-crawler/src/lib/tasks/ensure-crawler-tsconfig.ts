@@ -1,22 +1,22 @@
 import { CrawlConfig } from "../models";
 import { prompt } from "enquirer";
 import { normalize } from "path";
-import { CRAWLER_CONFIG_PATH, TSCONFIG_PATH } from "../constants";
-import { findTsConfigFiles } from "../config";
+import { CRAWLER_CONFIG_PATH, SKIP_PROMPT_SELECTION_CHOICE, TSCONFIG_PATH } from "../constants";
 import { readFileSync, writeFileSync } from "fs";
 import { format, resolveConfig } from "prettier";
 import { fileExists } from "@nrwl/workspace/src/utils/fileutils";
 import { sandBoxMode, updateRepoConfig } from "../utils";
+import { glob } from "glob";
 
 export async function ensureTsConfigPath(config: CrawlConfig): Promise<CrawlConfig> {
 
-  const tsConfigFiles: string[] = findTsConfigFiles();
+  const tsConfigFiles: string[] = [SKIP_PROMPT_SELECTION_CHOICE, ...findTsConfigFiles()];
   if (tsConfigFiles.length === 0) {
-    throw Error("We need a tsconfig file to crawl");
+    tsConfigFiles.push(SKIP_PROMPT_SELECTION_CHOICE)
   }
 
   if (fileExists(config.tsConfigPath)) {
-    console.log();
+    console.log(`Crawling with tsconfig: ${config.tsConfigPath}`);
     // @Note The file exists because of the above check for tsConfig files.
     return config;
   }
@@ -32,7 +32,7 @@ export async function ensureTsConfigPath(config: CrawlConfig): Promise<CrawlConf
       type: "select",
       name: "baseTsConfigPath",
       message: "What's the location of the base ts config file to extend from?",
-      choices: findTsConfigFiles(),
+      choices: tsConfigFiles,
       format(value) {
         return value ? normalize(value) : "";
       },
@@ -40,7 +40,10 @@ export async function ensureTsConfigPath(config: CrawlConfig): Promise<CrawlConf
       skip: tsConfigFiles.length === 1
     }
   ]);
-  const baseTsConfigFile = readFileSync(tsConfigPathAnswer.baseTsConfigPath);
+  const skippedBaseTsConfig = tsConfigPathAnswer.baseTsConfigPath === SKIP_PROMPT_SELECTION_CHOICE;
+  // The default makes it more obvious for the user to understand why everything is crawled
+  const defaultTsConfig = JSON.stringify({include: ["**/*.ts"]});
+  const baseTsConfigFile =  skippedBaseTsConfig ? defaultTsConfig : readFileSync(tsConfigPathAnswer.baseTsConfigPath) || defaultTsConfig;
   const baseTsConfig = JSON.parse(baseTsConfigFile as any);
 
   const { files, exclude, include } = baseTsConfig;
@@ -82,4 +85,10 @@ export async function ensureTsConfigPath(config: CrawlConfig): Promise<CrawlConf
   const newConfig = { ...config, tsConfigPath: TSCONFIG_PATH };
   updateRepoConfig(newConfig);
   return newConfig;
+}
+
+export function findTsConfigFiles(): string[] {
+  return  glob.sync('**/*tsconfig*.json', {
+    ignore: '**/node_modules/**',
+  });
 }
