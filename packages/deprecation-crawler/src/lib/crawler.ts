@@ -11,8 +11,7 @@ import { isConstructorDeclaration, isVariableStatement } from 'typescript';
 import { CrawlConfig, Deprecation } from './models';
 import { normalize, relative } from 'path';
 import { existsSync } from 'fs';
-import { prompt } from 'enquirer';
-import { findTsConfigFiles } from './config';
+import { TSCONFIG_PATH } from "./constants";
 
 // What about https://ts-morph.com/details/documentation#js-docs ?
 // Problem: can't find top level deprecations? e.g. merge
@@ -134,26 +133,10 @@ function getNodesWithCommentsForFile(file: SourceFile) {
 async function getSourceFiles(config: CrawlConfig) {
   const project = new Project();
 
-  if (!config.tsConfigPath) {
-    throw Error('We need a ts config path to be able to crawl');
-  }
-
-  if (existsSync(config.tsConfigPath)) {
-    project.addSourceFilesFromTsConfig(config.tsConfigPath);
+  if (existsSync(TSCONFIG_PATH)) {
+    project.addSourceFilesFromTsConfig(TSCONFIG_PATH);
   } else {
-    const { tsConfigPath } = await prompt([
-      {
-        type: 'select',
-        name: 'tsConfigPath',
-        message: `tsconfig "${config.tsConfigPath}" does not exist, let's try again`,
-        choices: findTsConfigFiles(),
-        format(value) {
-          return value ? normalize(value) : '';
-        },
-      },
-    ]);
-    config.tsConfigPath = tsConfigPath;
-    project.addSourceFilesFromTsConfig(tsConfigPath);
+    throw new Error('This should not happen. A tsconfig file should already exist.')
   }
 
   return project.getSourceFiles();
