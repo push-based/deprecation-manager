@@ -29,3 +29,8 @@ function foo3() {
 function foo4() {
   return 'foo4';
 }
+
+// @deprecated comment-style a non-jsdoc comment
+function foo5() {
+  return 'foo5';
+}
