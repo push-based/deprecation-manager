@@ -8,7 +8,12 @@ import { execSync } from 'child_process';
 import * as yargs from "yargs";
 
 export async function getConfig(): Promise<CrawlConfig> {
-  const crawlerConfigPath: string = (yargs.argv.path || yargs.argv.p) as string || CRAWLER_CONFIG_PATH;
+  // Check for path params from cli command
+  const argPath = (yargs.argv.path ? yargs.argv.path : yargs.argv.p ? yargs.argv.p: '').toString().trim();
+  // if no param is given it is '' if param with no value is given it is true
+  const argPathGiven = argPath !== 'true' && argPath !== '';
+  const crawlerConfigPath = argPathGiven ? argPath : CRAWLER_CONFIG_PATH;
+
   const repoConfigFile = readFile(crawlerConfigPath) || '{}';
   const repoConfig = JSON.parse(repoConfigFile);
 
@@ -17,6 +22,7 @@ export async function getConfig(): Promise<CrawlConfig> {
     throw Error('We need a tsconfig file to crawl');
   }
 
+  // Check for tag params from cli command
   const argTag = (yargs.argv.tag ? yargs.argv.tag : yargs.argv.t ? yargs.argv.t: '').toString().trim();
   // if no param is given it is '' if param with no value is given it is true
   const argTagGiven = argTag !== 'true' && argTag !== '';
