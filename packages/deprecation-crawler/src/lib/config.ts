@@ -9,7 +9,6 @@ import * as yargs from "yargs";
 
 export async function getConfig(): Promise<CrawlConfig> {
   const crawlerConfigPath: string = (yargs.argv.path || yargs.argv.p) as string || CRAWLER_CONFIG_PATH;
-  console.log('crawlerConfigPath',crawlerConfigPath);
   const repoConfigFile = readFile(crawlerConfigPath) || '{}';
   const repoConfig = JSON.parse(repoConfigFile);
 
@@ -17,19 +16,19 @@ export async function getConfig(): Promise<CrawlConfig> {
   if (tsConfigFiles.length === 0) {
     throw Error('We need a tsconfig file to crawl');
   }
-  const defaultTag = 'master';
+
+  const argTag = (yargs.argv.tag || yargs.argv.t) as string;
+  const defaultTag = argTag || 'master';
   const tagChoices = [...getGitHubBranches(defaultTag), ...getGitHubTags()];
   const userConfig: CrawlConfig = await prompt([
     {
       type: 'select',
       name: 'gitTag',
       message: `What git tag do you want to crawl?`,
-      skip: !!process.argv.slice(2)[0],
+      skip: !!argTag,
       // @NOTICE: by using choices here the initial value has to be typed as number.
       // However, passing a string works :)
-      initial:
-        ((process.argv.slice(2)[0] as unknown) as number) ||
-        ((defaultTag as unknown) as number),
+      initial: ((defaultTag as unknown) as number),
       choices: tagChoices,
     },
     {
