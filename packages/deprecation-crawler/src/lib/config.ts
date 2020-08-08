@@ -25,7 +25,7 @@ export async function getConfig(): Promise<CrawlConfig> {
       type: 'select',
       name: 'gitTag',
       message: `What git tag do you want to crawl?`,
-      skip: !!argTag,
+      skip: argTag !== '',
       // @NOTICE: by using choices here the initial value has to be typed as number.
       // However, passing a string works :)
       initial: ((defaultTag as unknown) as number),
