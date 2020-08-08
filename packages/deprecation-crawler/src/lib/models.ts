@@ -5,6 +5,7 @@ export interface CrawlConfig {
   deprecationComment: string;
   deprecationLink: string;
   groups: { key: string; matchers: string[] }[];
+  commitMessage?: string;
 }
 
 export enum NodeTypes {

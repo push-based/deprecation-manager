@@ -26,8 +26,10 @@
     "help": "nx help"
   },
   "dependencies": {
+    "common-tags": "^1.8.0",
     "enquirer": "^2.3.6",
     "glob": "^7.1.6",
+    "kleur": "^4.0.3",
     "ts-morph": "^7.1.3",
     "tslib": "^2.0.0"
   },
