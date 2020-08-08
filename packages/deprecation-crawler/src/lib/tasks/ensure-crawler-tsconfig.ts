@@ -20,7 +20,10 @@ export async function ensureTsConfigPath(config: CrawlConfig): Promise<CrawlConf
     // @Note The file exists because of the above check for tsConfig files.
     return config;
   }
-    // @TODO Fail here in CI mode
+
+  if (sandBoxMode()) {
+    throw new Error(`${config.tsConfigPath} should already exist in CI mode`);
+  }
 
   console.log("Setup ", TSCONFIG_PATH);
 
