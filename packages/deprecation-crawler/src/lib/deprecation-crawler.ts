@@ -1,16 +1,14 @@
-import { stripIndent } from 'common-tags';
-import { getConfig } from './config';
-import { CrawledRelease } from './models';
-import { crawlDeprecations } from './crawler';
-import { checkout } from './checkout';
-import { addGrouping } from './processors/grouping';
-import { addUniqueKey } from './processors/unique';
-import {addCommentToRepository, generateRawJson} from './output-formatters/';
-import { askToSkip, concat, tap, git, sandBoxMode } from './utils';
-import { DEFAULT_COMMIT_MESSAGE } from './constants';
-import { logError } from './log';
+import { getConfig } from "./config";
+import { CrawledRelease } from "./models";
+import { crawlDeprecations } from "./crawler";
+import { checkout } from "./checkout";
+import { addGrouping } from "./processors/grouping";
+import { addUniqueKey } from "./processors/unique";
+import { addCommentToRepository, generateRawJson } from "./output-formatters";
+import { askToSkip, concat, tap } from "./utils";
 import { format } from "./processors/format";
-
+import { group } from "./processors/grouping";
+import { crawl } from "./processors/crawl";
 
 (async () => {
   await guardAgainstDirtyRepo();
@@ -27,15 +25,7 @@ import { format } from "./processors/format";
 
   const processors = [
     // Crawling Phase
-    concat([
-      async (): Promise<CrawledRelease> => ({
-        ...crawledRelease,
-        deprecations: await addUniqueKey(config, crawledRelease.deprecations)
-      }),
-      tap((r: CrawledRelease) =>
-        generateRawJson(config, r.deprecations, { tagDate: r.date })
-      )
-    ]),
+    crawl(config),
     // Repo Update
     askToSkip(
       "Repo Update?",
@@ -44,15 +34,7 @@ import { format } from "./processors/format";
     // Grouping Phase
     askToSkip(
       "Grouping?",
-      concat([
-        async (r: CrawledRelease) => ({
-          ...r,
-          deprecations: await addGrouping(config, r.deprecations)
-        }),
-        tap((r: CrawledRelease) =>
-          generateRawJson(config, r.deprecations, { tagDate: r.date })
-        )
-      ])
+      group(config)
     ),
     // Formatting Phase
     askToSkip(
