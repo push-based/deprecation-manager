@@ -3,15 +3,15 @@ import { basename, join } from 'path';
 import { CrawlConfig, Deprecation } from '../models';
 import { ensureDirExists } from '../utils';
 import { EOL } from 'os';
+import { checkout } from "../checkout";
 
-export async function generateMarkdown(
+export async function generateTagBasedFormatter(
   config: CrawlConfig,
-  rawDeprecations: Deprecation[],
-  options: { tagDate: string }
+  rawDeprecations: Deprecation[]
 ): Promise<void> {
   if (rawDeprecations.length === 0) {
     console.log(
-      '🎉 All deprecations are resolved, no markdown have to be generated'
+      '🎉 All deprecations are resolved, no markdown have to be generated for tag based formatting'
     );
     return;
   }
@@ -60,8 +60,9 @@ export async function generateMarkdown(
     }
   );
 
+  const tagDate = await checkout(config);
   const markdownContent = [
-    `# ${config.gitTag} (${options.tagDate})`,
+    `# ${config.gitTag} (${tagDate})`,
     '',
     ...pagesInMd,
   ].join(EOL);
