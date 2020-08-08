@@ -1,5 +1,5 @@
 {
-  "outputFormatters": ["markdown"],
+  "outputFormatters": ["tagBasedMarkdown", "groupBasedMarkdown"],
   "groups": [
     { "key": "all-lowercase", "matchers": ["iNternal use onLy"] },
     {
