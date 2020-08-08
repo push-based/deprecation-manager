@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as cp from 'child_process';
 import * as path from 'path';
 import * as rimraf from 'rimraf';
+import { RAW_DEPRECATION_PATH } from "../src/lib/constants";
 
 const SANDBOX_PATH = path.join(__dirname, '..', 'sandbox');
 
@@ -55,7 +56,7 @@ test('sandbox', async () => {
   // verify json
   const jsonOutput = JSON.parse(
     fs.readFileSync(
-      path.join(SANDBOX_PATH, 'deprecations', 'master.json'),
+      path.join(SANDBOX_PATH, 'deprecations', RAW_DEPRECATION_PATH),
       'utf8'
     )
   );
