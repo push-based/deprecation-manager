@@ -1,7 +1,7 @@
 import { CrawlConfig } from "../models";
 import { prompt } from "enquirer";
 import { normalize } from "path";
-import { TSCONFIG_PATH } from "../constants";
+import { CRAWLER_CONFIG_PATH, TSCONFIG_PATH } from "../constants";
 import { findTsConfigFiles } from "../config";
 import { readFileSync, writeFileSync } from "fs";
 import { format, resolveConfig } from "prettier";
@@ -70,9 +70,13 @@ export async function ensureTsConfigPath(config: CrawlConfig): Promise<CrawlConf
 
   // create tsconfig
   writeFileSync(TSCONFIG_PATH, prettiedCrawlerTsConfig);
+  console.log(``);
   console.log(`Generated ${TSCONFIG_PATH}: ${prettiedCrawlerTsConfig}`);
-  console.log(`From now on this the crawler will use this as tsConfig file. You can edit it every time.`);
+  console.log(`From now on this the crawler will use this as tsConfig file.
+               You can edit it every time.`);
+  console.log(`You can also change the location by editing the tsConfigPath in ${CRAWLER_CONFIG_PATH}.`);
   console.log(`If you delete it it will get recreated.`);
+  console.log(``);
 
   // update repoConfig
   const newConfig = { ...config, tsConfigPath: TSCONFIG_PATH };
