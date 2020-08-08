@@ -5,15 +5,13 @@ import { CrawlConfig } from './models';
 import { CRAWLER_CONFIG_PATH, TSCONFIG_PATH } from './constants';
 import { readFile, updateRepoConfig } from './utils';
 import { execSync } from 'child_process';
+import { ensureTsConfigPath } from "./tasks/ensure-crawler-tsconfig";
 
 export async function getConfig(): Promise<CrawlConfig> {
   const repoConfigFile = readFile(CRAWLER_CONFIG_PATH) || '{}';
-  const repoConfig = JSON.parse(repoConfigFile);
+  let repoConfig = JSON.parse(repoConfigFile);
+  repoConfig = await ensureTsConfigPath(repoConfig);
 
-  const tsConfigFiles = findTsConfigFiles();
-  if (tsConfigFiles.length === 0) {
-    throw Error('We need a tsconfig file to crawl');
-  }
   const defaultTag = 'master';
   const tagChoices = [...getGitHubBranches(defaultTag), ...getGitHubTags()];
   const userConfig: CrawlConfig = await prompt([
@@ -37,20 +35,6 @@ export async function getConfig(): Promise<CrawlConfig> {
       skip: !!repoConfig.outputDirectory,
     },
     {
-      type: 'select',
-      name: 'tsConfigPath',
-      message: "What's the location of the ts config file?",
-      choices: findTsConfigFiles(),
-      format(value) {
-        return value ? normalize(value) : '';
-      },
-      initial:
-        repoConfig.tsConfigPath ||
-        tsConfigFiles.find((p) => p === TSCONFIG_PATH) ||
-        tsConfigFiles[0],
-      skip: !!repoConfig.tsConfigPath || tsConfigFiles.length === 1,
-    },
-    {
       type: 'input',
       name: 'deprecationComment',
       message: "What's the deprecation keyword to look for?",
@@ -72,14 +56,10 @@ export async function getConfig(): Promise<CrawlConfig> {
   return config;
 }
 
-export function findTsConfigFiles() {
-  const tsConfigs = glob.sync('**/*tsconfig*.json', {
+export function findTsConfigFiles(): string[] {
+  return  glob.sync('**/*tsconfig*.json', {
     ignore: '**/node_modules/**',
   });
-  return [
-    TSCONFIG_PATH,
-    ...tsConfigs.filter((i) => i.indexOf(TSCONFIG_PATH) === -1),
-  ];
 }
 
 export function getGitHubTags(): string[] {
