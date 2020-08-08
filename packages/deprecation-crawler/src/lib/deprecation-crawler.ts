@@ -1,14 +1,15 @@
 import { getConfig } from "./config";
 import { CrawledRelease } from "./models";
+import { stripIndent } from 'common-tags';
 import { crawlDeprecations } from "./crawler";
 import { checkout } from "./checkout";
-import { addGrouping } from "./processors/grouping";
-import { addUniqueKey } from "./processors/unique";
-import { addCommentToRepository, generateRawJson } from "./output-formatters";
-import { askToSkip, concat, tap } from "./utils";
+import { addCommentToRepository } from "./output-formatters";
+import { askToSkip, concat, git, sandBoxMode, tap } from "./utils";
 import { format } from "./processors/format";
 import { group } from "./processors/grouping";
 import { crawl } from "./processors/crawl";
+import { logError } from "./log";
+import { DEFAULT_COMMIT_MESSAGE } from "./constants";
 
 (async () => {
   await guardAgainstDirtyRepo();
