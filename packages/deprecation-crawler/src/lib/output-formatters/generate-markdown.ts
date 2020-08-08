@@ -4,6 +4,7 @@ import { CrawlConfig, Deprecation } from '../models';
 import { ensureDirExists } from '../utils';
 import { EOL } from 'os';
 import { checkout } from "../checkout";
+import { toFileName } from "@nrwl/workspace";
 
 export async function generateTagBasedFormatter(
   config: CrawlConfig,
@@ -69,7 +70,10 @@ export async function generateTagBasedFormatter(
 
   ensureDirExists(config.outputDirectory);
   writeFileSync(
-    join(config.outputDirectory, `${config.gitTag}.md`),
+    join(config.outputDirectory, `${toFileName(config.gitTag
+      .split('/').join('')
+      .split('\\').join('')
+    )}.md`),
     markdownContent
   );
   console.log('Updated tag-based markdown format');
