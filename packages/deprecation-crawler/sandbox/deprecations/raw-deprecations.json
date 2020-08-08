@@ -1,0 +1,141 @@
+{
+    "version": "master",
+    "date": "sandbox-date",
+    "deprecations": [
+        {
+            "path": "all-lowercase\\crawled.ts",
+            "lineNumber": 12,
+            "name": "lowercase1",
+            "kind": "VariableStatement",
+            "code": "const lowercase1 = 0;",
+            "deprecationMessage": "/**\r\n * @deprecated internal use only\r\n * Example: all lowercase character\r\n * Group name: all lowercase\r\n * Regex: iNternal use onLy\r\n */",
+            "pos": [
+                173,
+                311
+            ],
+            "version": "master",
+            "ruid": "3998890672",
+            "group": "all-lowercase"
+        },
+        {
+            "path": "all-lowercase\\crawled.ts",
+            "lineNumber": 18,
+            "name": "lowercase2",
+            "kind": "VariableStatement",
+            "code": "const lowercase2 = 0;",
+            "deprecationMessage": "/**\r\n * @deprecated Internal use only\r\n * Example: One uppercase character\r\n */",
+            "pos": [
+                338,
+                417
+            ],
+            "version": "master",
+            "ruid": "2129363187",
+            "group": "all-lowercase"
+        },
+        {
+            "path": "all-lowercase\\crawled.ts",
+            "lineNumber": 24,
+            "name": "lowercase3",
+            "kind": "VariableStatement",
+            "code": "const lowercase3 = 0;",
+            "deprecationMessage": "/**\r\n * @deprecated inteRnal use oNly\r\n * Example: Multiple uppercase character\r\n */",
+            "pos": [
+                444,
+                528
+            ],
+            "version": "master",
+            "ruid": "2585813938",
+            "group": "all-lowercase"
+        },
+        {
+            "path": "multiple-string-patterns-at-once\\crawled.ts",
+            "lineNumber": 15,
+            "name": "multiPatternMatch1",
+            "kind": "VariableStatement",
+            "code": "const multiPatternMatch1 = 0;",
+            "deprecationMessage": "/**\r\n * @deprecated This const named `t` is deprecated. See {@link info} for xyz.\r\n * Example: 3 pattern match\r\n * Group name: multi pattern match\r\n * Regex: /^(?=.*This const named!)(?=.*deprecated!)(?=.*xyz!).../\r\n */",
+            "pos": [
+                240,
+                459
+            ],
+            "version": "master",
+            "ruid": "1734398741",
+            "group": "catch-all"
+        },
+        {
+            "path": "multiple-string-patterns-at-once\\crawled.ts",
+            "lineNumber": 21,
+            "name": "multiPatternMatch2",
+            "kind": "VariableStatement",
+            "code": "const multiPatternMatch2 = 0;",
+            "deprecationMessage": "/**\r\n * @deprecated IMPORTANT! This const named `t1` is deprecated. See {@link info} for xyz.\r\n * Example: 3 pattern match with other start\r\n */",
+            "pos": [
+                494,
+                638
+            ],
+            "version": "master",
+            "ruid": "3477709142",
+            "group": "catch-all"
+        },
+        {
+            "path": "multiple-string-patterns-at-once\\crawled.ts",
+            "lineNumber": 27,
+            "name": "multiPatternMatch3",
+            "kind": "VariableStatement",
+            "code": "const multiPatternMatch3 = 0;",
+            "deprecationMessage": "/**\r\n * @deprecated This const named `t2` is deprecated. See {@link info} for xyz and related things.\r\n * Example: 3 pattern match with other end\r\n */",
+            "pos": [
+                673,
+                823
+            ],
+            "version": "master",
+            "ruid": "2417065367",
+            "group": "catch-all"
+        },
+        {
+            "path": "whitespace-normalisation\\crawled.ts",
+            "lineNumber": 12,
+            "name": "whitespacesNormalisation1",
+            "kind": "VariableStatement",
+            "code": "const whitespacesNormalisation1 = 0;",
+            "deprecationMessage": "/**\r\n * @deprecated This const is deprecated\r\n * Example: single whitespaces\r\n * Group name: whitespace normalisation\r\n * Regex: This  const is  deprecated\r\n */",
+            "pos": [
+                146,
+                306
+            ],
+            "version": "master",
+            "ruid": "3186155811",
+            "group": "whitespace-normalisation"
+        },
+        {
+            "path": "whitespace-normalisation\\crawled.ts",
+            "lineNumber": 18,
+            "name": "whitespacesNormalisation2",
+            "kind": "VariableStatement",
+            "code": "const whitespacesNormalisation2 = 0;",
+            "deprecationMessage": "/**\r\n * @deprecated    This  const is deprecated\r\n * Example: start multiple whitespaces and also multiple times inside\r\n */",
+            "pos": [
+                348,
+                472
+            ],
+            "version": "master",
+            "ruid": "677771456",
+            "group": "whitespace-normalisation"
+        },
+        {
+            "path": "whitespace-normalisation\\crawled.ts",
+            "lineNumber": 24,
+            "name": "whitespacesNormalisation3",
+            "kind": "VariableStatement",
+            "code": "const whitespacesNormalisation3 = 0;",
+            "deprecationMessage": "/**\r\n * @deprecated This  const   is    deprecated\r\n * Example: multiple whitespaces multiple times\r\n */",
+            "pos": [
+                514,
+                618
+            ],
+            "version": "master",
+            "ruid": "3130163297",
+            "group": "whitespace-normalisation"
+        }
+    ]
+}
