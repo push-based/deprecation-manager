@@ -8,9 +8,9 @@ import { execSync } from 'child_process';
 import * as yargs from "yargs";
 
 export async function getConfig(): Promise<CrawlConfig> {
-  const crawlerConfigPath = yargs.argv;
+  const crawlerConfigPath: string = (yargs.argv.path || yargs.argv.p) as string || CRAWLER_CONFIG_PATH;
   console.log('crawlerConfigPath',crawlerConfigPath);
-  const repoConfigFile = readFile(CRAWLER_CONFIG_PATH) || '{}';
+  const repoConfigFile = readFile(crawlerConfigPath) || '{}';
   const repoConfig = JSON.parse(repoConfigFile);
 
   const tsConfigFiles = findTsConfigFiles();
