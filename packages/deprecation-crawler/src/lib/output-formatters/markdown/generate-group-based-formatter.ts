@@ -40,7 +40,6 @@ export async function updateGroupMd(config: CrawlConfig,
   const newlines = "";
 
   const sections = splitMulti(fileContent, [MD_GROUP_OPENER, MD_GROUP_CLOSER]).map(trim);
-  console.log("sections", sections, sections.length);
 
   if (sections.length > 3) {
     throw new Error("markdown-ruids only supports one list of RUIDs per file.");
