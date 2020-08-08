@@ -23,7 +23,7 @@ export async function ensureTsConfigPath(config: CrawlConfig): Promise<CrawlConf
 
     console.log("Setup ", TSCONFIG_PATH);
 
-    const tsConfigPathAnswer: { tsConfigPath: string } = await prompt([
+    const tsConfigPathAnswer: { baseTsConfigPath: string } = await prompt([
       {
         type: "select",
         name: "tsConfigPath",
@@ -36,7 +36,7 @@ export async function ensureTsConfigPath(config: CrawlConfig): Promise<CrawlConf
         skip: tsConfigFiles.length === 1
       }
     ]);
-    const baseTsConfigFile = readFileSync(tsConfigPathAnswer.tsConfigPath);
+    const baseTsConfigFile = readFileSync(tsConfigPathAnswer.baseTsConfigPath);
     const baseTsConfig = JSON.parse(baseTsConfigFile as any);
 
     const { files, exclude, include } = baseTsConfig;
