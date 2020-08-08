@@ -23,7 +23,9 @@
     "update": "nx migrate latest",
     "workspace-schematic": "nx workspace-schematic",
     "dep-graph": "nx dep-graph",
-    "help": "nx help"
+    "help": "nx help",
+    "run-build":  "nx build deprecation-crawler && npx ./dist/packages/deprecation-crawler/index.js",
+    "run-sandbox":  "nx build deprecation-crawler && nx test deprecation-crawler"
   },
   "dependencies": {
     "common-tags": "^1.8.0",
