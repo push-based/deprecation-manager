@@ -1,5 +1,6 @@
 import { Project } from 'ts-morph';
 import { CrawlConfig, Deprecation } from '../models';
+import { TSCONFIG_PATH } from "../constants";
 
 export async function addCommentToRepository(
   config: CrawlConfig,
@@ -13,7 +14,7 @@ export async function addCommentToRepository(
   console.log('Writing deprecation ids to your repository...');
 
   const project = new Project({
-    tsConfigFilePath: config.tsConfigPath,
+    tsConfigFilePath: TSCONFIG_PATH,
   });
 
   const deprecationsByFile = rawDeprecations.reduce((acc, val) => {
