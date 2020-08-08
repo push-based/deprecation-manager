@@ -4,6 +4,7 @@ export interface CrawlConfig {
   tsConfigPath: string;
   deprecationComment: string;
   deprecationLink: string;
+  outputFormatters: string[];
   groups: { key: string; matchers: string[] }[];
   commitMessage?: string;
 }
@@ -72,6 +73,7 @@ export interface Deprecation {
   code: string;
   deprecationMessage: string;
   pos: [number, number];
+  version: string;
   group?: string;
   ruid?: string;
 }
