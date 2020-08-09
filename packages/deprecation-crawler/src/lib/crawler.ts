@@ -72,7 +72,7 @@ function crawlFileForDeprecations(file: SourceFile, config: CrawlConfig) {
 
         function getHumanReadableNameForNode() {
           let text =
-            'DEPRECATION-TODO, unknown node, open an issue at https://github.com/timdeschryver/find-deprecations/issues/new';
+            'DEPRECATION-TODO, unknown node, open an issue at https://github.com/timdeschryver/deprecation-manager/issues/new';
 
           if (
             'name' in deprecation.node.compilerNode &&

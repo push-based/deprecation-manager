@@ -1,4 +1,4 @@
-# find-deprecations
+# deprecation-crawler
 
 ## Preconditions
 
