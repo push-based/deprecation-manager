@@ -36,7 +36,7 @@ beforeAll(async () => {
 test('sandbox', async () => {
   // BUG: format tag to be able to save the file, e.g. pr/foo
   // const currentGitTag = await git([`branch --show-current`]);
-  const cliOutput = await exec('npm run crawl ' + 'master');
+  const cliOutput = await exec('npm run crawl -- -t master');
 
   // verify output
   expect(cliOutput).toMatch(/Looking for deprecations/i);
