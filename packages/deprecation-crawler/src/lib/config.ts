@@ -46,8 +46,9 @@ export async function getConfig(): Promise<CrawlConfig> {
   const argTagGiven = argTag !== 'true' && argTag !== '';
   const tagChoices = argTagGiven
     ? [argTag]
-    : sortTags(await getGitHubBranches(), await getGitHubTags());
-  const intialTag = argTagGiven ? 0 : await initialTag(tagChoices);
+    : await sortTags(await getGitHubBranches(), await getGitHubTags());
+  // select the string value if passed, otherwise select the first item in the list
+  const intialTag = argTagGiven ? argTag : 0;
 
   const userConfig: CrawlConfig = await prompt([
     {
@@ -55,7 +56,9 @@ export async function getConfig(): Promise<CrawlConfig> {
       name: 'gitTag',
       message: `What git tag do you want to crawl?`,
       skip: argTagGiven,
-      initial: intialTag,
+      // @NOTICE: by using choices here the initial value has to be typed as number.
+      // However, passing a string works :)
+      initial: (intialTag as unknown) as number,
       choices: tagChoices,
     },
     {
@@ -103,6 +106,7 @@ export async function getConfig(): Promise<CrawlConfig> {
     ...repoConfig,
     ...userConfig,
   };
+
   updateRepoConfig(config);
   return config;
 }
@@ -117,10 +121,15 @@ export function findTsConfigFiles() {
   ];
 }
 
-function sortTags(tags: string[], branches: string[]): string[] {
+async function sortTags(tags: string[], branches: string[]): Promise<string[]> {
+  const currentBranchOrTag = (
+    (await git(['branch', '--show-current'])) ||
+    (await git(['describe', ' --tags --exact-match']))
+  ).trim();
+
   // remove any duplicates
-  const tagsAndBranches = [...new Set([...branches, ...tags])];
-  return tagsAndBranches.sort(innerSort);
+  const sorted = [...branches, ...tags].sort(innerSort);
+  return [...new Set([currentBranchOrTag, ...sorted])];
 
   function innerSort(a: string, b: string): number {
     const normalizedA = normalizeSemverIfPresent(a);
@@ -167,24 +176,4 @@ export async function getGitHubBranches(): Promise<string[]> {
       .map((i) => i.split('* ').join(''))
       .sort()
   );
-}
-
-async function initialTag(tags: string[]) {
-  const currentBranchOrTag = (
-    (await git(['branch', '--show-current'])) ||
-    (await git(['describe', ' --tags --exact-match']))
-  ).trim();
-  if (tags.includes(currentBranchOrTag)) {
-    return tags.indexOf(currentBranchOrTag);
-  }
-
-  if (tags.includes('main')) {
-    return tags.indexOf('main');
-  }
-
-  if (tags.includes('master')) {
-    return tags.indexOf('master');
-  }
-
-  return 0;
 }
