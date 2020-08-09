@@ -41,18 +41,20 @@ export async function getConfig(): Promise<CrawlConfig> {
   )
     .toString()
     .trim();
+
   // if no param is given it is '' if param with no value is given it is true
   const argTagGiven = argTag !== 'true' && argTag !== '';
-  const tagChoices = sortTags(await getGitHubBranches(), await getGitHubTags());
-  const intialTag = await initialTag(tagChoices);
+  const tagChoices = argTagGiven
+    ? [argTag]
+    : sortTags(await getGitHubBranches(), await getGitHubTags());
+  const intialTag = argTagGiven ? 0 : await initialTag(tagChoices);
 
   const userConfig: CrawlConfig = await prompt([
     {
       type: 'select',
       name: 'gitTag',
       message: `What git tag do you want to crawl?`,
-      skip: argTagGiven as any,
-      // @NOTICE: by using choices here the initial value has to be typed as number.
+      skip: argTagGiven,
       initial: intialTag,
       choices: tagChoices,
     },
