@@ -96,5 +96,5 @@ export function getGitHubBranches(defaultTag: string): string[] {
       // @TODO remove ugly hack for the `*` char of the current branch
       .map((i) => i.split('* ').join(''))
       .filter((v) => v !== defaultTag),
-  ].reverse();
+  ].sort();
 }
