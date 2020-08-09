@@ -1,16 +1,18 @@
 <!-- ruid-groups
 
 - : 
-  - https://github.com/timdeschryver/find-deprecations/tree//all-lowercase/crawled.ts#L12
-  - https://github.com/timdeschryver/find-deprecations/tree//all-lowercase/crawled.ts#L18
-  - https://github.com/timdeschryver/find-deprecations/tree//all-lowercase/crawled.ts#L24
+  - https://github.com/timdeschryver/find-deprecations/tree//deprecation-comments/crawled.ts#L6
+  - https://github.com/timdeschryver/find-deprecations/tree//deprecation-comments/crawled.ts#L14
+  - https://github.com/timdeschryver/find-deprecations/tree//deprecation-comments/crawled.ts#L24
+  - https://github.com/timdeschryver/find-deprecations/tree//deprecation-comments/crawled.ts#L29
+  - https://github.com/timdeschryver/find-deprecations/tree//deprecation-comments/crawled.ts#L34
 
 ruid-groups -->
 
 
 
 
-# all-lowercase
+# comment-style
 
 Some general information what all there deprecations have in common.
 

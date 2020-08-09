@@ -1,5 +1,5 @@
 {
-    "version": "master",
+    "version": "",
     "date": "sandbox-date",
     "deprecations": [
         {
@@ -13,9 +13,10 @@
                 173,
                 311
             ],
-            "version": "master",
+            "version": "",
+            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
             "ruid": "3998890672",
-            "group": "all lowercase"
+            "group": "all-lowercase"
         },
         {
             "path": "all-lowercase\\crawled.ts",
@@ -28,9 +29,10 @@
                 338,
                 417
             ],
-            "version": "master",
+            "version": "",
+            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
             "ruid": "2129363187",
-            "group": "all lowercase"
+            "group": "all-lowercase"
         },
         {
             "path": "all-lowercase\\crawled.ts",
@@ -43,9 +45,90 @@
                 444,
                 528
             ],
-            "version": "master",
+            "version": "",
+            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
             "ruid": "2585813938",
-            "group": "all lowercase"
+            "group": "all-lowercase"
+        },
+        {
+            "path": "deprecation-comments\\crawled.ts",
+            "lineNumber": 6,
+            "name": "foo",
+            "kind": "FunctionDeclaration",
+            "code": "function foo() {\r\n  return 'foo';\r\n}",
+            "deprecationMessage": "/** @deprecated comment-style single line deprecation */",
+            "pos": [
+                73,
+                129
+            ],
+            "version": "",
+            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
+            "ruid": "3397214801",
+            "group": "comment-style"
+        },
+        {
+            "path": "deprecation-comments\\crawled.ts",
+            "lineNumber": 14,
+            "name": "foo2",
+            "kind": "FunctionDeclaration",
+            "code": "function foo2() {\r\n  return 'foo2';\r\n}",
+            "deprecationMessage": "/**\r\n * @nocollapse\r\n * @deprecated comment-style deprecation with leading text\r\n */",
+            "pos": [
+                171,
+                255
+            ],
+            "version": "",
+            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
+            "ruid": "456802929",
+            "group": "comment-style"
+        },
+        {
+            "path": "deprecation-comments\\crawled.ts",
+            "lineNumber": 24,
+            "name": "foo3",
+            "kind": "FunctionDeclaration",
+            "code": "function foo3() {\r\n  return 'foo3';\r\n}",
+            "deprecationMessage": "/**\r\n * This is foo3\r\n * @method foo3\r\n * @deprecated comment-style deprecation with leading and trailing text\r\n * @return {void}\r\n */",
+            "pos": [
+                299,
+                433
+            ],
+            "version": "",
+            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
+            "ruid": "242198417",
+            "group": "comment-style"
+        },
+        {
+            "path": "deprecation-comments\\crawled.ts",
+            "lineNumber": 29,
+            "name": "foo4",
+            "kind": "FunctionDeclaration",
+            "code": "function foo4() {\r\n  return 'foo4';\r\n}",
+            "deprecationMessage": "/** @deprecated comment-style single line deprecation with no space at the end*/",
+            "pos": [
+                477,
+                557
+            ],
+            "version": "",
+            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
+            "ruid": "2601492017",
+            "group": "comment-style"
+        },
+        {
+            "path": "deprecation-comments\\crawled.ts",
+            "lineNumber": 34,
+            "name": "foo5",
+            "kind": "FunctionDeclaration",
+            "code": "function foo5() {\r\n  return 'foo5';\r\n}",
+            "deprecationMessage": "// @deprecated comment-style a non-jsdoc comment",
+            "pos": [
+                601,
+                649
+            ],
+            "version": "",
+            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
+            "ruid": "2711487569",
+            "group": "comment-style"
         },
         {
             "path": "multiple-string-patterns-at-once\\crawled.ts",
@@ -58,7 +141,8 @@
                 240,
                 459
             ],
-            "version": "master",
+            "version": "",
+            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
             "ruid": "1734398741",
             "group": "catch-all"
         },
@@ -73,7 +157,8 @@
                 494,
                 638
             ],
-            "version": "master",
+            "version": "",
+            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
             "ruid": "3477709142",
             "group": "catch-all"
         },
@@ -88,7 +173,8 @@
                 673,
                 823
             ],
-            "version": "master",
+            "version": "",
+            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
             "ruid": "2417065367",
             "group": "catch-all"
         },
@@ -103,7 +189,8 @@
                 146,
                 306
             ],
-            "version": "master",
+            "version": "",
+            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
             "ruid": "3186155811",
             "group": "whitespace-normalisation"
         },
@@ -118,7 +205,8 @@
                 348,
                 472
             ],
-            "version": "master",
+            "version": "",
+            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
             "ruid": "677771456",
             "group": "whitespace-normalisation"
         },
@@ -133,7 +221,8 @@
                 514,
                 618
             ],
-            "version": "master",
+            "version": "",
+            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
             "ruid": "3130163297",
             "group": "whitespace-normalisation"
         }
