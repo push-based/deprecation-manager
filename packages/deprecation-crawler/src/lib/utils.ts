@@ -26,7 +26,7 @@ export function ensureDirExists(dir: string) {
   }
 }
 
-export function updateRepoConfig(config: CrawlConfig, path: string = CRAWLER_CONFIG_PATH) {
+export function updateRepoConfig(config: CrawlConfig) {
   // exclude gitTag from the persisted config
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { gitTag: _, ...writableConfig } = config;
@@ -34,6 +34,7 @@ export function updateRepoConfig(config: CrawlConfig, path: string = CRAWLER_CON
     parser: 'json',
     ...resolveConfig.sync('./'),
   });
+  const path = config.configPath || CRAWLER_CONFIG_PATH;
 
   writeFileSync(path, prettiedConfig);
 }

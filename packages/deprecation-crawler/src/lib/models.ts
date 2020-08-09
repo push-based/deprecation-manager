@@ -1,4 +1,6 @@
 export interface CrawlConfig {
+  // only form cli params
+  configPath: string;
   gitTag: string;
   outputDirectory: string;
   tsConfigPath: string;
