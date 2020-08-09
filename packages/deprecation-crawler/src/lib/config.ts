@@ -93,7 +93,7 @@ function sortTags(tags: string[], branches: string[]): string[] {
     const normalizedA = normalizeSemverIfPresent(a);
     const normalizedB = normalizeSemverIfPresent(b);
 
-    return (/[A-Za-z]/.test(normalizedA) as unknown as number) - (/[A-Za-z]/.test(normalizedB) as unknown as  number) || (normalizedA.toUpperCase() < normalizedB.toUpperCase() ? -1 : normalizedA.toUpperCase() > normalizedB.toUpperCase() ? 1 : 0);
+    return (/[A-Za-z]/.test(normalizedA) as unknown as number) - (/[A-Za-z]/.test(normalizedB) as unknown as  number) || (normalizedA.toUpperCase() < normalizedB.toUpperCase() ? 1 : normalizedA.toUpperCase() > normalizedB.toUpperCase() ? -1 : 0);
   }
 
   function normalizeSemverIfPresent(str: string): string {
