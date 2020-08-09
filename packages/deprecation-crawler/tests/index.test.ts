@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as cp from 'child_process';
 import * as path from 'path';
 import * as rimraf from 'rimraf';
-import { RAW_DEPRECATION_PATH } from "../src/lib/constants";
+import { RAW_DEPRECATION_PATH } from '../src/lib/constants';
 
 const SANDBOX_PATH = path.join(__dirname, '..', 'sandbox');
 
@@ -34,9 +34,7 @@ beforeAll(async () => {
 });
 
 test('sandbox', async () => {
-  // BUG: format tag to be able to save the file, e.g. pr/foo
-  // const currentGitTag = await git([`branch --show-current`]);
-  const cliOutput = await exec('npm run crawl -- -t master');
+  const cliOutput = await exec(`npm run crawl -- -t master`);
 
   // verify output
   expect(cliOutput).toMatch(/Looking for deprecations/i);
