@@ -87,7 +87,7 @@ function sortTags(tags: string[], branches: string[]): string[] {
   // prioritize current branch
   // prioritize tags before branches
   // normalize v1.0.0 and v1.0.0
-  return [...tags.sort(innerSort), ...branches.sort(innerSort)];
+  return [...branches.sort(innerSort), ...tags.sort(innerSort), ];
 
   function innerSort(a: string, b: string): number {
     const normalizedA = normalizeSemverIfPresent(a);
