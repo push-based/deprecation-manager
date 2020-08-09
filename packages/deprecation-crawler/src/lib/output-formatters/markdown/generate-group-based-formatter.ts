@@ -3,6 +3,7 @@ import { git, readFile } from "../../utils";
 import { writeFileSync } from "fs";
 import * as path from "path";
 import { EOL } from "os";
+import { URL } from "url";
 
 // @TODO consider the content to update within the comments
 const MD_GROUP_OPENER = "<!-- ruid-groups";
@@ -125,7 +126,7 @@ async function getDeprecationList(groupedDeprecations: { [version: string]: Depr
   function getLink(deprecation: Deprecation): string {
     const treeName = deprecation.version;
     const baseUrl = deprecation.remoteUrl.split('.git')[0];
-    return `${baseUrl}/tree/${treeName}/${deprecation.path}#L${deprecation.lineNumber}`;
+    return new URL(`${baseUrl}/tree/${treeName}/${deprecation.path}#L${deprecation.lineNumber}`).toString();
   }
 }
 
