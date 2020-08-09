@@ -18,7 +18,6 @@ cd rxjs
 
 ## Usage
 
-### Setup
 
 1. In the root of the repository run the following command.
 
@@ -39,7 +38,8 @@ CLI Questions
 The command will ask you a couple of questions regarding the included file locations and defaults 
 to run the crawling and grouping process. It also includes helpful information.
 
-# Setup
+
+### Setup
 
 2.1. Setup `tsconfig` (one-time)
 
@@ -118,7 +118,7 @@ Doing this enables us to detect already crawled deprecations, malicious deprecat
 4. After the deprecations have been processed, the source code of the repository will be updated. A link to the deprecation info will be added at the end of the deprecation message.
 
 
-## Format
+### Format
 
 There are currently 2 formatters built in:
 - tag-based markdown
