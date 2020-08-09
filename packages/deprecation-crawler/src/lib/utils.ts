@@ -34,8 +34,9 @@ export function updateRepoConfig(config: CrawlConfig) {
     parser: 'json',
     ...resolveConfig.sync('./'),
   });
+  const path = config.configPath || CRAWLER_CONFIG_PATH;
 
-  writeFileSync(CRAWLER_CONFIG_PATH, prettiedConfig);
+  writeFileSync(path, prettiedConfig);
 }
 
 export function readFile(path: string) {
@@ -92,6 +93,13 @@ export function askToSkip<I>(
 
 export function git(args: string[]): Promise<string> {
   return cmd('git', args);
+}
+
+export async function getCurrentHeadName(): Promise<string> {
+  // That will output the value of HEAD,
+  // if it's not detached, or emit the tag name,
+  // if it's an exact match. It'll show you an error otherwise.
+  return git(['symbolic-ref -q --short HEAD || git describe --tags --exact-match']);
 }
 
 export function cmd(command: string, args: string[]): Promise<string> {

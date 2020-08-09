@@ -1,9 +1,12 @@
 export interface CrawlConfig {
+  // only form cli params
+  configPath: string;
   gitTag: string;
   outputDirectory: string;
   tsConfigPath: string;
   deprecationComment: string;
   deprecationLink: string;
+  outputFormatters: string[];
   groups: { key: string; matchers: string[] }[];
   commitMessage?: string;
 }
@@ -72,6 +75,8 @@ export interface Deprecation {
   code: string;
   deprecationMessage: string;
   pos: [number, number];
+  version: string;
+  remoteUrl: string;
   group?: string;
   ruid?: string;
 }

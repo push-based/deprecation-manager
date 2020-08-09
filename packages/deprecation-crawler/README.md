@@ -1,4 +1,4 @@
-# find-deprecations
+# deprecation-crawler
 
 ## Preconditions
 
@@ -18,7 +18,6 @@ cd rxjs
 
 ## Usage
 
-### Setup
 
 1. In the root of the repository run the following command.
 
@@ -26,50 +25,73 @@ cd rxjs
 npx deprecation-crawler
 ```
 
-2. Answer the CLI questions
-   The command will ask you a couple of questions regarding the included file locations and defaults to run the crawling and grouping process.
+Possible CLI params are:
+- path (--path <path>, -p <path>)
+  Path to the `deprecation-crawler.config.json`. 
+  Pro Tip: use `./GIT_IGNORED_FOLDER/deprecation-crawler.config.json` for a 'dry-run'.
+- tag (--tag <path>, -t <path>)
+  Git tag to crawl. 
+  Pro Tip: use the current branch name for a 'dry-run' (git branch --show-current).
 
-2.1 Configuring the crawling process
 
-Let's walk through the crawling process first:
+CLI Questions  
+The command will ask you a couple of questions regarding the included file locations and defaults 
+to run the crawling and grouping process. It also includes helpful information.
 
-_√ What git tag do you want to crawl?_
-By default `master` is set. This will crawl deprecations from `master` on.
 
-_√ What's the output directory?_
-By default `./depercations` is set. This will put the resulting data into the named folder.
+### Setup
 
-_√ What's the location of the ts config file?_
-By default `./tsconfig.json` is set. These locations should represent the projects ts config settings used to determine the folders to crawl.
+#### Setup `tsconfig` (one-time)
 
-_√ What's the deprecation keyword to look for?_
-By default `@deprecated` is set. Looks for comments with this keyword to add to the deprecations list.
+- _√ What's the location of the ts config file?_
+  By default `./tsconfig.json` is set as tscinfig to extend from. These locations should represent the projects ts config settings used to determine the folders to crawl.
+  Pro Tip: The result is stored in `deprecation-crawler.tsconfig.json` go there to edit included files.
+  
+#### Configuring the crawling process (one-time)
 
-_√ What's the deprecation link to the docs (the deprecation ruid will be appended to this)?_
-By default `https://rxjs.dev/deprecations` is set. Used to add a link in the sourcecode to this location.
-If a deprecation comment already has this link, it will be skipped.
+- _√ What's the output directory?_
+  By default `./depercations` is set. This will put the resulting data into the named folder.
+  Pro Tip: Move it in a gitignored folder for a 'dry-run'.
+  
+- _√ What's the deprecation keyword to look for?_
+  By default `@deprecated` is set. Looks for comments with this keyword to add to the deprecations list.
 
-### Crawling
+- _√ What's the deprecation link to the docs (the deprecation ruid will be appended to this)?_
+  By default `https://rxjs.dev/deprecations` is set. Used to add a link in the sourcecode to this location.
+  If a deprecation comment already has this link, it will be skipped.
+
+
+### Crawl
 
 After that, the process should start crawling and every crawled file should get logged to the console.
 `Looking for deprecations in path/to/file`
 
-### Grouping
+- _√ What git tag do you want to crawl?_
+  By default `main` is set.
+  Pro Tip: Pass the tag name as cli param to save repetitive questions (npx deprecation-crawler --tag main)
 
-2.2 Grouping the results
+For all crawled deprecations ruis get generated. 
+
+### Sync Repository
+
+- _√ Do you want to sync the repo?_
+ This commits the changes to the version control
+ Pro Tip: Edit the commit message under `config#defaultCommitMessage` 
+
+### Group
 
 After the crawling is done, a new message should show up in the console saying
 `Adding grouping to deprecations...`
 
 You will get asked 2 questions for every crawled deprecation:
 
-_√ Add group to deprecation path/to/file#LINE_NUMBER_
-The text of the deprecation message gets listed and you have to enter a string for the group name.
-By default `ungrouped` is suggested. These strings serve as a reverence to the group.
+- _√ Add group to deprecation path/to/file#LINE_NUMBER_
+  The text of the deprecation message gets listed and you have to enter a string for the group name.
+  By default `ungrouped` is suggested. These strings serve as a reverence to the group.
 
-_√ Add regexp to group_
-This question asks for a regular expression used to check every new deprecation against it is to see if it matches the group's conditions/regexes.
-Every group can have multiple regular expressions to test a deprecation for.
+- _√ Add regexp to group_
+  This question asks for a regular expression used to check every new deprecation against it is to see if it matches the group's conditions/regexes.
+  Every group can have multiple regular expressions to test a deprecation for.
 
 The deprecation message as well as the passed reges string will get normalized
 
@@ -81,28 +103,35 @@ Examples for message `The full deprecation message for {@link test} thingy!`:
 
 - Full message `The full deprecation message for {@link test} thingy!`
 - Partial message/Includes `full deprecation`
-- Partial message `/^(?=.*deprecation message)(?=.*thingy!).../`
 
-@NOTICE ATM a deprecation can only belong to one group.
+Pro Tip:
+Use groups to:
+- Address health checks e.g. deprecations without a message
+- Maintain custom content for a group
+- Validate the messages against a set of patterns
 
 If you just hit enter no regular expression gets saved.
-
-3. After the grouping process is done you should see the following message `Adding ruid to deprecations...`
 
 This means that every deprecation gets its own ruid generated by created from its function signature.
 Doing this enables us to detect already crawled deprecations, malicious deprecations as well as a ruid across machines and codebases/repositories.
 
-4. After the deprecations have been processed, the source code of the repository will be updated. A link to the deprecation info will be added at the end of the deprecation message.
+After the deprecations have been processed, the source code of the repository will be updated. A link to the deprecation info will be added at the end of the deprecation message.
 
-5. Now the generation of the crawled data starts.
+### Format
 
-There are 2 formats generated by default:
+There are currently 2 formatters built in:
+- tag-based markdown
+- group-based markdown
 
-- markdown
-- raw JSON
+Both are set as default in the setup step.
 
-6. Check if the generated configs ended up in `./deprecation-crawler.config.json`.
-   And the crawled deprecations are present in the configured folder (by default in the `./deprecations` folder).
+- _√ Update Formats?_
+  Hit enter to generate the registered formats.
+
+Check if the generated configs ended up in `./[config#outputPath]/raw-deprecations.json`.
+And the crawled deprecations are present in the configured folder (by default in the `./deprecations` folder).
+
+Pro Tip: edit the formatters under `[config#formatters]`
 
 ## Usage during development
 
