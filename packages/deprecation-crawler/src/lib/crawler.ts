@@ -11,28 +11,27 @@ import { isConstructorDeclaration, isVariableStatement } from 'typescript';
 import { CrawlConfig, Deprecation } from './models';
 import { normalize, relative } from 'path';
 import { existsSync } from 'fs';
-import { TSCONFIG_PATH } from "./constants";
+import { getRemoteUrl } from "./output-formatters/markdown/generate-group-based-formatter";
 
 // What about https://ts-morph.com/details/documentation#js-docs ?
 // Problem: can't find top level deprecations? e.g. merge
 
 export async function crawlDeprecations(config: CrawlConfig) {
   const sourceFiles = await getSourceFiles(config);
-
+  const remoteUrl = await getRemoteUrl();
   const deprecations = sourceFiles
     // TODO: seems like these files cannot be parsed correctly?
     .filter((file) => !file.getFilePath().includes('/Observable.ts'))
-    .map((file) => crawlFileForDeprecations(file, config))
+    .map((file) => crawlFileForDeprecations(file, config, remoteUrl))
     .reduce((acc, val) => acc.concat(val), []);
 
   return deprecations;
 }
 
-function crawlFileForDeprecations(file: SourceFile, config: CrawlConfig) {
+function crawlFileForDeprecations(file: SourceFile, config: CrawlConfig, remoteUrl: string) {
   try {
     const path = relative(process.cwd(), file.getFilePath());
     console.log(`🔎 Looking for deprecations in ${path}`);
-
     const commentsInFile = getNodesWithCommentsForFile(file);
     const deprecationsInFile = commentsInFile
       .map((p) =>
@@ -67,11 +66,13 @@ function crawlFileForDeprecations(file: SourceFile, config: CrawlConfig) {
             deprecation.comment.range.compilerObject.pos,
             deprecation.comment.range.compilerObject.end,
           ],
+          version: config.gitTag,
+          remoteUrl
         };
 
         function getHumanReadableNameForNode() {
           let text =
-            'DEPRECATION-TODO, unknown node, open an issue at https://github.com/timdeschryver/find-deprecations/issues/new';
+            'DEPRECATION-TODO, unknown node, open an issue at https://github.com/timdeschryver/deprecation-manager/issues/new';
 
           if (
             'name' in deprecation.node.compilerNode &&
