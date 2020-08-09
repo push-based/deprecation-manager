@@ -84,11 +84,12 @@ export function findTsConfigFiles() {
 
 function sortTags(tags: string[], branches: string[], first: string): string[] {
   // @TODO
-  const withoutFirst = branches.filter(b => b === first)
+  const branchesWithoutFirst = branches.filter(b => b !== first)
+  const tagsWithoutFirst = tags.filter(b => b !== first)
   // prioritize current branch
   // prioritize tags before branches
   // normalize v1.0.0 and v1.0.0
-  return [...withoutFirst.sort(innerSort), ...tags.sort(innerSort), first];
+  return [...branchesWithoutFirst.sort(innerSort), ...tagsWithoutFirst.sort(innerSort), first];
 
   function innerSort(a: string, b: string): number {
     const normalizedA = normalizeSemverIfPresent(a);
