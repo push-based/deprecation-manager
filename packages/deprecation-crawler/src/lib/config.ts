@@ -84,9 +84,10 @@ export function findTsConfigFiles() {
 
 function sortTags(tags: string[], branches: string[], first: string): string[] {
   // @TODO
+  // prioritize current branch
+  // sort by date?
   const branchesWithoutFirst = branches.filter(b => b !== first)
   const tagsWithoutFirst = tags.filter(b => b !== first)
-  // prioritize current branch
   // prioritize tags before branches
   // normalize v1.0.0 and v1.0.0
   return [...branchesWithoutFirst.sort(innerSort), ...tagsWithoutFirst.sort(innerSort), first];
