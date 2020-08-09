@@ -14,8 +14,8 @@ export async function getConfig(): Promise<CrawlConfig> {
   if (tsConfigFiles.length === 0) {
     throw Error("We need a tsconfig file to crawl");
   }
-  const defaultTag = "master";
-  const tagChoices = sortTags(getGitHubBranches(defaultTag), getGitHubTags());
+  const defaultTag = "main";
+  const tagChoices = sortTags(getGitHubBranches(defaultTag), getGitHubTags(), defaultTag);
   const userConfig: CrawlConfig = await prompt([
     {
       type: "select",
@@ -82,12 +82,13 @@ export function findTsConfigFiles() {
   ];
 }
 
-function sortTags(tags: string[], branches: string[]): string[] {
+function sortTags(tags: string[], branches: string[], first: string): string[] {
   // @TODO
+  const withoutFirst = branches.filter(b => b === first)
   // prioritize current branch
   // prioritize tags before branches
   // normalize v1.0.0 and v1.0.0
-  return [...branches.sort(innerSort), ...tags.sort(innerSort), ];
+  return [...withoutFirst.sort(innerSort), ...tags.sort(innerSort), first];
 
   function innerSort(a: string, b: string): number {
     const normalizedA = normalizeSemverIfPresent(a);
