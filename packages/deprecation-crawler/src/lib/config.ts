@@ -15,7 +15,7 @@ export async function getConfig(): Promise<CrawlConfig> {
     throw Error('We need a tsconfig file to crawl');
   }
   const defaultTag = 'master';
-  const tagChoices = [...getGitHubBranches(defaultTag), ...getGitHubTags()].sort();
+  const tagChoices = sortTags(getGitHubBranches(defaultTag), getGitHubTags());
   const userConfig: CrawlConfig = await prompt([
     {
       type: 'select',
@@ -81,7 +81,13 @@ export function findTsConfigFiles() {
     ...tsConfigs.filter((i) => i.indexOf(TSCONFIG_PATH) === -1),
   ];
 }
-
+function sortTags(tags: string[], branches: string[]): string[] {
+  // @TODO
+  // prioritize current branch
+  // prioritize tags before branches
+  // normalize v1.0.0 and v1.0.0
+  return [...tags, ...branches.sort()]
+}
 export function getGitHubTags(): string[] {
   return execSync('git tag').toString().trim().split('\n').map((s) => s.trim()).sort();
 }
