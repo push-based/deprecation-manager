@@ -86,7 +86,7 @@ function sortTags(tags: string[], branches: string[]): string[] {
   // prioritize current branch
   // prioritize tags before branches
   // normalize v1.0.0 and v1.0.0
-  return [...tags, ...branches.sort()]
+  return [...tags.sort((a,b) => a.charCodeAt(0) - b.charCodeAt(0)), ...branches.sort()]
 }
 export function getGitHubTags(): string[] {
   return execSync('git tag').toString().trim().split('\n').map((s) => s.trim()).sort();
