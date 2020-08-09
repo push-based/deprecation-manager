@@ -2,6 +2,7 @@ import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { CrawlConfig, Deprecation } from '../models';
 import { ensureDirExists } from '../utils';
+import { RAW_DEPRECATION_PATH } from "../constants";
 
 export async function generateRawJson(
   config: CrawlConfig,
@@ -22,7 +23,7 @@ export async function generateRawJson(
   let existingData;
   try {
     const t = readFileSync(
-      join(config.outputDirectory, `${config.gitTag}.json`)
+      join(config.outputDirectory, `${RAW_DEPRECATION_PATH}`)
     );
     existingData = JSON.parse(t as any);
   } catch (e) {
@@ -46,7 +47,7 @@ export async function generateRawJson(
   }
 
   const json = JSON.stringify(content, null, 4);
-  const path = join(config.outputDirectory, `${config.gitTag}.json`);
+  const path = join(config.outputDirectory, `${RAW_DEPRECATION_PATH}`);
   writeFileSync(path, json);
 
   console.log(`📝 Raw JSON data up to date under ${path}`);
