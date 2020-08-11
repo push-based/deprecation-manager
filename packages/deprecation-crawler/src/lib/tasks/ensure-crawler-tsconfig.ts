@@ -1,7 +1,6 @@
 import { CrawlConfig } from '../models';
 import { prompt } from 'enquirer';
 import { normalize } from 'path';
-import { SKIP_PROMPT_SELECTION_CHOICE } from '../constants';
 import { fileExists } from '@nrwl/workspace/src/utils/fileutils';
 import { sandBoxMode, updateRepoConfig } from '../utils';
 import { glob } from 'glob';
@@ -20,10 +19,7 @@ export async function ensureTsConfigPath(
   }
 
   // Ensure any tsconfig files present to select
-  const tsConfigFiles: string[] = [
-    SKIP_PROMPT_SELECTION_CHOICE,
-    ...findTsConfigFiles(),
-  ];
+  const tsConfigFiles: string[] = findTsConfigFiles();
   if (tsConfigFiles.length === 0) {
     throw Error(
       'No tsconfig.ts files present in the current folder structure.'
