@@ -16,7 +16,7 @@ import { DEFAULT_COMMIT_MESSAGE } from './constants';
 
   const processors = [
     // Crawling Phase
-    crawl(config),
+    askToSkip('Crawl Repo?', crawl(config)),
     // Repo Update
     askToSkip(
       'Repo Update?',
