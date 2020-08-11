@@ -1,5 +1,5 @@
 {
-    "version": "",
+    "version": "master",
     "date": "sandbox-date",
     "deprecations": [
         {
@@ -13,7 +13,7 @@
                 173,
                 311
             ],
-            "version": "",
+            "version": "master",
             "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
             "ruid": "3998890672",
             "group": "all-lowercase"
@@ -29,7 +29,7 @@
                 338,
                 417
             ],
-            "version": "",
+            "version": "master",
             "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
             "ruid": "2129363187",
             "group": "all-lowercase"
@@ -45,7 +45,7 @@
                 444,
                 528
             ],
-            "version": "",
+            "version": "master",
             "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
             "ruid": "2585813938",
             "group": "all-lowercase"
@@ -61,7 +61,7 @@
                 73,
                 129
             ],
-            "version": "",
+            "version": "master",
             "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
             "ruid": "3397214801",
             "group": "comment-style"
@@ -77,7 +77,7 @@
                 171,
                 255
             ],
-            "version": "",
+            "version": "master",
             "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
             "ruid": "456802929",
             "group": "comment-style"
@@ -93,7 +93,7 @@
                 299,
                 433
             ],
-            "version": "",
+            "version": "master",
             "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
             "ruid": "242198417",
             "group": "comment-style"
@@ -109,7 +109,7 @@
                 477,
                 557
             ],
-            "version": "",
+            "version": "master",
             "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
             "ruid": "2601492017",
             "group": "comment-style"
@@ -125,7 +125,7 @@
                 601,
                 649
             ],
-            "version": "",
+            "version": "master",
             "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
             "ruid": "2711487569",
             "group": "comment-style"
@@ -141,7 +141,7 @@
                 240,
                 459
             ],
-            "version": "",
+            "version": "master",
             "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
             "ruid": "1734398741",
             "group": "catch-all"
@@ -157,7 +157,7 @@
                 494,
                 638
             ],
-            "version": "",
+            "version": "master",
             "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
             "ruid": "3477709142",
             "group": "catch-all"
@@ -173,7 +173,7 @@
                 673,
                 823
             ],
-            "version": "",
+            "version": "master",
             "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
             "ruid": "2417065367",
             "group": "catch-all"
@@ -189,7 +189,7 @@
                 146,
                 306
             ],
-            "version": "",
+            "version": "master",
             "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
             "ruid": "3186155811",
             "group": "whitespace-normalisation"
@@ -205,7 +205,7 @@
                 348,
                 472
             ],
-            "version": "",
+            "version": "master",
             "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
             "ruid": "677771456",
             "group": "whitespace-normalisation"
@@ -221,7 +221,7 @@
                 514,
                 618
             ],
-            "version": "",
+            "version": "master",
             "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
             "ruid": "3130163297",
             "group": "whitespace-normalisation"

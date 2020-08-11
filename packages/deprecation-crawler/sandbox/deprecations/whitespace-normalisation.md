@@ -1,9 +1,9 @@
 <!-- ruid-groups
 
-- : 
-  - https://github.com/timdeschryver/find-deprecations/tree//whitespace-normalisation/crawled.ts#L12
-  - https://github.com/timdeschryver/find-deprecations/tree//whitespace-normalisation/crawled.ts#L18
-  - https://github.com/timdeschryver/find-deprecations/tree//whitespace-normalisation/crawled.ts#L24
+- master: 
+  - https://github.com/timdeschryver/find-deprecations/tree/master/whitespace-normalisation/crawled.ts#L12
+  - https://github.com/timdeschryver/find-deprecations/tree/master/whitespace-normalisation/crawled.ts#L18
+  - https://github.com/timdeschryver/find-deprecations/tree/master/whitespace-normalisation/crawled.ts#L24
 
 ruid-groups -->
 
