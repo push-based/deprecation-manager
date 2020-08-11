@@ -1,13 +1,11 @@
-import { normalize } from 'path';
 import { prompt } from 'enquirer';
-import { glob } from 'glob';
 import { CrawlConfig } from './models';
 import {
   CRAWLER_CONFIG_PATH,
   DEPRECATIONS_OUTPUT_DIRECTORY,
 } from './constants';
 import { readFile, updateRepoConfig } from './utils';
-import { ensureTsConfigPath } from "./tasks/ensure-crawler-tsconfig";
+import { ensureTsConfigPath } from './tasks/ensure-crawler-tsconfig';
 import { execSync } from 'child_process';
 import * as yargs from 'yargs';
 
