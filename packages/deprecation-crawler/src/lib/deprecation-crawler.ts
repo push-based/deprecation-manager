@@ -16,7 +16,10 @@ import { DEFAULT_COMMIT_MESSAGE } from './constants';
 
   const processors = [
     // Crawling Phase
-    askToSkip('Crawl Repo?', crawl(config)),
+    async (_: CrawledRelease) =>
+      config.gitTag
+        ? crawl(config)
+        : await askToSkip('Crawl Repo?', crawl(config)),
     // Repo Update
     askToSkip(
       'Repo Update?',
@@ -33,7 +36,7 @@ import { DEFAULT_COMMIT_MESSAGE } from './constants';
   ];
 
   // Run all processors
-  concat(processors)({});
+  concat(processors)({} as CrawledRelease);
 })();
 
 async function guardAgainstDirtyRepo() {
