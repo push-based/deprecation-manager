@@ -18,8 +18,8 @@ export enum NodeTypes {
   MethodDefinition = 'MethodDefinition',
 }
 
-export interface CrawlerProcess<I, O> {
-  (crawledReleases: I): Promise<O>;
+export interface CrawlerProcess {
+  (crawledReleases: CrawledRelease): Promise<CrawledRelease | void>;
 }
 
 export enum SubjectSymbols {

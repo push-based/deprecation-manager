@@ -1,27 +1,26 @@
-import { getConfig } from "./config";
-import { CrawledRelease } from "./models";
+import { getConfig } from './config';
+import { CrawledRelease } from './models';
 import { stripIndent } from 'common-tags';
-import { crawlDeprecations } from "./crawler";
-import { checkout } from "./checkout";
-import { addCommentToRepository } from "./output-formatters";
-import { askToSkip, concat, git, sandBoxMode, tap } from "./utils";
-import { format } from "./processors/format";
-import { group } from "./processors/grouping";
-import { crawl } from "./processors/crawl";
-import { logError } from "./log";
-import { DEFAULT_COMMIT_MESSAGE } from "./constants";
+import { crawlDeprecations } from './crawler';
+import { checkout } from './checkout';
+import { addCommentToRepository } from './output-formatters';
+import { askToSkip, concat, git, sandBoxMode, tap } from './utils';
+import { format } from './processors/format';
+import { group } from './processors/grouping';
+import { crawl } from './processors/crawl';
+import { logError } from './log';
+import { DEFAULT_COMMIT_MESSAGE } from './constants';
 
 (async () => {
   await guardAgainstDirtyRepo();
 
   const config = await getConfig();
-
   const date = await checkout(config);
   const deprecations = await crawlDeprecations(config);
   const crawledRelease: CrawledRelease = {
     version: config.gitTag,
     date,
-    deprecations
+    deprecations,
   };
 
   const processors = [
@@ -29,19 +28,13 @@ import { DEFAULT_COMMIT_MESSAGE } from "./constants";
     crawl(config),
     // Repo Update
     askToSkip(
-      "Repo Update?",
-      tap((r: CrawledRelease) => addCommentToRepository(config, r.deprecations))
+      'Repo Update?',
+      tap((r) => addCommentToRepository(config, r.deprecations))
     ),
     // Grouping Phase
-    askToSkip(
-      "Grouping?",
-      group(config)
-    ),
+    askToSkip('Grouping?', group(config)),
     // Formatting Phase
-    askToSkip(
-      "Update Formatted Output?",
-      format(config)
-    ),
+    askToSkip('Update Formatted Output?', format(config)),
     askToSkip(
       'Do you want to commit the updates to the codebase?',
       tap((_) => commitChanges(config.commitMessage))

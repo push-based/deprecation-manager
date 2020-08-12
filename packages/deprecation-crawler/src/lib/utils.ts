@@ -1,6 +1,6 @@
 import * as cp from 'child_process';
 import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
-import { CrawlConfig, CrawlerProcess } from './models';
+import { CrawlConfig, CrawlerProcess, CrawledRelease } from './models';
 import { format, resolveConfig } from 'prettier';
 import { CRAWLER_CONFIG_PATH } from './constants';
 import { prompt } from 'enquirer';
@@ -46,10 +46,8 @@ export function readFile(path: string) {
   return '';
 }
 
-export function concat<I>(
-  processes: CrawlerProcess<I, I>[]
-): CrawlerProcess<I, I> {
-  return async function (d: I): Promise<I> {
+export function concat(processes: CrawlerProcess[]): CrawlerProcess {
+  return async function (d: CrawledRelease): Promise<CrawledRelease | void> {
     return await processes.reduce(
       async (deps, processor) => await processor(await deps),
       Promise.resolve(d)
@@ -57,20 +55,18 @@ export function concat<I>(
   };
 }
 
-export function tap<I>(
-  process: CrawlerProcess<I, I | void>
-): CrawlerProcess<I, I> {
-  return async function (d: I): Promise<I> {
+export function tap(process: CrawlerProcess): CrawlerProcess {
+  return async function (d: CrawledRelease): Promise<CrawledRelease> {
     await process(d);
     return Promise.resolve(d);
   };
 }
 
-export function askToSkip<I>(
+export function askToSkip(
   question: string,
-  crawlerProcess: CrawlerProcess<I, I>
-): CrawlerProcess<I, I> {
-  return async function (d: I): Promise<I> {
+  crawlerProcess: CrawlerProcess
+): CrawlerProcess {
+  return async function (d: CrawledRelease): Promise<CrawledRelease | void> {
     if (sandBoxMode()) {
       return await crawlerProcess(d);
     }
@@ -99,7 +95,9 @@ export async function getCurrentHeadName(): Promise<string> {
   // That will output the value of HEAD,
   // if it's not detached, or emit the tag name,
   // if it's an exact match. It'll show you an error otherwise.
-  return git(['symbolic-ref -q --short HEAD || git describe --tags --exact-match']);
+  return git([
+    'symbolic-ref -q --short HEAD || git describe --tags --exact-match',
+  ]);
 }
 
 export function cmd(command: string, args: string[]): Promise<string> {

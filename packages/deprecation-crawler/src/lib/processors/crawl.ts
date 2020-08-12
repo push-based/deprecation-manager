@@ -1,16 +1,14 @@
-import { CrawlConfig, CrawledRelease, CrawlerProcess } from "../models";
-import { concat, tap } from "../utils";
-import { generateRawJson } from "../output-formatters";
-import { addUniqueKey } from "../tasks/unique";
+import { CrawlConfig, CrawledRelease, CrawlerProcess } from '../models';
+import { concat, tap } from '../utils';
+import { generateRawJson } from '../output-formatters';
+import { addUniqueKey } from '../tasks/unique';
 
-export function crawl(config: CrawlConfig): CrawlerProcess<CrawledRelease, CrawledRelease> {
+export function crawl(config: CrawlConfig): CrawlerProcess {
   return concat([
-    async (crawledRelease: CrawledRelease): Promise<CrawledRelease> => ({
-      ...crawledRelease,
-      deprecations: await addUniqueKey(config, crawledRelease.deprecations)
+    async (r): Promise<CrawledRelease> => ({
+      ...r,
+      deprecations: await addUniqueKey(config, r.deprecations),
     }),
-    tap((r: CrawledRelease) =>
-      generateRawJson(config, r.deprecations, { tagDate: r.date })
-    )
-  ])
+    tap((r) => generateRawJson(config, r.deprecations, { tagDate: r.date })),
+  ]);
 }

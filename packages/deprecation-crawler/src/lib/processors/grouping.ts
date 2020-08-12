@@ -1,9 +1,9 @@
 import { EOL } from 'os';
 import { prompt } from 'enquirer';
-import { CrawlConfig, CrawledRelease, CrawlerProcess, Deprecation } from "../models";
-import { concat, tap, updateRepoConfig } from "../utils";
-import { toFileName } from "@nrwl/workspace";
-import { generateRawJson } from "../output-formatters";
+import { CrawlConfig, CrawlerProcess, Deprecation } from '../models';
+import { concat, tap, updateRepoConfig } from '../utils';
+import { toFileName } from '@nrwl/workspace';
+import { generateRawJson } from '../output-formatters';
 
 const ungrouped = 'ungrouped';
 
@@ -12,16 +12,14 @@ interface Group {
   matchers: string[];
 }
 
-export function group(config: CrawlConfig): CrawlerProcess<CrawledRelease, CrawledRelease> {
+export function group(config: CrawlConfig): CrawlerProcess {
   return concat([
-    async (r: CrawledRelease) => ({
+    async (r) => ({
       ...r,
-      deprecations: await addGrouping(config, r.deprecations)
+      deprecations: await addGrouping(config, r.deprecations),
     }),
-    tap((r: CrawledRelease) =>
-      generateRawJson(config, r.deprecations, { tagDate: r.date })
-    )
-  ])
+    tap((r) => generateRawJson(config, r.deprecations, { tagDate: r.date })),
+  ]);
 }
 
 export async function addGrouping(
@@ -119,9 +117,9 @@ async function getGroupNameFromExistingOrInputQuestion(
   const isExistingGroup = answerNameFromExisting.existingKey !== newGroupChoice;
   return isExistingGroup
     ? answerNameFromExisting.existingKey
-    : await prompt([getGroupNameQuestion(deprecation)]).then(
-        (s: { key: string }) => toFileName(s.key)
-      );
+    : await prompt([
+        getGroupNameQuestion(deprecation),
+      ]).then((s: { key: string }) => toFileName(s.key));
 }
 
 function getGroupNameFromExistingQuestion(
@@ -184,7 +182,8 @@ function testMessage(reg: string, deprecationMessage: string): boolean {
 // Used for both, message and regex string.
 // Otherwise it could happen that will never match
 function parseDeprecationMessageOrRegex(deprecationMessage: string): string {
-  return deprecationMessage
+  return (
+    deprecationMessage
       // check against lowercase to avoid multiple patterns
       .toLowerCase()
       // normalize multiple whitespaces to one
@@ -192,5 +191,6 @@ function parseDeprecationMessageOrRegex(deprecationMessage: string): string {
       .filter((s) => !!s)
       .join(' ')
       // tri trailing and leading white spaces
-      .trim();
-};
+      .trim()
+  );
+}
