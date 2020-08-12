@@ -1,6 +1,7 @@
 export interface CrawlConfig {
   // only from cli params
   configPath: string;
+  // Also over cli params
   gitTag: string;
   outputDirectory: string;
   deprecationComment: string;
@@ -8,7 +9,6 @@ export interface CrawlConfig {
   tsConfigPath: string;
   outputFormatters: string[];
   groups: { key: string; matchers: string[] }[];
-  
   // can be edited manually in the config file
   commitMessage?: string;
 }
