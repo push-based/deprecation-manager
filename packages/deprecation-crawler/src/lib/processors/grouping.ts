@@ -1,8 +1,7 @@
 import { EOL } from 'os';
 import { prompt } from 'enquirer';
-import { CrawlConfig, CrawlerProcess, Deprecation } from '../models';
-import { concat, tap, updateRepoConfig } from '../utils';
-import { toFileName } from '@nrwl/workspace';
+import { CrawlConfig, CrawlerProcess, CrawledRelease, Deprecation } from '../models';
+import { concat, tap, updateRepoConfig, toFileName } from '../utils';
 import { generateRawJson } from '../output-formatters';
 
 const ungrouped = 'ungrouped';

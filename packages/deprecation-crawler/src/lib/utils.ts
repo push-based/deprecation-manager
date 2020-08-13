@@ -39,6 +39,9 @@ export function updateRepoConfig(config: CrawlConfig) {
   writeFileSync(path, prettiedConfig);
 }
 
+/**
+ * Ensures the file exists before reading it
+ */
 export function readFile(path: string) {
   if (existsSync(path)) {
     return readFileSync(path, 'utf-8');
