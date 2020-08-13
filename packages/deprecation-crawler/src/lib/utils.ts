@@ -94,7 +94,7 @@ export function askToSkip(
 }
 
 async function shouldProceed(question: string) {
-  if (ignoreQuestions()) {
+  if (toggles.autoAnswerQuestions) {
     return true;
   }
 
@@ -111,7 +111,7 @@ async function shouldProceed(question: string) {
 }
 
 export async function git(args: string[]): Promise<string> {
-  if (ignoreGitCommands()) {
+  if (!toggles.executeGitCommands) {
     return '';
   }
   const out = await cmd('git', args);
@@ -159,10 +159,10 @@ export function exec(command: string, args: string[]): Promise<string> {
   });
 }
 
-function ignoreQuestions() {
-  return process.env.__CRAWLER_MODE__ === CRAWLER_MODES.SANDBOX;
-}
-
-function ignoreGitCommands() {
-  return process.env.__CRAWLER_MODE__ === CRAWLER_MODES.SANDBOX;
-}
+/**
+ * Feature toggles for different modes
+ */
+export const toggles = {
+  autoAnswerQuestions: process.env.__CRAWLER_MODE__ === CRAWLER_MODES.SANDBOX,
+  executeGitCommands: process.env.__CRAWLER_MODE__ !== CRAWLER_MODES.SANDBOX,
+};
