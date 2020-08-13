@@ -4,9 +4,8 @@ import {
   CRAWLER_CONFIG_PATH,
   DEPRECATIONS_OUTPUT_DIRECTORY,
 } from './constants';
-import { readFile, updateRepoConfig } from './utils';
+import { readFile, updateRepoConfig, git } from './utils';
 import { ensureTsConfigPath } from './tasks/ensure-crawler-tsconfig';
-import { execSync } from 'child_process';
 import * as yargs from 'yargs';
 
 export async function getConfig(): Promise<CrawlConfig> {
@@ -90,16 +89,6 @@ export async function getConfig(): Promise<CrawlConfig> {
 
   updateRepoConfig(config);
   return config;
-}
-
-export function findTsConfigFiles() {
-  const tsConfigs = glob.sync('**/*tsconfig*.json', {
-    ignore: '**/node_modules/**',
-  });
-  return [
-    TSCONFIG_PATH,
-    ...tsConfigs.filter((i) => i.indexOf(TSCONFIG_PATH) === -1),
-  ];
 }
 
 async function sortTags(tags: string[], branches: string[]): Promise<string[]> {
