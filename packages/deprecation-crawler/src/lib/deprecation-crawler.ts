@@ -1,55 +1,40 @@
 import { getConfig } from './config';
 import { CrawledRelease } from './models';
 import { stripIndent } from 'common-tags';
-import { crawlDeprecations } from './crawler';
-import { checkout } from './checkout';
-import { addCommentToRepository } from './output-formatters';
-import { askToSkip, concat, git, sandBoxMode, tap } from './utils';
-import { format } from './processors/format';
-import { group } from './processors/grouping';
-import { crawl } from './processors/crawl';
+import { branchHasChanges, run } from './utils';
 import { logError } from './log';
-import { DEFAULT_COMMIT_MESSAGE } from './constants';
+import { addRuid } from './processors/add-ruid';
+import { checkout } from './tasks/checkout';
+import { crawl } from './tasks/crawl';
+import { updateRepository } from './tasks/update-repository';
+import { addGroups } from './tasks/add-groups';
+import { generateOutput } from './tasks/generate-output';
+import { commitChanges } from './tasks/commit-changes';
 
 (async () => {
   await guardAgainstDirtyRepo();
 
   const config = await getConfig();
-  const date = await checkout(config);
-  const deprecations = await crawlDeprecations(config);
-  const crawledRelease: CrawledRelease = {
-    version: config.gitTag,
-    date,
-    deprecations,
-  };
 
-  const processors = [
-    // Crawling Phase
-    crawl(config),
-    // Repo Update
-    askToSkip(
-      'Repo Update?',
-      tap((r) => addCommentToRepository(config, r.deprecations))
-    ),
-    // Grouping Phase
-    askToSkip('Grouping?', group(config)),
-    // Formatting Phase
-    askToSkip('Update Formatted Output?', format(config)),
-    askToSkip(
-      'Do you want to commit the updates to the codebase?',
-      tap((_) => commitChanges(config.commitMessage))
-    ),
+  const tasks = [
+    checkout,
+    crawl,
+    addRuid,
+    updateRepository,
+    addGroups,
+    generateOutput,
+    commitChanges,
   ];
 
   // Run all processors
-  concat(processors)(crawledRelease);
+  const initial = ({
+    version: config.gitTag,
+  } as unknown) as CrawledRelease;
+  run(tasks, config)(initial);
 })();
 
 async function guardAgainstDirtyRepo() {
-  if (sandBoxMode()) {
-    return;
-  }
-  const isDirty = await git(['status', '-s']);
+  const isDirty = await branchHasChanges();
   if (isDirty) {
     logError(
       stripIndent`
@@ -59,12 +44,4 @@ async function guardAgainstDirtyRepo() {
     );
     process.exit(1);
   }
-}
-
-async function commitChanges(commitMessage = DEFAULT_COMMIT_MESSAGE) {
-  if (sandBoxMode()) {
-    return;
-  }
-  await git(['add', '.']);
-  await git(['commit', `-m "${commitMessage}"`]);
 }

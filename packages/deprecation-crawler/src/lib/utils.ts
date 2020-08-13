@@ -2,7 +2,7 @@ import * as cp from 'child_process';
 import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
 import { CrawlConfig, CrawlerProcess, CrawledRelease } from './models';
 import { format, resolveConfig } from 'prettier';
-import { CRAWLER_CONFIG_PATH } from './constants';
+import { CRAWLER_CONFIG_PATH, CRAWLER_MODES } from './constants';
 import { prompt } from 'enquirer';
 
 export function hash(str: string) {
@@ -46,6 +46,13 @@ export function readFile(path: string) {
   return '';
 }
 
+export function run(
+  tasks: ((config: CrawlConfig) => CrawlerProcess)[],
+  config: CrawlConfig
+): CrawlerProcess {
+  return concat(tasks.map((s) => s(config)));
+}
+
 export function concat(processes: CrawlerProcess[]): CrawlerProcess {
   return async function (d: CrawledRelease): Promise<CrawledRelease | void> {
     return await processes.reduce(
@@ -64,31 +71,51 @@ export function tap(process: CrawlerProcess): CrawlerProcess {
 
 export function askToSkip(
   question: string,
-  crawlerProcess: CrawlerProcess
+  crawlerProcess: CrawlerProcess,
+  options: {
+    precondition?: (r: CrawledRelease) => Promise<boolean>;
+  } = {
+    precondition: async () => true,
+  }
 ): CrawlerProcess {
   return async function (d: CrawledRelease): Promise<CrawledRelease | void> {
-    if (sandBoxMode()) {
+    const isPreconditionMet = await options.precondition(d);
+
+    if (!isPreconditionMet) {
+      return d;
+    }
+
+    if (await shouldProceed(question)) {
       return await crawlerProcess(d);
     }
 
-    const answer: { proceed: boolean } = await prompt([
-      {
-        type: 'confirm',
-        name: 'proceed',
-        message: question,
-        initial: true,
-      },
-    ]);
-
-    if (answer.proceed) {
-      return await crawlerProcess(d);
-    }
-    return Promise.resolve(d);
+    return d;
   };
 }
 
-export function git(args: string[]): Promise<string> {
-  return cmd('git', args);
+async function shouldProceed(question: string) {
+  if (ignoreQuestions()) {
+    return true;
+  }
+
+  const answer: { proceed: boolean } = await prompt([
+    {
+      type: 'confirm',
+      name: 'proceed',
+      message: question,
+      initial: true,
+    },
+  ]);
+
+  return answer.proceed;
+}
+
+export async function git(args: string[]): Promise<string> {
+  if (ignoreGitCommands()) {
+    return '';
+  }
+  const out = await cmd('git', args);
+  return out.trim();
 }
 
 export async function getCurrentHeadName(): Promise<string> {
@@ -98,6 +125,22 @@ export async function getCurrentHeadName(): Promise<string> {
   return git([
     'symbolic-ref -q --short HEAD || git describe --tags --exact-match',
   ]);
+}
+
+export async function getCurrentBranchOrTag() {
+  return (
+    (await git(['branch', '--show-current'])) ||
+    (await git(['describe', ' --tags --exact-match']))
+  );
+}
+
+export async function branchHasChanges() {
+  const out = await git(['status', '-s']);
+  return Boolean(out);
+}
+
+export async function getRemoteUrl(): Promise<string> {
+  return git([`config --get remote.origin.url`]);
 }
 
 export function cmd(command: string, args: string[]): Promise<string> {
@@ -116,8 +159,10 @@ export function exec(command: string, args: string[]): Promise<string> {
   });
 }
 
-// used to determine if tests are running in sandbox mode
-// otherwise the test will get stuck on cli questions
-export function sandBoxMode() {
-  return process.env.CRAWLER_SANDBOX_MODE === 'true';
+function ignoreQuestions() {
+  return process.env.__CRAWLER_MODE__ === CRAWLER_MODES.SANDBOX;
+}
+
+function ignoreGitCommands() {
+  return process.env.__CRAWLER_MODE__ === CRAWLER_MODES.SANDBOX;
 }

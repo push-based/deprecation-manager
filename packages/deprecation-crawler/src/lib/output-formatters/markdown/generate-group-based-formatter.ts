@@ -1,51 +1,57 @@
-import { CrawlConfig, Deprecation } from "../../models";
-import { git, readFile } from "../../utils";
-import { writeFileSync } from "fs";
-import * as path from "path";
-import { EOL } from "os";
-import { URL } from "url";
+import { CrawlConfig, Deprecation } from '../../models';
+import { readFile } from '../../utils';
+import { writeFileSync } from 'fs';
+import * as path from 'path';
+import { EOL } from 'os';
 
 // @TODO consider the content to update within the comments
-const MD_GROUP_OPENER = "<!-- ruid-groups";
-const MD_GROUP_CLOSER = "ruid-groups -->";
+const MD_GROUP_OPENER = '<!-- ruid-groups';
+const MD_GROUP_CLOSER = 'ruid-groups -->';
 
-export async function generateGroupBasedFormatter(config: CrawlConfig,
-                                                  rawDeprecations: Deprecation[]): Promise<void> {
+export async function generateGroupBasedFormatter(
+  config: CrawlConfig,
+  rawDeprecations: Deprecation[]
+): Promise<void> {
+  console.log('📝 Update group-based markdown format');
 
-  console.log("📝 Update group-based markdown format");
-
-  config.groups.forEach(g => {
+  config.groups.forEach((g) => {
     updateGroupMd(config, g, rawDeprecations);
   });
 
-  console.log("Updated group-based markdown format");
+  console.log('Updated group-based markdown format');
 }
 
-export async function updateGroupMd(config: CrawlConfig,
-                                    group: { key: string, matchers: string[] },
-                                    rawDeprecations: Deprecation[]): Promise<void> {
-
+export async function updateGroupMd(
+  config: CrawlConfig,
+  group: { key: string; matchers: string[] },
+  rawDeprecations: Deprecation[]
+): Promise<void> {
   const groupedDeprecationsByFileAndTag = rawDeprecations
-    .filter(deprecation => deprecation.group === group.key)
+    .filter((deprecation) => deprecation.group === group.key)
     .reduce((tags, deprecation) => {
       return {
         ...tags,
-        [deprecation.version]: [...tags[deprecation.version] || [], deprecation]
+        [deprecation.version]: [
+          ...(tags[deprecation.version] || []),
+          deprecation,
+        ],
       };
     }, {});
 
-
-  const filePath = path.join(config.outputDirectory, group.key + ".md");
+  const filePath = path.join(config.outputDirectory, group.key + '.md');
   const fileContent: string = readFile(filePath);
 
-  const newlines = "";
+  const newlines = '';
 
-  const sections = splitMulti(fileContent, [MD_GROUP_OPENER, MD_GROUP_CLOSER]).map(trim);
+  const sections = splitMulti(fileContent, [
+    MD_GROUP_OPENER,
+    MD_GROUP_CLOSER,
+  ]).map(trim);
   if (sections.length > 3) {
-    throw new Error("markdown-ruids only supports one list of RUIDs per file.");
+    throw new Error('markdown-ruids only supports one list of RUIDs per file.');
   }
   if (sections.length !== 1 && sections.length !== 3) {
-    throw new Error("Something is wrong with the RIUD groups in the md file");
+    throw new Error('Something is wrong with the RIUD groups in the md file');
   }
 
   const updatedSections = [
@@ -54,7 +60,7 @@ export async function updateGroupMd(config: CrawlConfig,
     MD_GROUP_CLOSER,
     sections.length === 1 ? sections[0] : sections[2],
     // We update already existing
-    sections.length === 1 ? getInitialGroupContent(group.key) : ""
+    sections.length === 1 ? getInitialGroupContent(group.key) : '',
   ];
 
   const newMd = updatedSections.join(EOL + EOL) + newlines;
@@ -62,7 +68,6 @@ export async function updateGroupMd(config: CrawlConfig,
 }
 
 function getInitialGroupContent(groupName: string) {
-
   return `
 # ${groupName}
 
@@ -102,31 +107,23 @@ the following version specifier are set for the rxjs dependencies in StackBlitz:
 `;
 }
 
-
-export async function getRemoteUrl(): Promise<string> {
-  const remotes = arrayFromGitOutput(await git(["remote show"]));
-  return git([`remote get-url ${remotes[0]}`]);
-}
-
-function arrayFromGitOutput(output: string): string[] {
-  return output.toString()
-    .trim()
-    .split("\n").map(s => s.trim())
-    .reverse();
-}
-
-
-async function getDeprecationList(groupedDeprecations: { [version: string]: Deprecation[] }): Promise<string> {
-  return Object.entries(groupedDeprecations).map(([version, deprecations]) => {
-    return `- ${version}: ` +
-      EOL +
-      deprecations.map(d => `  - ${getLink(d)}`).join(EOL);
-  }).join(EOL);
+async function getDeprecationList(groupedDeprecations: {
+  [version: string]: Deprecation[];
+}): Promise<string> {
+  return Object.entries(groupedDeprecations)
+    .map(([version, deprecations]) => {
+      return (
+        `- ${version}: ` +
+        EOL +
+        deprecations.map((d) => `  - ${getLink(d)}`).join(EOL)
+      );
+    })
+    .join(EOL);
 
   function getLink(deprecation: Deprecation): string {
     const treeName = deprecation.version;
     const baseUrl = deprecation.remoteUrl.split('.git')[0];
-    return new URL(`${baseUrl}/tree/${treeName}/${deprecation.path}#L${deprecation.lineNumber}`).toString();
+    return `${baseUrl}/tree/${treeName}/${deprecation.path}#L${deprecation.lineNumber}`;
   }
 }
 

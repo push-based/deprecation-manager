@@ -1,9 +1,9 @@
 <!-- ruid-groups
 
 - master: 
-  - https://github.com/timdeschryver/find-deprecations/tree/master/multiple-string-patterns-at-once/crawled.ts#L15
-  - https://github.com/timdeschryver/find-deprecations/tree/master/multiple-string-patterns-at-once/crawled.ts#L21
-  - https://github.com/timdeschryver/find-deprecations/tree/master/multiple-string-patterns-at-once/crawled.ts#L27
+  - /tree/master/multiple-string-patterns-at-once/crawled.ts#L15
+  - /tree/master/multiple-string-patterns-at-once/crawled.ts#L21
+  - /tree/master/multiple-string-patterns-at-once/crawled.ts#L27
 
 ruid-groups -->
 

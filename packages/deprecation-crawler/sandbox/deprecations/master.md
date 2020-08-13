@@ -1,4 +1,4 @@
-# master (sandbox-date)
+# master
 
 ## all-lowercase
 

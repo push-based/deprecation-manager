@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as cp from 'child_process';
 import * as path from 'path';
 import * as rimraf from 'rimraf';
-import { RAW_DEPRECATION_PATH } from '../src/lib/constants';
+import { RAW_DEPRECATION_PATH, CRAWLER_MODES } from '../src/lib/constants';
 
 const SANDBOX_PATH = path.join(__dirname, '..', 'sandbox');
 
@@ -88,7 +88,7 @@ function exec(command) {
         cwd: SANDBOX_PATH,
         env: {
           ...process.env,
-          CRAWLER_SANDBOX_MODE: 'true',
+          __CRAWLER_MODE__: CRAWLER_MODES.SANDBOX,
         },
       },
       (err, stdout) => {

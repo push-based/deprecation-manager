@@ -8,31 +8,41 @@ import {
   TypeElementTypes,
 } from 'ts-morph';
 import { isConstructorDeclaration, isVariableStatement } from 'typescript';
-import { CrawlConfig, Deprecation } from './models';
 import { normalize, relative } from 'path';
 import { existsSync } from 'fs';
 import { prompt } from 'enquirer';
-import { findTsConfigFiles } from './config';
-import { getRemoteUrl } from "./output-formatters/markdown/generate-group-based-formatter";
+import { CrawlConfig, Deprecation } from '../models';
+import { findTsConfigFiles } from '../config';
 
 // What about https://ts-morph.com/details/documentation#js-docs ?
 // Problem: can't find top level deprecations? e.g. merge
 
-export async function crawlDeprecations(config: CrawlConfig) {
+export async function crawlDeprecations(
+  config: CrawlConfig,
+  remoteUrl: string,
+  date: string
+) {
   const sourceFiles = await getSourceFiles(config);
-  const remoteUrl = await getRemoteUrl();
   const deprecations = sourceFiles
     // TODO: seems like these files cannot be parsed correctly?
     .filter((file) => !file.getFilePath().includes('/Observable.ts'))
-    .map((file) => crawlFileForDeprecations(file, config, remoteUrl))
+    .map((file) => crawlFileForDeprecations(file, config, remoteUrl, date))
     .reduce((acc, val) => acc.concat(val), []);
 
   return deprecations;
 }
 
-function crawlFileForDeprecations(file: SourceFile, config: CrawlConfig, remoteUrl: string) {
+function crawlFileForDeprecations(
+  file: SourceFile,
+  config: CrawlConfig,
+  remoteUrl: string,
+  date: string
+) {
   try {
-    const path = relative(process.cwd(), file.getFilePath());
+    const path = relative(process.cwd(), file.getFilePath()).replace(
+      /\\/g,
+      '/'
+    );
     console.log(`🔎 Looking for deprecations in ${path}`);
     const commentsInFile = getNodesWithCommentsForFile(file);
     const deprecationsInFile = commentsInFile
@@ -69,7 +79,8 @@ function crawlFileForDeprecations(file: SourceFile, config: CrawlConfig, remoteU
             deprecation.comment.range.compilerObject.end,
           ],
           version: config.gitTag,
-          remoteUrl
+          remoteUrl,
+          date,
         };
 
         function getHumanReadableNameForNode() {

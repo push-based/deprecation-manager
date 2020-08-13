@@ -2,20 +2,13 @@ import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { CrawlConfig, Deprecation } from '../models';
 import { ensureDirExists } from '../utils';
-import { RAW_DEPRECATION_PATH } from "../constants";
+import { RAW_DEPRECATION_PATH } from '../constants';
 
 export async function generateRawJson(
   config: CrawlConfig,
   rawDeprecations: Deprecation[],
   options: { tagDate: string }
 ): Promise<void> {
-  if (rawDeprecations.length === 0) {
-    console.log(
-      '🎉 All deprecations are resolved, no raw JSON has to be generated'
-    );
-    return;
-  }
-
   console.log('📝 Regenerating raw JSON');
 
   ensureDirExists(config.outputDirectory);

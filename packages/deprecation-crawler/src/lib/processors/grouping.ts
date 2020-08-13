@@ -26,10 +26,6 @@ export async function addGrouping(
   config: CrawlConfig,
   crawledDeprecations: Deprecation[]
 ): Promise<Deprecation[]> {
-  if (crawledDeprecations.length === 0) {
-    return crawledDeprecations;
-  }
-
   console.log('Start grouping deprecations...');
   const { groups } = config as { groups: Group[] };
   const deprecationsWithGroup: Deprecation[] = [];
