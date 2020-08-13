@@ -39,11 +39,24 @@ export function updateRepoConfig(config: CrawlConfig) {
   writeFileSync(path, prettiedConfig);
 }
 
+/**
+ * Ensures the file exists before reading it
+ */
 export function readFile(path: string) {
   if (existsSync(path)) {
     return readFileSync(path, 'utf-8');
   }
   return '';
+}
+
+/**
+ * Upper camelCase to lowercase, hypenated
+ */
+export function toFileName(s: string): string {
+  return s
+    .replace(/([a-z\d])([A-Z])/g, '$1_$2')
+    .toLowerCase()
+    .replace(/[ _]/g, '-');
 }
 
 export function concat<I>(
@@ -99,7 +112,9 @@ export async function getCurrentHeadName(): Promise<string> {
   // That will output the value of HEAD,
   // if it's not detached, or emit the tag name,
   // if it's an exact match. It'll show you an error otherwise.
-  return git(['symbolic-ref -q --short HEAD || git describe --tags --exact-match']);
+  return git([
+    'symbolic-ref -q --short HEAD || git describe --tags --exact-match',
+  ]);
 }
 
 export function cmd(command: string, args: string[]): Promise<string> {
