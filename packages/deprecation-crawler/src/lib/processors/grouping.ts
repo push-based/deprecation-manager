@@ -6,8 +6,7 @@ import {
   CrawlerProcess,
   Deprecation,
 } from '../models';
-import { concat, tap, updateRepoConfig } from '../utils';
-import { toFileName } from '@nrwl/workspace';
+import { concat, tap, updateRepoConfig, toFileName } from '../utils';
 import { generateRawJson } from '../output-formatters';
 
 const ungrouped = 'ungrouped';

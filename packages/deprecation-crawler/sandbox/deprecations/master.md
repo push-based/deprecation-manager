@@ -32,6 +32,63 @@ const lowercase2 = 0;
 ```ts
 const lowercase3 = 0;
 ```
+## comment-style
+
+### crawled.ts
+
+#### foo (FunctionDeclaration) {#3397214801}
+
+@deprecated comment-style single line deprecation
+
+```ts
+function foo() {
+  return 'foo';
+}
+```
+
+#### foo2 (FunctionDeclaration) {#456802929}
+
+@nocollapse
+  @deprecated comment-style deprecation with leading text
+
+```ts
+function foo2() {
+  return 'foo2';
+}
+```
+
+#### foo3 (FunctionDeclaration) {#242198417}
+
+This is foo3
+  @method foo3
+  @deprecated comment-style deprecation with leading and trailing text
+  @return {void}
+
+```ts
+function foo3() {
+  return 'foo3';
+}
+```
+
+#### foo4 (FunctionDeclaration) {#2601492017}
+
+@deprecated comment-style single line deprecation with no space at the end
+
+```ts
+function foo4() {
+  return 'foo4';
+}
+```
+
+#### foo5 (FunctionDeclaration) {#2711487569}
+
+// @deprecated comment-style a non-jsdoc comment
+
+```ts
+function foo5() {
+  return 'foo5';
+}
+```
 ## catch-all
 
 ### crawled.ts

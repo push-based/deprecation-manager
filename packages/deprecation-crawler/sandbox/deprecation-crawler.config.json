@@ -13,6 +13,7 @@
     { "key": "comment-style", "matchers": ["comment-style"] },
     { "key": "catch-all", "matchers": ["(.*?)"] }
   ],
+  "configPath": "deprecation-crawler.config.json",
   "outputDirectory": "./deprecations",
   "tsConfigPath": "tsconfig.deprecation-crawler.json",
   "deprecationComment": "@deprecated",

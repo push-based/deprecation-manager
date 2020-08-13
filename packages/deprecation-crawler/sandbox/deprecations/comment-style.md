@@ -1,13 +1,18 @@
 <!-- ruid-groups
 
-
+- master: 
+  - https://github.com/timdeschryver/find-deprecations/tree/master/deprecation-comments/crawled.ts#L6
+  - https://github.com/timdeschryver/find-deprecations/tree/master/deprecation-comments/crawled.ts#L14
+  - https://github.com/timdeschryver/find-deprecations/tree/master/deprecation-comments/crawled.ts#L24
+  - https://github.com/timdeschryver/find-deprecations/tree/master/deprecation-comments/crawled.ts#L29
+  - https://github.com/timdeschryver/find-deprecations/tree/master/deprecation-comments/crawled.ts#L34
 
 ruid-groups -->
 
 
 
 
-# multiple-string-patterns-at-once
+# comment-style
 
 Some general information what all there deprecations have in common.
 
