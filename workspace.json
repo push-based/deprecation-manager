@@ -41,6 +41,35 @@
               "packages/deprecation-crawler/src/cli.js"
             ]
           }
+        },
+        "build-docs": {
+          "builder": "@nrwl/workspace:run-commands",
+          "sequential": true,
+          "options": {
+            "commands": [
+              {
+                "command": "nx test-coverage deprecation-crawler && nx test-coverage-badge deprecation-crawler"
+              }
+            ]
+          }
+        },
+        "test-coverage-badge": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              {
+                "command": "npx istanbul-cobertura-badger -b jest-coverage-badge -r ./docs/test-coverage/deprecation-crawler/cobertura-coverage.xml -d docs/test-coverage/deprecation-crawler"
+              }
+            ]
+          }
+        },
+        "test-coverage": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "packages/deprecation-crawler/jest.config.js",
+            "passWithNoTests": true,
+            "codeCoverage": true
+          }
         }
       }
     }
