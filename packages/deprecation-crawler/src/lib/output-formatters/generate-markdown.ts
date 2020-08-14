@@ -1,21 +1,13 @@
 import { writeFileSync } from 'fs';
 import { basename, join } from 'path';
 import { CrawlConfig, Deprecation } from '../models';
-import { ensureDirExists, toFileName } from '../utils';
+import { ensureDirExists, toFileName, formatCode } from '../utils';
 import { EOL } from 'os';
-import { checkout } from '../checkout';
 
 export async function generateTagBasedFormatter(
   config: CrawlConfig,
   rawDeprecations: Deprecation[]
 ): Promise<void> {
-  if (rawDeprecations.length === 0) {
-    console.log(
-      '🎉 All deprecations are resolved, no markdown have to be generated for tag based formatting'
-    );
-    return;
-  }
-
   console.log('📝 Update tag-based markdown format');
 
   const deprecationsByGroup = rawDeprecations.reduce((acc, val) => {
@@ -60,17 +52,12 @@ export async function generateTagBasedFormatter(
     }
   );
 
-  const tagDate = await checkout(config);
-  const markdownContent = [
-    `# ${config.gitTag} (${tagDate})`,
-    '',
-    ...pagesInMd,
-  ].join(EOL);
+  const markdownContent = [`# ${config.gitTag}`, '', ...pagesInMd].join(EOL);
 
   ensureDirExists(config.outputDirectory);
   writeFileSync(
     join(config.outputDirectory, `${toFileName(config.gitTag)}.md`),
-    markdownContent
+    formatCode(markdownContent, 'markdown')
   );
   console.log('Updated tag-based markdown format');
 }

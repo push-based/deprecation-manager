@@ -1,8 +1,12 @@
 import * as cp from 'child_process';
 import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
-import { CrawlConfig, CrawlerProcess } from './models';
-import { format, resolveConfig } from 'prettier';
-import { CRAWLER_CONFIG_PATH } from './constants';
+import { CrawlConfig, CrawlerProcess, CrawledRelease } from './models';
+import {
+  format as prettier,
+  resolveConfig,
+  Options as PrettierOptions,
+} from 'prettier';
+import { CRAWLER_CONFIG_PATH, CRAWLER_MODES } from './constants';
 import { prompt } from 'enquirer';
 
 export function hash(str: string) {
@@ -30,13 +34,19 @@ export function updateRepoConfig(config: CrawlConfig) {
   // exclude gitTag from the persisted config
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { gitTag: _, ...writableConfig } = config;
-  const prettiedConfig = format(JSON.stringify(writableConfig), {
-    parser: 'json',
-    ...resolveConfig.sync('./'),
-  });
   const path = config.configPath || CRAWLER_CONFIG_PATH;
+  writeFileSync(path, formatCode(JSON.stringify(writableConfig), 'json'));
+}
 
-  writeFileSync(path, prettiedConfig);
+export function formatCode(
+  code: string,
+  parser: PrettierOptions['parser'] = 'typescript'
+) {
+  const prettierConfig = resolveConfig.sync(__dirname);
+  return prettier(code, {
+    parser,
+    ...prettierConfig,
+  }).trim();
 }
 
 /**
@@ -59,10 +69,15 @@ export function toFileName(s: string): string {
     .replace(/[ _]/g, '-');
 }
 
-export function concat<I>(
-  processes: CrawlerProcess<I, I>[]
-): CrawlerProcess<I, I> {
-  return async function (d: I): Promise<I> {
+export function run(
+  tasks: ((config: CrawlConfig) => CrawlerProcess)[],
+  config: CrawlConfig
+): CrawlerProcess {
+  return concat(tasks.map((s) => s(config)));
+}
+
+export function concat(processes: CrawlerProcess[]): CrawlerProcess {
+  return async function (d: CrawledRelease): Promise<CrawledRelease | void> {
     return await processes.reduce(
       async (deps, processor) => await processor(await deps),
       Promise.resolve(d)
@@ -70,42 +85,60 @@ export function concat<I>(
   };
 }
 
-export function tap<I>(
-  process: CrawlerProcess<I, I | void>
-): CrawlerProcess<I, I> {
-  return async function (d: I): Promise<I> {
+export function tap(process: CrawlerProcess): CrawlerProcess {
+  return async function (d: CrawledRelease): Promise<CrawledRelease> {
     await process(d);
     return Promise.resolve(d);
   };
 }
 
-export function askToSkip<I>(
+export function askToSkip(
   question: string,
-  crawlerProcess: CrawlerProcess<I, I>
-): CrawlerProcess<I, I> {
-  return async function (d: I): Promise<I> {
-    if (sandBoxMode()) {
+  crawlerProcess: CrawlerProcess,
+  options: {
+    precondition?: (r: CrawledRelease) => Promise<boolean>;
+  } = {
+    precondition: async () => true,
+  }
+): CrawlerProcess {
+  return async function (d: CrawledRelease): Promise<CrawledRelease | void> {
+    const isPreconditionMet = await options.precondition(d);
+
+    if (!isPreconditionMet) {
+      return d;
+    }
+
+    if (await shouldProceed(question)) {
       return await crawlerProcess(d);
     }
 
-    const answer: { proceed: boolean } = await prompt([
-      {
-        type: 'confirm',
-        name: 'proceed',
-        message: question,
-        initial: true,
-      },
-    ]);
-
-    if (answer.proceed) {
-      return await crawlerProcess(d);
-    }
-    return Promise.resolve(d);
+    return d;
   };
 }
 
-export function git(args: string[]): Promise<string> {
-  return cmd('git', args);
+async function shouldProceed(question: string) {
+  if (toggles.autoAnswerQuestions) {
+    return true;
+  }
+
+  const answer: { proceed: boolean } = await prompt([
+    {
+      type: 'confirm',
+      name: 'proceed',
+      message: question,
+      initial: true,
+    },
+  ]);
+
+  return answer.proceed;
+}
+
+export async function git(args: string[]): Promise<string> {
+  if (!toggles.executeGitCommands) {
+    return '';
+  }
+  const out = await cmd('git', args);
+  return out.trim();
 }
 
 export async function getCurrentHeadName(): Promise<string> {
@@ -115,6 +148,22 @@ export async function getCurrentHeadName(): Promise<string> {
   return git([
     'symbolic-ref -q --short HEAD || git describe --tags --exact-match',
   ]);
+}
+
+export async function getCurrentBranchOrTag() {
+  return (
+    (await git(['branch', '--show-current'])) ||
+    (await git(['describe', ' --tags --exact-match']))
+  );
+}
+
+export async function branchHasChanges() {
+  const out = await git(['status', '-s']);
+  return Boolean(out);
+}
+
+export async function getRemoteUrl(): Promise<string> {
+  return git([`config --get remote.origin.url`]);
 }
 
 export function cmd(command: string, args: string[]): Promise<string> {
@@ -133,8 +182,10 @@ export function exec(command: string, args: string[]): Promise<string> {
   });
 }
 
-// used to determine if tests are running in sandbox mode
-// otherwise the test will get stuck on cli questions
-export function sandBoxMode() {
-  return process.env.CRAWLER_SANDBOX_MODE === 'true';
-}
+/**
+ * Feature toggles for different modes
+ */
+export const toggles = {
+  autoAnswerQuestions: process.env.__CRAWLER_MODE__ === CRAWLER_MODES.SANDBOX,
+  executeGitCommands: process.env.__CRAWLER_MODE__ !== CRAWLER_MODES.SANDBOX,
+};

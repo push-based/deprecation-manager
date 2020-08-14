@@ -1,11 +1,6 @@
 import { EOL } from 'os';
 import { prompt } from 'enquirer';
-import {
-  CrawlConfig,
-  CrawledRelease,
-  CrawlerProcess,
-  Deprecation,
-} from '../models';
+import { CrawlConfig, CrawlerProcess, CrawledRelease, Deprecation } from '../models';
 import { concat, tap, updateRepoConfig, toFileName } from '../utils';
 import { generateRawJson } from '../output-formatters';
 
@@ -16,17 +11,13 @@ interface Group {
   matchers: string[];
 }
 
-export function group(
-  config: CrawlConfig
-): CrawlerProcess<CrawledRelease, CrawledRelease> {
+export function group(config: CrawlConfig): CrawlerProcess {
   return concat([
-    async (r: CrawledRelease) => ({
+    async (r) => ({
       ...r,
       deprecations: await addGrouping(config, r.deprecations),
     }),
-    tap((r: CrawledRelease) =>
-      generateRawJson(config, r.deprecations, { tagDate: r.date })
-    ),
+    tap((r) => generateRawJson(config, r.deprecations, { tagDate: r.date })),
   ]);
 }
 
@@ -34,10 +25,6 @@ export async function addGrouping(
   config: CrawlConfig,
   crawledDeprecations: Deprecation[]
 ): Promise<Deprecation[]> {
-  if (crawledDeprecations.length === 0) {
-    return crawledDeprecations;
-  }
-
   console.log('Start grouping deprecations...');
   const { groups } = config as { groups: Group[] };
   const deprecationsWithGroup: Deprecation[] = [];

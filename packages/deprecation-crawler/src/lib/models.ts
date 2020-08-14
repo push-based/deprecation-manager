@@ -18,8 +18,8 @@ export enum NodeTypes {
   MethodDefinition = 'MethodDefinition',
 }
 
-export interface CrawlerProcess<I, O> {
-  (crawledReleases: I): Promise<O>;
+export interface CrawlerProcess {
+  (crawledReleases: CrawledRelease): Promise<CrawledRelease | void>;
 }
 
 export enum SubjectSymbols {
@@ -64,6 +64,7 @@ export interface RawDeprecation {
 export interface CrawledRelease {
   version: string;
   date: string;
+  remoteUrl: string;
   deprecations: Deprecation[];
 }
 
@@ -77,6 +78,7 @@ export interface Deprecation {
   pos: [number, number];
   version: string;
   remoteUrl: string;
+  date: string;
   group?: string;
   ruid?: string;
 }

@@ -7,7 +7,12 @@ import {
   TSCONFIG_PATH,
   DEPRECATIONS_OUTPUT_DIRECTORY,
 } from './constants';
-import { readFile, updateRepoConfig, git } from './utils';
+import {
+  readFile,
+  updateRepoConfig,
+  git,
+  getCurrentBranchOrTag,
+} from './utils';
 import * as yargs from 'yargs';
 
 export async function getConfig(): Promise<CrawlConfig> {
@@ -122,10 +127,7 @@ export function findTsConfigFiles() {
 }
 
 async function sortTags(tags: string[], branches: string[]): Promise<string[]> {
-  const currentBranchOrTag = (
-    (await git(['branch', '--show-current'])) ||
-    (await git(['describe', ' --tags --exact-match']))
-  ).trim();
+  const currentBranchOrTag = await getCurrentBranchOrTag();
 
   // remove any duplicates
   const sorted = [...branches, ...tags].sort(innerSort);

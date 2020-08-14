@@ -1,9 +1,9 @@
 {
     "version": "master",
-    "date": "sandbox-date",
+    "date": "",
     "deprecations": [
         {
-            "path": "all-lowercase\\crawled.ts",
+            "path": "all-lowercase/crawled.ts",
             "lineNumber": 12,
             "name": "lowercase1",
             "kind": "VariableStatement",
@@ -14,12 +14,13 @@
                 311
             ],
             "version": "master",
-            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
+            "remoteUrl": "",
+            "date": "",
             "ruid": "3998890672",
             "group": "all-lowercase"
         },
         {
-            "path": "all-lowercase\\crawled.ts",
+            "path": "all-lowercase/crawled.ts",
             "lineNumber": 18,
             "name": "lowercase2",
             "kind": "VariableStatement",
@@ -30,12 +31,13 @@
                 417
             ],
             "version": "master",
-            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
+            "remoteUrl": "",
+            "date": "",
             "ruid": "2129363187",
             "group": "all-lowercase"
         },
         {
-            "path": "all-lowercase\\crawled.ts",
+            "path": "all-lowercase/crawled.ts",
             "lineNumber": 24,
             "name": "lowercase3",
             "kind": "VariableStatement",
@@ -46,12 +48,13 @@
                 528
             ],
             "version": "master",
-            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
+            "remoteUrl": "",
+            "date": "",
             "ruid": "2585813938",
             "group": "all-lowercase"
         },
         {
-            "path": "deprecation-comments\\crawled.ts",
+            "path": "deprecation-comments/crawled.ts",
             "lineNumber": 6,
             "name": "foo",
             "kind": "FunctionDeclaration",
@@ -62,12 +65,13 @@
                 129
             ],
             "version": "master",
-            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
+            "remoteUrl": "",
+            "date": "",
             "ruid": "3397214801",
             "group": "comment-style"
         },
         {
-            "path": "deprecation-comments\\crawled.ts",
+            "path": "deprecation-comments/crawled.ts",
             "lineNumber": 14,
             "name": "foo2",
             "kind": "FunctionDeclaration",
@@ -78,12 +82,13 @@
                 255
             ],
             "version": "master",
-            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
+            "remoteUrl": "",
+            "date": "",
             "ruid": "456802929",
             "group": "comment-style"
         },
         {
-            "path": "deprecation-comments\\crawled.ts",
+            "path": "deprecation-comments/crawled.ts",
             "lineNumber": 24,
             "name": "foo3",
             "kind": "FunctionDeclaration",
@@ -94,12 +99,13 @@
                 433
             ],
             "version": "master",
-            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
+            "remoteUrl": "",
+            "date": "",
             "ruid": "242198417",
             "group": "comment-style"
         },
         {
-            "path": "deprecation-comments\\crawled.ts",
+            "path": "deprecation-comments/crawled.ts",
             "lineNumber": 29,
             "name": "foo4",
             "kind": "FunctionDeclaration",
@@ -110,12 +116,13 @@
                 557
             ],
             "version": "master",
-            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
+            "remoteUrl": "",
+            "date": "",
             "ruid": "2601492017",
             "group": "comment-style"
         },
         {
-            "path": "deprecation-comments\\crawled.ts",
+            "path": "deprecation-comments/crawled.ts",
             "lineNumber": 34,
             "name": "foo5",
             "kind": "FunctionDeclaration",
@@ -126,12 +133,13 @@
                 649
             ],
             "version": "master",
-            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
+            "remoteUrl": "",
+            "date": "",
             "ruid": "2711487569",
             "group": "comment-style"
         },
         {
-            "path": "multiple-string-patterns-at-once\\crawled.ts",
+            "path": "multiple-string-patterns-at-once/crawled.ts",
             "lineNumber": 15,
             "name": "multiPatternMatch1",
             "kind": "VariableStatement",
@@ -142,12 +150,13 @@
                 459
             ],
             "version": "master",
-            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
+            "remoteUrl": "",
+            "date": "",
             "ruid": "1734398741",
             "group": "catch-all"
         },
         {
-            "path": "multiple-string-patterns-at-once\\crawled.ts",
+            "path": "multiple-string-patterns-at-once/crawled.ts",
             "lineNumber": 21,
             "name": "multiPatternMatch2",
             "kind": "VariableStatement",
@@ -158,12 +167,13 @@
                 638
             ],
             "version": "master",
-            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
+            "remoteUrl": "",
+            "date": "",
             "ruid": "3477709142",
             "group": "catch-all"
         },
         {
-            "path": "multiple-string-patterns-at-once\\crawled.ts",
+            "path": "multiple-string-patterns-at-once/crawled.ts",
             "lineNumber": 27,
             "name": "multiPatternMatch3",
             "kind": "VariableStatement",
@@ -174,12 +184,13 @@
                 823
             ],
             "version": "master",
-            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
+            "remoteUrl": "",
+            "date": "",
             "ruid": "2417065367",
             "group": "catch-all"
         },
         {
-            "path": "whitespace-normalisation\\crawled.ts",
+            "path": "whitespace-normalisation/crawled.ts",
             "lineNumber": 12,
             "name": "whitespacesNormalisation1",
             "kind": "VariableStatement",
@@ -190,12 +201,13 @@
                 306
             ],
             "version": "master",
-            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
+            "remoteUrl": "",
+            "date": "",
             "ruid": "3186155811",
             "group": "whitespace-normalisation"
         },
         {
-            "path": "whitespace-normalisation\\crawled.ts",
+            "path": "whitespace-normalisation/crawled.ts",
             "lineNumber": 18,
             "name": "whitespacesNormalisation2",
             "kind": "VariableStatement",
@@ -206,12 +218,13 @@
                 472
             ],
             "version": "master",
-            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
+            "remoteUrl": "",
+            "date": "",
             "ruid": "677771456",
             "group": "whitespace-normalisation"
         },
         {
-            "path": "whitespace-normalisation\\crawled.ts",
+            "path": "whitespace-normalisation/crawled.ts",
             "lineNumber": 24,
             "name": "whitespacesNormalisation3",
             "kind": "VariableStatement",
@@ -222,7 +235,8 @@
                 618
             ],
             "version": "master",
-            "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git\n",
+            "remoteUrl": "",
+            "date": "",
             "ruid": "3130163297",
             "group": "whitespace-normalisation"
         }
