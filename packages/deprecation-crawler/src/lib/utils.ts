@@ -1,7 +1,11 @@
 import * as cp from 'child_process';
 import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
 import { CrawlConfig, CrawlerProcess, CrawledRelease } from './models';
-import { format, resolveConfig } from 'prettier';
+import {
+  format as prettier,
+  resolveConfig,
+  Options as PrettierOptions,
+} from 'prettier';
 import { CRAWLER_CONFIG_PATH, CRAWLER_MODES } from './constants';
 import { prompt } from 'enquirer';
 
@@ -30,13 +34,19 @@ export function updateRepoConfig(config: CrawlConfig) {
   // exclude gitTag from the persisted config
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { gitTag: _, ...writableConfig } = config;
-  const prettiedConfig = format(JSON.stringify(writableConfig), {
-    parser: 'json',
-    ...resolveConfig.sync('./'),
-  });
   const path = config.configPath || CRAWLER_CONFIG_PATH;
+  writeFileSync(path, formatCode(JSON.stringify(writableConfig), 'json'));
+}
 
-  writeFileSync(path, prettiedConfig);
+export function formatCode(
+  code: string,
+  parser: PrettierOptions['parser'] = 'typescript'
+) {
+  const prettierConfig = resolveConfig.sync(__dirname);
+  return prettier(code, {
+    parser,
+    ...prettierConfig,
+  }).trim();
 }
 
 /**

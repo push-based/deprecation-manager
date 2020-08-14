@@ -1,5 +1,5 @@
 import { CrawlConfig, Deprecation } from '../../models';
-import { readFile } from '../../utils';
+import { readFile, formatCode } from '../../utils';
 import { writeFileSync } from 'fs';
 import * as path from 'path';
 import { EOL } from 'os';
@@ -64,7 +64,7 @@ export async function updateGroupMd(
   ];
 
   const newMd = updatedSections.join(EOL + EOL) + newlines;
-  writeFileSync(filePath, newMd);
+  writeFileSync(filePath, formatCode(newMd, 'markdown'));
 }
 
 function getInitialGroupContent(groupName: string) {

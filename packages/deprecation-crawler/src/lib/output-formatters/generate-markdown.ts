@@ -1,7 +1,7 @@
 import { writeFileSync } from 'fs';
 import { basename, join } from 'path';
 import { CrawlConfig, Deprecation } from '../models';
-import { ensureDirExists, toFileName } from '../utils';
+import { ensureDirExists, toFileName, formatCode } from '../utils';
 import { EOL } from 'os';
 
 export async function generateTagBasedFormatter(
@@ -57,7 +57,7 @@ export async function generateTagBasedFormatter(
   ensureDirExists(config.outputDirectory);
   writeFileSync(
     join(config.outputDirectory, `${toFileName(config.gitTag)}.md`),
-    markdownContent
+    formatCode(markdownContent, 'markdown')
   );
   console.log('Updated tag-based markdown format');
 }
