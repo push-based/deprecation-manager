@@ -3,7 +3,6 @@ import { basename, join } from 'path';
 import { CrawlConfig, Deprecation } from '../models';
 import { ensureDirExists, toFileName } from '../utils';
 import { EOL } from 'os';
-import { checkout } from '../checkout';
 
 export async function generateTagBasedFormatter(
   config: CrawlConfig,
