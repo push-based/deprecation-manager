@@ -28,7 +28,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: git fetch --no-tags --prune --depth=5 origin master
       - name: crawl
-        run: npx deprecation-crawler --path ./deprecation-crawler.config.githib-action.json --tag master
+        run: npx deprecation-crawler --path ./deprecation-crawler.config.github-action.json --tag master
       - uses: EndBug/add-and-commit@v4 # You can change this to use a specific version
         with:
           add: 'docs/*'
