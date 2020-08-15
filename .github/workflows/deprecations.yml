@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
         env:
-        __CRAWLER_MODE__: 'SANDBOX';
+        CRAWLER_MODE: 'SANDBOX';
       - run: git fetch --no-tags --prune --depth=5 origin master
       - name: crawl
         run: npx deprecation-crawler --path ./deprecation-crawler.config.github-action.json --tag master
