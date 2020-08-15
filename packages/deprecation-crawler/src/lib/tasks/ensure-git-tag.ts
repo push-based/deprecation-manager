@@ -62,10 +62,10 @@ export function ensureGitTag(config: CrawlConfig): CrawlerProcess {
 
       // select the string value if passed, otherwise select the first item in the list
       const intialTag = cliPassedTag ? cliPassedTag.name : 0;
-      const { gitTag }: { gitTag: string } = await prompt([
+      const { name }: { name: string } = await prompt([
         {
           type: 'select',
-          name: 'tag',
+          name: 'name',
           message: `What git tag do you want to crawl?`,
           skip: !!intialTag,
           // @NOTICE: by using choices here the initial value has to be typed as number.
@@ -76,7 +76,7 @@ export function ensureGitTag(config: CrawlConfig): CrawlerProcess {
       ]);
       return {
         // @TODO consider pass the whole object
-        tag: relevantBranches.find((t) => t.name === gitTag),
+        tag: relevantBranches.find((t) => t.name === name),
         ...r,
       };
     }
