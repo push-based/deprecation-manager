@@ -6,7 +6,7 @@ name: Crawl Deprecations
 on:
   push:
     branches:
-      - master
+      - setup-git-action
 
 jobs:
   build-docs:
