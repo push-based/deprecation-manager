@@ -9,7 +9,7 @@ on:
       - setup-git-action
 
 jobs:
-  build-docs:
+  crawl-and-update:
 
     runs-on: ubuntu-latest
 
