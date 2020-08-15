@@ -3,7 +3,6 @@ import { CrawledRelease } from './models';
 import { stripIndent } from 'common-tags';
 import { branchHasChanges, run } from './utils';
 import { logError } from './log';
-import { addRuid } from './processors/add-ruid';
 import { checkout } from './tasks/checkout';
 import { crawl } from './tasks/crawl';
 import { updateRepository } from './tasks/update-repository';
@@ -21,7 +20,6 @@ import { ensureGitTag } from './tasks/ensure-git-tag';
     ensureGitTag,
     checkout,
     crawl,
-    addRuid,
     updateRepository,
     addGroups,
     generateOutput,
