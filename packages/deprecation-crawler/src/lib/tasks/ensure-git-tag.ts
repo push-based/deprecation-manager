@@ -80,4 +80,5 @@ export async function getTagChoices(gitTags: GitTag[]): Promise<string[]> {
   );
   // remove any duplicates
   return [...new Set([...sortedTags])];
+
 }

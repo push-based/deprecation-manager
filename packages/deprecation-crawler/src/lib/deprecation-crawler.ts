@@ -10,6 +10,7 @@ import { updateRepository } from './tasks/update-repository';
 import { addGroups } from './tasks/add-groups';
 import { generateOutput } from './tasks/generate-output';
 import { commitChanges } from './tasks/commit-changes';
+import { ensureGitTag } from './tasks/ensure-git-tag';
 
 (async () => {
   await guardAgainstDirtyRepo();
@@ -17,6 +18,7 @@ import { commitChanges } from './tasks/commit-changes';
   const config = await getConfig();
 
   const tasks = [
+    ensureGitTag,
     checkout,
     crawl,
     addRuid,
