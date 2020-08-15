@@ -7,9 +7,8 @@ import {
   TSCONFIG_PATH,
   DEPRECATIONS_OUTPUT_DIRECTORY,
 } from './constants';
-import { readFile, updateRepoConfig, git } from './utils';
+import { readFile, updateRepoConfig } from './utils';
 import * as yargs from 'yargs';
-import { getTagChoices } from './tasks/ensure-git-tag';
 
 export async function getConfig(): Promise<CrawlConfig> {
   // Check for path params from cli command
@@ -45,24 +44,10 @@ export async function getConfig(): Promise<CrawlConfig> {
 
   // if no param is given it is '' if param with no value is given it is true
   const argTagGiven = argTag !== 'true' && argTag !== '';
-  const currentBranch = await git(['branch --show-current']);
-  const tagChoices = argTagGiven
-    ? [argTag]
-    : await getTagChoices(currentBranch);
-  // select the string value if passed, otherwise select the first item in the list
-  const intialTag = argTagGiven ? argTag : 0;
+  // select the string value if passed, otherwise undefined
+  const gitTag = argTagGiven ? argTag : undefined;
 
   const userConfig: CrawlConfig = await prompt([
-    {
-      type: 'select',
-      name: 'gitTag',
-      message: `What git tag do you want to crawl?`,
-      skip: argTagGiven,
-      // @NOTICE: by using choices here the initial value has to be typed as number.
-      // However, passing a string works :)
-      initial: (intialTag as unknown) as number,
-      choices: tagChoices,
-    },
     {
       type: 'input',
       name: 'outputDirectory',
@@ -107,6 +92,7 @@ export async function getConfig(): Promise<CrawlConfig> {
     configPath: crawlerConfigPath,
     ...repoConfig,
     ...userConfig,
+    gitTag,
   };
 
   updateRepoConfig(config);

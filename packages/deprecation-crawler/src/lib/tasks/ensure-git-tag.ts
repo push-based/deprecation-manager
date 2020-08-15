@@ -1,9 +1,43 @@
-import { escapeRegExp, template } from 'lodash';
+import { CrawlConfig, CrawledRelease, CrawlerProcess } from '../models';
+import { prompt } from 'enquirer';
 import * as semver from 'semver';
 // @TODO get rid of require
 import semverRegex = require('semver-regex');
-import { getTags } from '../utils';
+import { getTags, git } from '../utils';
 import { GitTag } from '../models';
+import { escapeRegExp, template } from 'lodash';
+
+export function ensureGitTag(config): CrawlerProcess {
+  return async (r: CrawledRelease): Promise<CrawledRelease> => {
+    const currentBranch = await git(['branch --show-current']);
+    const relevantBranches = await getRelevantTagsFromBranch(
+      `v\${version}`,
+      currentBranch
+    );
+    const tagChoices = config.gitTag
+      ? [config.gitTag]
+      : await getTagChoices(relevantBranches);
+    // select the string value if passed, otherwise select the first item in the list
+    const intialTag = config.gitTag ? config.gitTag : 0;
+    const { gitTag }: CrawlConfig = await prompt([
+      {
+        type: 'select',
+        name: 'gitTag',
+        message: `What git tag do you want to crawl?`,
+        skip: !!config.gitTag,
+        // @NOTICE: by using choices here the initial value has to be typed as number.
+        // However, passing a string works :)
+        initial: (intialTag as unknown) as number,
+        choices: tagChoices,
+      },
+    ]);
+
+    return {
+      gitTag: relevantBranches.find((t) => t.gitTag === gitTag),
+      ...r,
+    };
+  };
+}
 
 export async function getRelevantTagsFromBranch(
   tagFormat: string,
@@ -39,12 +73,11 @@ function semverSort(semvers: string[], asc: boolean) {
   });
 }
 
-export async function getTagChoices(branch: string): Promise<string[]> {
-  const tags = await getRelevantTagsFromBranch(`v\${version}`, branch);
+export async function getTagChoices(gitTags: GitTag[]): Promise<string[]> {
   const sortedTags = semverSort(
-    tags.map((gt) => gt.gitTag),
-    true
+    gitTags.map((gt) => gt.gitTag),
+    false
   );
   // remove any duplicates
-  return [...new Set([branch, ...sortedTags])];
+  return [...new Set([...sortedTags])];
 }
