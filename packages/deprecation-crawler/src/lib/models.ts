@@ -1,19 +1,23 @@
 export interface CrawlConfig {
   // only form cli params
   configPath: string;
-  gitTag: string;
-  outputDirectory: string;
+  // required fields
+  tagFormat: string;
+  commitMessage?: string;
   tsConfigPath: string;
   deprecationComment: string;
   deprecationLink: string;
-  outputFormatters: string[];
   groups: { key: string; matchers: string[] }[];
-  commitMessage?: string;
+  // optional fields
+  outputDirectory: string;
+  outputFormatters: string[];
 }
 
 export interface GitTag {
-  gitTag: string;
+  name: string;
   semver: string;
+  // @TODO implement
+  date?: string;
 }
 
 export enum NodeTypes {
@@ -67,7 +71,8 @@ export interface RawDeprecation {
 }
 
 export interface CrawledRelease {
-  gitTag: GitTag;
+  tag: GitTag;
+  branch: string;
   date: string;
   remoteUrl: string;
   deprecations: Deprecation[];

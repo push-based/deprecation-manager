@@ -1,6 +1,11 @@
 import { EOL } from 'os';
 import { prompt } from 'enquirer';
-import { CrawlConfig, CrawlerProcess, CrawledRelease, Deprecation } from '../models';
+import {
+  CrawlConfig,
+  CrawlerProcess,
+  CrawledRelease,
+  Deprecation,
+} from '../models';
 import { concat, tap, updateRepoConfig, toFileName } from '../utils';
 import { generateRawJson } from '../output-formatters';
 
@@ -15,21 +20,21 @@ export function group(config: CrawlConfig): CrawlerProcess {
   return concat([
     async (r) => ({
       ...r,
-      deprecations: await addGrouping(config, r.deprecations),
+      ...(await addGrouping(config, r)),
     }),
-    tap((r) => generateRawJson(config, r.deprecations, { tagDate: r.date })),
+    tap((r) => generateRawJson(config, r, { tagDate: r.date })),
   ]);
 }
 
 export async function addGrouping(
   config: CrawlConfig,
-  crawledDeprecations: Deprecation[]
-): Promise<Deprecation[]> {
+  crawledRelease: CrawledRelease
+): Promise<CrawledRelease> {
   console.log('Start grouping deprecations...');
   const { groups } = config as { groups: Group[] };
   const deprecationsWithGroup: Deprecation[] = [];
 
-  for (const deprecation of crawledDeprecations) {
+  for (const deprecation of crawledRelease.deprecations) {
     const deprecationHasExistingGroup = checkForExistingGroup(
       groups,
       deprecation
@@ -73,7 +78,10 @@ export async function addGrouping(
   }
 
   updateRepoConfig({ ...config, groups });
-  return deprecationsWithGroup;
+  return {
+    ...crawledRelease,
+    deprecations: deprecationsWithGroup,
+  };
 }
 
 function getGroupNames(

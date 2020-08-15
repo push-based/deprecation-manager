@@ -33,9 +33,9 @@ export function ensureDirExists(dir: string) {
 export function updateRepoConfig(config: CrawlConfig) {
   // exclude gitTag from the persisted config
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { gitTag: _, ...writableConfig } = config;
+  // const { ignoredParam, ...writableConfig } = config;
   const path = config.configPath || CRAWLER_CONFIG_PATH;
-  writeFileSync(path, formatCode(JSON.stringify(writableConfig), 'json'));
+  writeFileSync(path, formatCode(JSON.stringify(config), 'json'));
 }
 
 export function formatCode(

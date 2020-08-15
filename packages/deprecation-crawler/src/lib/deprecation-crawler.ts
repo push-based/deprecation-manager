@@ -10,7 +10,6 @@ import { updateRepository } from './tasks/update-repository';
 import { addGroups } from './tasks/add-groups';
 import { generateOutput } from './tasks/generate-output';
 import { commitChanges } from './tasks/commit-changes';
-import { ensureGitTag } from './tasks/ensure-git-tag';
 
 (async () => {
   await guardAgainstDirtyRepo();
@@ -18,7 +17,6 @@ import { ensureGitTag } from './tasks/ensure-git-tag';
   const config = await getConfig();
 
   const tasks = [
-    ensureGitTag,
     checkout,
     crawl,
     addRuid,
@@ -29,9 +27,7 @@ import { ensureGitTag } from './tasks/ensure-git-tag';
   ];
 
   // Run all processors
-  const initial = ({
-    version: config.gitTag,
-  } as unknown) as CrawledRelease;
+  const initial = ({} as unknown) as CrawledRelease;
   run(tasks, config)(initial);
 })();
 

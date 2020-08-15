@@ -6,7 +6,7 @@ import { ensureFormatter } from '../tasks/ensure-fotmatters';
 export function format(config): CrawlerProcess {
   return concat(
     ensureFormatter(config).map(([_, formatter]) =>
-      tap((r: CrawledRelease) => formatter(config, r.deprecations))
+      tap((r: CrawledRelease) => formatter(config, r))
     )
   );
 }

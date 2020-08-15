@@ -1,4 +1,4 @@
-import { CrawlConfig, Deprecation } from '../../models';
+import { CrawlConfig, CrawledRelease, Deprecation } from '../../models';
 import { readFile, formatCode } from '../../utils';
 import { writeFileSync } from 'fs';
 import * as path from 'path';
@@ -10,12 +10,12 @@ const MD_GROUP_CLOSER = 'ruid-groups -->';
 
 export async function generateGroupBasedFormatter(
   config: CrawlConfig,
-  rawDeprecations: Deprecation[]
+  crawledRelease: CrawledRelease
 ): Promise<void> {
   console.log('📝 Update group-based markdown format');
 
   config.groups.forEach((g) => {
-    updateGroupMd(config, g, rawDeprecations);
+    updateGroupMd(config, g, crawledRelease.deprecations);
   });
 
   console.log('Updated group-based markdown format');

@@ -6,6 +6,7 @@ import {
   CRAWLER_CONFIG_PATH,
   TSCONFIG_PATH,
   DEPRECATIONS_OUTPUT_DIRECTORY,
+  TAG_FORMAT_TEMPLATE,
 } from './constants';
 import { readFile, updateRepoConfig } from './utils';
 import * as yargs from 'yargs';
@@ -31,21 +32,6 @@ export async function getConfig(): Promise<CrawlConfig> {
   if (tsConfigFiles.length === 0) {
     throw Error('We need a tsconfig file to crawl');
   }
-
-  // Check for tag params from cli command
-  const argTag = (yargs.argv.tag
-    ? yargs.argv.tag
-    : yargs.argv.t
-    ? yargs.argv.t
-    : ''
-  )
-    .toString()
-    .trim();
-
-  // if no param is given it is '' if param with no value is given it is true
-  const argTagGiven = argTag !== 'true' && argTag !== '';
-  // select the string value if passed, otherwise undefined
-  const gitTag = argTagGiven ? argTag : undefined;
 
   const userConfig: CrawlConfig = await prompt([
     {
@@ -88,11 +74,11 @@ export async function getConfig(): Promise<CrawlConfig> {
 
   const config = {
     outputFormatters: ['tagBasedMarkdown', 'groupBasedMarkdown'],
+    tagFormat: TAG_FORMAT_TEMPLATE,
     groups: [],
     configPath: crawlerConfigPath,
     ...repoConfig,
     ...userConfig,
-    gitTag,
   };
 
   updateRepoConfig(config);

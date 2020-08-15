@@ -1,11 +1,6 @@
 import { CrawlConfig, CrawlerProcess, CrawledRelease } from '../models';
-import {
-  git,
-  concat,
-  tap,
-  getCurrentBranchOrTag,
-  getRemoteUrl,
-} from '../utils';
+import { git, concat, tap, getRemoteUrl } from '../utils';
+import { ensureGitTag } from './ensure-git-tag';
 
 /**
  * Checkout the desired branch
@@ -13,9 +8,10 @@ import {
  */
 export function checkout(config: CrawlConfig): CrawlerProcess {
   return concat([
-    tap(async () => await checkoutBranch(config)),
+    ensureGitTag(config),
+    tap(async (r) => await checkoutTag(r)),
     async (r): Promise<CrawledRelease> => {
-      const date = await getBranchDate(config);
+      const date = await getBranchDate(r);
       const remoteUrl = await getRemoteUrl();
       return {
         ...r,
@@ -26,14 +22,11 @@ export function checkout(config: CrawlConfig): CrawlerProcess {
   ]);
 }
 
-async function checkoutBranch(config: CrawlConfig) {
-  const currentBranchOrTag = await getCurrentBranchOrTag();
-  if (currentBranchOrTag !== config.gitTag) {
-    await git([`checkout`, config.gitTag]);
-  }
+async function checkoutTag(r: CrawledRelease): Promise<void> {
+  await git([`checkout tags/${r.tag.name}`]);
 }
 
-async function getBranchDate(config: CrawlConfig) {
-  const date = await git([`log -1 --format=%ai ${config.gitTag}`]);
+async function getBranchDate(r: CrawledRelease) {
+  const date = await git([`log -1 --format=%ai ${r.tag.name}`]);
   return date;
 }
