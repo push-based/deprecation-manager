@@ -1,0 +1,8 @@
+{
+  "outputFormatters": ["tagBasedMarkdown", "groupBasedMarkdown"],
+  "groups": [],
+  "outputDirectory": "deprecations",
+  "tsConfigPath": "packages/deprecation-crawler/sandbox/tsconfig.sandasdfx.json",
+  "deprecationComment": "@deprecated",
+  "deprecationLink": "https://rxjs.dev/deprecations"
+}
