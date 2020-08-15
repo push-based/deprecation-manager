@@ -31,7 +31,7 @@ jobs:
         run: npx deprecation-crawler --path ./deprecation-crawler.config.github-action.json --tag master
       - uses: EndBug/add-and-commit@v4 # You can change this to use a specific version
         with:
-          add: 'docs/*'
+          add: 'deprecations/*'
           author_name: Github Action
           message: 'docs(deprecation-manager): updated deprecations'
           # Whether to use the --force option on `git add`, in order to bypass eventual gitignores
