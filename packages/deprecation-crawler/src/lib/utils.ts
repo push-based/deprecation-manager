@@ -150,6 +150,19 @@ export async function getCurrentHeadName(): Promise<string> {
   ]);
 }
 
+/**
+ * @description Get all the tags for a given branch.
+ *
+ * @return - List of git tags.
+ * @throws - If the `git` command fails.
+ */
+export async function getTags(branch): Promise<string[]> {
+  return (await git(['tag', '--merged', branch]))
+    .split('\n')
+    .map((tag) => tag.trim())
+    .filter(Boolean);
+}
+
 export async function getCurrentBranchOrTag() {
   return (
     (await git(['branch', '--show-current'])) ||
