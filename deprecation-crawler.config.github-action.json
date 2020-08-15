@@ -3,7 +3,7 @@
   "groups": [],
   "configPath": "./deprecation-crawler.config.githib-action.json",
   "outputDirectory": "deprecations",
-  "tsConfigPath": "packages/deprecation-crawler/sandbox/tsconfig.sandasdfx.json",
+  "tsConfigPath": "packages/deprecation-crawler/sandbox/tsconfig.sandbox.json",
   "deprecationComment": "@deprecated",
   "deprecationLink": "https://rxjs.dev/deprecations"
 }
