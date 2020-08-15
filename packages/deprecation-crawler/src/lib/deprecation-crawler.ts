@@ -11,11 +11,12 @@ import { addGroups } from './tasks/add-groups';
 import { generateOutput } from './tasks/generate-output';
 import { commitChanges } from './tasks/commit-changes';
 import { ensureGitTag } from './tasks/ensure-git-tag';
+import { ensureTsConfigPath } from './tasks/ensure-tsconfig-path';
 
 (async () => {
   await guardAgainstDirtyRepo();
 
-  const config = await getConfig();
+  const config = await ensureTsConfigPath(await getConfig());
 
   const tasks = [
     ensureGitTag,
