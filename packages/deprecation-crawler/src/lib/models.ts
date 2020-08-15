@@ -11,6 +11,11 @@ export interface CrawlConfig {
   commitMessage?: string;
 }
 
+export interface GitTag {
+  gitTag: string;
+  semver: string;
+}
+
 export enum NodeTypes {
   ClassDeclaration = 'ClassDeclaration',
   Identifier = 'Identifier',
