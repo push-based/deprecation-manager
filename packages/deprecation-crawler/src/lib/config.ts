@@ -7,13 +7,9 @@ import {
   TSCONFIG_PATH,
   DEPRECATIONS_OUTPUT_DIRECTORY,
 } from './constants';
-import {
-  readFile,
-  updateRepoConfig,
-  git,
-  getCurrentBranchOrTag,
-} from './utils';
+import { readFile, updateRepoConfig, git } from './utils';
 import * as yargs from 'yargs';
+import { getTagChoices } from './tasks/ensure-git-tag';
 
 export async function getConfig(): Promise<CrawlConfig> {
   // Check for path params from cli command
@@ -49,9 +45,10 @@ export async function getConfig(): Promise<CrawlConfig> {
 
   // if no param is given it is '' if param with no value is given it is true
   const argTagGiven = argTag !== 'true' && argTag !== '';
+  const currentBranch = await git(['branch --show-current']);
   const tagChoices = argTagGiven
     ? [argTag]
-    : await sortTags(await getGitHubBranches(), await getGitHubTags());
+    : await getTagChoices(currentBranch);
   // select the string value if passed, otherwise select the first item in the list
   const intialTag = argTagGiven ? argTag : 0;
 
@@ -124,58 +121,4 @@ export function findTsConfigFiles() {
     TSCONFIG_PATH,
     ...tsConfigs.filter((i) => i.indexOf(TSCONFIG_PATH) === -1),
   ];
-}
-
-async function sortTags(tags: string[], branches: string[]): Promise<string[]> {
-  const currentBranchOrTag = await getCurrentBranchOrTag();
-
-  // remove any duplicates
-  const sorted = [...branches, ...tags].sort(innerSort);
-  return [...new Set([currentBranchOrTag, ...sorted])];
-
-  function innerSort(a: string, b: string): number {
-    const normalizedA = normalizeSemverIfPresent(a);
-    const normalizedB = normalizeSemverIfPresent(b);
-
-    return (
-      ((/[A-Za-z]/.test(normalizedA) as unknown) as number) -
-        ((/[A-Za-z]/.test(normalizedB) as unknown) as number) ||
-      (normalizedA.toUpperCase() < normalizedB.toUpperCase()
-        ? 1
-        : normalizedA.toUpperCase() > normalizedB.toUpperCase()
-        ? -1
-        : 0)
-    );
-  }
-
-  function normalizeSemverIfPresent(str: string): string {
-    const regex = /^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/;
-    const potentialVersionNumber =
-      str[0].toLowerCase() === 'v' ? str.slice(1) : str;
-    return regex.test(potentialVersionNumber) ? potentialVersionNumber : str;
-  }
-}
-
-export async function getGitHubTags(): Promise<string[]> {
-  const branches = await git(['tag']);
-  return (
-    branches
-      .trim()
-      .split('\n')
-      // @TODO remove ugly hack for the `*` char of the current branch
-      .map((i) => i.split('* ').join(''))
-      .sort()
-  );
-}
-
-export async function getGitHubBranches(): Promise<string[]> {
-  const branches = await git(['branch']);
-  return (
-    branches
-      .trim()
-      .split('\n')
-      // @TODO remove ugly hack for the `*` char of the current branch
-      .map((i) => i.split('* ').join(''))
-      .sort()
-  );
 }
