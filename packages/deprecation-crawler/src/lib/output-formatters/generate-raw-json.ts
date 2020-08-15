@@ -41,7 +41,7 @@ export async function generateRawJson(
 
   const json = JSON.stringify(content, null, 4);
   const path = join(config.outputDirectory, `${RAW_DEPRECATION_PATH}`);
-  writeFileSync(path, json.trim());
+  writeFileSync(path, json);
 
   console.log(`📝 Raw JSON data up to date under ${path}`);
 }
