@@ -23,7 +23,7 @@ export async function ensureTsConfigPath(
   const tsConfigFiles: string[] = findTsConfigFiles();
   if (tsConfigFiles.length === 0) {
     throw Error(
-      'No tsconfig.ts files present in the current folder structure.'
+      'No tsconfig.json files present in the current folder structure.'
     );
   }
 
