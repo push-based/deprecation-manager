@@ -22,8 +22,9 @@ export interface GitTag {
 
 export interface CrawlConfigDefaults {
   outputFormatters: string[];
+  tagFormat: string;
   groups: Group[];
-  commitMessage?: string;
+  commitMessage: string;
 }
 
 export interface Group {
