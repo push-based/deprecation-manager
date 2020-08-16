@@ -7,7 +7,8 @@ import {
   TSCONFIG_PATH,
   DEPRECATIONS_OUTPUT_DIRECTORY,
   DEFAULT_COMMIT_MESSAGE,
-  DEFAULT_DEPRECATION_MSG_TOKEN
+  DEFAULT_DEPRECATION_MSG_TOKEN,
+  TAG_FORMAT_TEMPLATE,
 } from './constants';
 import { readFile, updateRepoConfig } from './utils';
 import * as yargs from 'yargs';
@@ -99,6 +100,7 @@ export function getDefaultConfig(
 ): CrawlConfigDefaults {
   return {
     outputFormatters: ['tagBasedMarkdown', 'groupBasedMarkdown'],
+    tagFormat: TAG_FORMAT_TEMPLATE,
     commitMessage: DEFAULT_COMMIT_MESSAGE,
     groups: [
       { key: 'ungrouped', matchers: [] },
