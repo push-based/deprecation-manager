@@ -34,7 +34,6 @@ async function checkoutTag(r: CrawledRelease): Promise<void> {
  */
 async function checkoutBranch(r: CrawledRelease) {
   const currentBranchOrTag = await getCurrentBranchOrTag();
-  console.log('checkoutBranch', r);
   if (currentBranchOrTag !== r.tag.name) {
     await git([`checkout`, r.tag.name]);
   }
