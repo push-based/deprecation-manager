@@ -6,7 +6,7 @@ name: Crawl Deprecations
 on:
   push:
     branches:
-      - setup-git-action
+      - master
 
 jobs:
   crawl-and-update:
