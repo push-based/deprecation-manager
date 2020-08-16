@@ -1,0 +1,9 @@
+{
+  "outputFormatters": ["tagBasedMarkdown", "groupBasedMarkdown"],
+  "groups": [],
+  "configPath": "./deprecation-crawler.config.githib-action.json",
+  "outputDirectory": "deprecations",
+  "tsConfigPath": "packages/deprecation-crawler/sandbox/tsconfig.sandbox.json",
+  "deprecationComment": "@deprecated",
+  "deprecationLink": "https://rxjs.dev/deprecations"
+}
