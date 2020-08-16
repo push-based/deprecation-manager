@@ -37,6 +37,7 @@ test('sandbox', async () => {
   const cliOutput = await exec(`npm run crawl -- -t master`);
 
   // verify output
+  expect(cliOutput).toMatch(/Crawling with tsconfig: tsconfig.sandbox.json/i);
   expect(cliOutput).toMatch(/Looking for deprecations/i);
   expect(cliOutput).toMatch(/Adding ruid to deprecations/i);
   expect(cliOutput).toMatch(/Regenerating raw JSON/i);
