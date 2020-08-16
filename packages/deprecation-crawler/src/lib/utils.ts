@@ -176,7 +176,7 @@ export async function branchHasChanges() {
 }
 
 export async function getRemoteUrl(): Promise<string> {
-  return git([`config --get remote.origin.url`]);
+  return git([`ls-remote --get-url`]);
 }
 
 export function cmd(command: string, args: string[]): Promise<string> {
