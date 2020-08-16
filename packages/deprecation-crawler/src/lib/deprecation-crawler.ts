@@ -3,7 +3,6 @@ import { CrawledRelease } from './models';
 import { stripIndent } from 'common-tags';
 import { branchHasChanges, run } from './utils';
 import { logError } from './log';
-import { addRuid } from './processors/add-ruid';
 import { checkout } from './tasks/checkout';
 import { crawl } from './tasks/crawl';
 import { updateRepository } from './tasks/update-repository';
@@ -14,12 +13,11 @@ import { commitChanges } from './tasks/commit-changes';
 (async () => {
   await guardAgainstDirtyRepo();
 
-  const config = await getConfig();
+  const config = await ensureTsConfigPath(await getConfig());
 
   const tasks = [
     checkout,
     crawl,
-    addRuid,
     updateRepository,
     addGroups,
     generateOutput,

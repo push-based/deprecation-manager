@@ -3,7 +3,7 @@ export interface CrawlConfig {
   configPath: string;
   // required fields
   tagFormat: string;
-  commitMessage?: string;
+  commitMessage: string;
   tsConfigPath: string;
   deprecationComment: string;
   deprecationLink: string;
@@ -18,6 +18,17 @@ export interface GitTag {
   semver: string;
   // @TODO implement
   date?: string;
+}
+
+export interface CrawlConfigDefaults {
+  outputFormatters: string[];
+  groups: Group[];
+  commitMessage?: string;
+}
+
+export interface Group {
+  key: string;
+  matchers: string[];
 }
 
 export enum NodeTypes {
