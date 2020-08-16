@@ -1,7 +1,7 @@
 import { CrawlConfig, CrawledRelease, CrawlerProcess, GitTag } from '../models';
 import { prompt } from 'enquirer';
 import * as semverHelper from 'semver';
-import { getTags, git } from '../utils';
+import { getCurrentBranchOrTag, getTags } from '../utils';
 import { escapeRegExp, template } from 'lodash';
 import { SEMVER_TOKEN } from '../constants';
 import * as yargs from 'yargs';
@@ -21,7 +21,7 @@ export function ensureGitTag(config: CrawlConfig): CrawlerProcess {
       );
     }
 
-    const currentBranch = await git(['branch --show-current']);
+    const currentBranch = await getCurrentBranchOrTag();
 
     const relevantBranches = await getRelevantTagsFromBranch(
       config.tagFormat,
@@ -56,9 +56,10 @@ export function ensureGitTag(config: CrawlConfig): CrawlerProcess {
     }
     // user did not pass tag over CLI param
     else {
+      const gitTags = await getTagChoices(relevantBranches);
       const tagChoices = cliPassedTag
         ? [cliPassedTag.name]
-        : await getTagChoices(relevantBranches);
+        : [currentBranch, ...gitTags];
 
       // select the string value if passed, otherwise select the first item in the list
       const intialTag = cliPassedTag ? cliPassedTag.name : 0;
@@ -74,9 +75,10 @@ export function ensureGitTag(config: CrawlConfig): CrawlerProcess {
           choices: tagChoices,
         },
       ]);
+
       return {
         // @TODO consider pass the whole object
-        tag: relevantBranches.find((t) => t.name === name),
+        tag: relevantBranches.find((t) => t.name === name) || { name },
         ...r,
       };
     }

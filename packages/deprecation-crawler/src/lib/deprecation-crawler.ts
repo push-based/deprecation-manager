@@ -9,6 +9,7 @@ import { updateRepository } from './tasks/update-repository';
 import { addGroups } from './tasks/add-groups';
 import { generateOutput } from './tasks/generate-output';
 import { commitChanges } from './tasks/commit-changes';
+import { ensureTsConfigPath } from './tasks/ensure-tsconfig-path';
 
 (async () => {
   await guardAgainstDirtyRepo();
