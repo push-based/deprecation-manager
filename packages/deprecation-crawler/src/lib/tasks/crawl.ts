@@ -1,6 +1,7 @@
 import { CrawlConfig, CrawlerProcess, CrawledRelease } from '../models';
 import { concat } from '../utils';
 import { crawlDeprecations } from '../crawler';
+import { addRuid } from '../processors/add-ruid';
 
 /**
  * Look for deprecations
@@ -15,5 +16,6 @@ export function crawl(config: CrawlConfig): CrawlerProcess {
         deprecations,
       };
     },
+    addRuid(config),
   ]);
 }
