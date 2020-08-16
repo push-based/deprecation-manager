@@ -7,8 +7,19 @@ export interface CrawlConfig {
   deprecationComment: string;
   deprecationLink: string;
   outputFormatters: string[];
-  groups: { key: string; matchers: string[] }[];
+  groups: Group[];
   commitMessage?: string;
+}
+
+export interface CrawlConfigDefaults {
+  outputFormatters: string[];
+  groups: Group[];
+  commitMessage?: string;
+}
+
+export interface Group {
+  key: string;
+  matchers: string[];
 }
 
 export enum NodeTypes {

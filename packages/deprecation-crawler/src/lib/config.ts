@@ -1,11 +1,13 @@
 import { normalize } from 'path';
 import { prompt } from 'enquirer';
 import { glob } from 'glob';
-import { CrawlConfig } from './models';
+import { CrawlConfig, CrawlConfigDefaults } from './models';
 import {
   CRAWLER_CONFIG_PATH,
   TSCONFIG_PATH,
   DEPRECATIONS_OUTPUT_DIRECTORY,
+  DEFAULT_COMMIT_MESSAGE,
+  DEFAULT_DEPRECATION_MSG_TOKEN,
 } from './constants';
 import { readFile, updateRepoConfig } from './utils';
 import * as yargs from 'yargs';
@@ -73,7 +75,7 @@ export async function getConfig(): Promise<CrawlConfig> {
       type: 'input',
       name: 'deprecationComment',
       message: "What's the deprecation keyword to look for?",
-      initial: repoConfig.deprecationComment || '@deprecated',
+      initial: repoConfig.deprecationComment || DEFAULT_DEPRECATION_MSG_TOKEN,
       skip: !!repoConfig.deprecationComment,
     },
     {
@@ -87,8 +89,7 @@ export async function getConfig(): Promise<CrawlConfig> {
   ]);
 
   const config = {
-    outputFormatters: ['tagBasedMarkdown', 'groupBasedMarkdown'],
-    groups: [],
+    ...getDefaultConfig(userConfig.deprecationComment),
     configPath: crawlerConfigPath,
     ...repoConfig,
     ...userConfig,
@@ -107,4 +108,20 @@ export function findTsConfigFiles() {
     TSCONFIG_PATH,
     ...tsConfigs.filter((i) => i.indexOf(TSCONFIG_PATH) === -1),
   ];
+}
+
+export function getDefaultConfig(
+  deprecationComment: string = DEFAULT_DEPRECATION_MSG_TOKEN
+): CrawlConfigDefaults {
+  return {
+    outputFormatters: ['tagBasedMarkdown', 'groupBasedMarkdown'],
+    commitMessage: DEFAULT_COMMIT_MESSAGE,
+    groups: [
+      { key: 'ungrouped', matchers: [] },
+      {
+        key: 'health-check',
+        matchers: ['\\/\\*\\* *\\' + deprecationComment + ' *\\*/'],
+      },
+    ],
+  };
 }
