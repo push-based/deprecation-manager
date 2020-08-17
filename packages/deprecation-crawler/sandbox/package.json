@@ -1,6 +1,7 @@
 {
   "name": "deprecation-crawler-sandbox",
   "scripts": {
-    "crawl": "npx ../../../dist/packages/deprecation-crawler/index.js"
+    "crawl": "npx ../../../dist/packages/deprecation-crawler/index.js",
+    "run-sandbox": "cross-env __CRAWLER_MODE__=SANDBOX_MODE npx ../../../dist/packages/deprecation-crawler/index.js -t master"
   }
 }

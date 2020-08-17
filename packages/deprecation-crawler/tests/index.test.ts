@@ -92,11 +92,14 @@ function exec(command) {
           __CRAWLER_MODE__: CRAWLER_MODES.SANDBOX,
         },
       },
-      (err, stdout) => {
+      (err, stdout, stderr) => {
         if (err) {
           return reject(err);
         }
-        resolve(stdout.toString());
+        if (stderr) {
+          return reject(stderr);
+        }
+        resolve(stdout);
       }
     );
   });

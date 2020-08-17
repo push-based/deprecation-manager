@@ -10,6 +10,7 @@ import { addGroups } from './tasks/add-groups';
 import { generateOutput } from './tasks/generate-output';
 import { commitChanges } from './tasks/commit-changes';
 import { ensureTsConfigPath } from './tasks/ensure-tsconfig-path';
+import { CRAWLER_MODES } from './constants';
 
 (async () => {
   await guardAgainstDirtyRepo();
@@ -31,6 +32,9 @@ import { ensureTsConfigPath } from './tasks/ensure-tsconfig-path';
 })();
 
 async function guardAgainstDirtyRepo() {
+  if (process.env.__CRAWLER_MODE__ === CRAWLER_MODES.SANDBOX) {
+    return;
+  }
   const isDirty = await branchHasChanges();
   if (isDirty) {
     logError(
