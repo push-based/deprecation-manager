@@ -33,7 +33,7 @@ export async function generateRawJson(
     };
   } else {
     content = {
-      version: crawledRelease.tag.name,
+      version: crawledRelease.tag,
       date: options.tagDate,
       deprecations: crawledRelease.deprecations,
     };

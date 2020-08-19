@@ -52,15 +52,13 @@ export async function generateTagBasedFormatter(
     }
   );
 
-  const markdownContent = [
-    `# ${crawledRelease.tag.name}`,
-    '',
-    ...pagesInMd,
-  ].join(EOL);
+  const markdownContent = [`# ${crawledRelease.tag}`, '', ...pagesInMd].join(
+    EOL
+  );
 
   ensureDirExists(config.outputDirectory);
   writeFileSync(
-    join(config.outputDirectory, `${toFileName(crawledRelease.tag.name)}.md`),
+    join(config.outputDirectory, `${toFileName(crawledRelease.tag)}.md`),
     formatCode(markdownContent, 'markdown')
   );
   console.log('Updated tag-based markdown format');
