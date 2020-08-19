@@ -27,19 +27,15 @@ export function checkout(config: CrawlConfig): CrawlerProcess {
     },
   ]);
 }
-/*
-async function checkoutTag(r: CrawledRelease): Promise<void> {
-  await git([`checkout tags/${r.tag.name}`]);
-}
- */
+
 async function checkoutBranch(r: CrawledRelease) {
   const currentBranchOrTag = await getCurrentBranchOrTag();
-  if (currentBranchOrTag !== r.tag.name) {
-    await git([`checkout`, r.tag.name]);
+  if (currentBranchOrTag !== r.tag) {
+    await git([`checkout`, r.tag]);
   }
 }
 
 async function getBranchDate(r: CrawledRelease) {
-  const date = await git([`log -1 --format=%ai ${r.tag.name}`]);
+  const date = await git([`log -1 --format=%ai ${r.tag}`]);
   return date;
 }
