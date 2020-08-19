@@ -1,10 +1,9 @@
 import { CrawlConfig, CrawledRelease, CrawlerProcess, GitTag } from '../models';
 import { prompt } from 'enquirer';
 import * as semverHelper from 'semver';
-import { getCurrentBranchOrTag, getTags } from '../utils';
+import { getCliParam, getCurrentBranchOrTag, getTags } from '../utils';
 import { escapeRegExp, template } from 'lodash';
 import { SEMVER_TOKEN } from '../constants';
-import * as yargs from 'yargs';
 // @TODO get rid of require
 import semverRegex = require('semver-regex');
 
@@ -33,10 +32,12 @@ export function ensureGitTag(config: CrawlConfig): CrawlerProcess {
       );
     }
 
-    const cliPassedTagName = getCliParamTag();
+    const cliPassedTagName = getCliParam(['tag', 't']);
+    console.log('cliPassedTagName', typeof cliPassedTagName);
     const cliPassedTagNameGiven = !!cliPassedTagName;
+    console.log('cliPassedTagNameGiven', typeof cliPassedTagNameGiven);
 
-    if (cliPassedTagNameGiven) {
+    if (cliPassedTagName !== false) {
       // user passed existing tag name
       return {
         // @TODO consider pass the whole object
@@ -83,21 +84,6 @@ export function ensureTagFormat(config: CrawlConfig): void {
       `tagFormat ${config.tagFormat} has to include ${SEMVER_TOKEN} as token`
     );
   }
-}
-
-export function getCliParamTag(): string | false {
-  // @TODO move  cli stuff into separate task
-  // Check for tag params from cli command
-  const cliPassedTagName = (yargs.argv.tag
-    ? yargs.argv.tag
-    : yargs.argv.t
-    ? yargs.argv.t
-    : ''
-  )
-    .toString()
-    .trim();
-
-  return cliPassedTagName !== '' ? cliPassedTagName : false;
 }
 
 export async function getRelevantTagsFromBranch(

@@ -8,6 +8,7 @@ import {
 } from 'prettier';
 import { CRAWLER_CONFIG_PATH, CRAWLER_MODES } from './constants';
 import { prompt } from 'enquirer';
+import * as yargs from 'yargs';
 
 export function hash(str: string) {
   const s = str.replace(/ /g, '').replace(/\r\n/g, '\n');
@@ -67,6 +68,16 @@ export function toFileName(s: string): string {
     .replace(/([a-z\d])([A-Z])/g, '$1_$2')
     .toLowerCase()
     .replace(/[ _]/g, '-');
+}
+
+export function getCliParam(names: string[]): string | false {
+  // @TODO move  cli stuff into separate task
+  // Check for tag params from cli command
+  const params = Object.keys(yargs.argv)
+    .filter((k) => names.includes(k))
+    .map((k) => yargs.argv[k].toString().trim())
+    .filter((p) => !!p);
+  return params.length ? params.pop() : '';
 }
 
 export function run(

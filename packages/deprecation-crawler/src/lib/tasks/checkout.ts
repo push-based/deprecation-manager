@@ -15,7 +15,7 @@ import { ensureGitTag } from './ensure-git-tag';
 export function checkout(config: CrawlConfig): CrawlerProcess {
   return concat([
     ensureGitTag(config),
-    tap(async (r) => await checkoutBranch(r)),
+    tap((r) => checkoutBranch(r)),
     async (r): Promise<CrawledRelease> => {
       const date = await getBranchDate(r);
       const remoteUrl = await getRemoteUrl();
