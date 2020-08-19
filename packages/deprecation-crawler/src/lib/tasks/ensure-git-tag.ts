@@ -37,11 +37,6 @@ export function ensureGitTag(config: CrawlConfig): CrawlerProcess {
     const cliPassedTagNameGiven = !!cliPassedTagName;
 
     if (cliPassedTagNameGiven) {
-      if (!relevantBranches.find((t) => t.name === cliPassedTagName)) {
-        throw new Error(
-          `Tag name ${cliPassedTagName} passed over cli is not in the list of releases.`
-        );
-      }
       // user passed existing tag name
       return {
         // @TODO consider pass the whole object
@@ -70,7 +65,7 @@ export function ensureGitTag(config: CrawlConfig): CrawlerProcess {
 
       return {
         // @TODO consider pass the whole object
-        tag: relevantBranches.find((t) => t.name === name) || { name },
+        tag: relevantBranches.find((t) => t.name === name),
         ...r,
       };
     }
