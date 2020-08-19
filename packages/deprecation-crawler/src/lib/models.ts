@@ -83,7 +83,7 @@ export interface RawDeprecation {
 }
 
 export interface CrawledRelease {
-  tag: GitTag;
+  tag: string;
   branch: string;
   date: string;
   remoteUrl: string;
