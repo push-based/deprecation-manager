@@ -10,22 +10,13 @@ import {
   DEFAULT_DEPRECATION_MSG_TOKEN,
   TAG_FORMAT_TEMPLATE,
 } from './constants';
-import { readFile, updateRepoConfig } from './utils';
-import * as yargs from 'yargs';
+import { getCliParam, readFile, updateRepoConfig } from './utils';
 
 export async function getConfig(): Promise<CrawlConfig> {
   // Check for path params from cli command
-  const argPath = (yargs.argv.path
-    ? yargs.argv.path
-    : yargs.argv.p
-    ? yargs.argv.p
-    : ''
-  )
-    .toString()
-    .trim();
+  const argPath = getCliParam(['path', 'p']);
   // if no param is given it is '' if param with no value is given it is true
-  const argPathGiven = argPath !== 'true' && argPath !== '';
-  const crawlerConfigPath = argPathGiven ? argPath : CRAWLER_CONFIG_PATH;
+  const crawlerConfigPath = argPath ? argPath : CRAWLER_CONFIG_PATH;
 
   const repoConfigFile = readFile(crawlerConfigPath) || '{}';
   const repoConfig = JSON.parse(repoConfigFile);
