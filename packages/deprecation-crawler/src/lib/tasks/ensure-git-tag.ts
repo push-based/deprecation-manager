@@ -8,70 +8,62 @@ import * as yargs from 'yargs';
 // @TODO get rid of require
 import semverRegex = require('semver-regex');
 
+/**
+ * @description
+ * returns a function that takes the current release tag and sets the current tag
+ * based on the CLI param.
+ * If not given the user is asked to select a tag form a list of tags which name is a valid semver
+ * tag.
+ * @param config
+ */
 export function ensureGitTag(config: CrawlConfig): CrawlerProcess {
   return async (r: CrawledRelease): Promise<CrawledRelease> => {
-    if (!config.tagFormat) {
-      throw new Error(
-        `tagFormat ${config.tagFormat} invalid check your settings in ${config.configPath}`
-      );
-    }
-    if (!config.tagFormat.includes(SEMVER_TOKEN)) {
-      throw new Error(
-        `tagFormat ${config.tagFormat} has to include ${SEMVER_TOKEN} as token`
-      );
-    }
+    ensureTagFormat(config);
 
     const currentBranch = await getCurrentBranchOrTag();
-
     const relevantBranches = await getRelevantTagsFromBranch(
       config.tagFormat,
       currentBranch
     );
 
-    // @TODO move  cli stuff into separate fask
-    // Check for tag params from cli command
-    const argTagName = (yargs.argv.tag
-      ? yargs.argv.tag
-      : yargs.argv.t
-      ? yargs.argv.t
-      : ''
-    )
-      .toString()
-      .trim();
-
-    const cliPassedTag = relevantBranches.find((t) => t.name === argTagName);
-
-    if (argTagName !== '' && !cliPassedTag) {
+    // No tags to select from
+    if (relevantBranches.length <= 0) {
       throw new Error(
-        `Tag name ${argTagName} passed over cli is not in the list of releases.`
+        `The repository [TODO_REMOTE_URL] does not contain merged tags in the semver format.`
       );
     }
-    // user passed existing tag name
-    else if (argTagName !== '' && cliPassedTag) {
+
+    const cliPassedTagName = getCliParamTag();
+    const cliPassedTagNameGiven = !!cliPassedTagName;
+
+    if (cliPassedTagNameGiven) {
+      if (!relevantBranches.find((t) => t.name === cliPassedTagName)) {
+        throw new Error(
+          `Tag name ${cliPassedTagName} passed over cli is not in the list of releases.`
+        );
+      }
+      // user passed existing tag name
       return {
         // @TODO consider pass the whole object
-        tag: relevantBranches.find((t) => t.name === argTagName),
+        tag: cliPassedTagName,
         ...r,
       };
     }
     // user did not pass tag over CLI param
     else {
       const gitTags = await getTagChoices(relevantBranches);
-      const tagChoices = cliPassedTag
-        ? [cliPassedTag.name]
-        : [currentBranch, ...gitTags];
+      const tagChoices = [currentBranch, ...gitTags];
 
       // select the string value if passed, otherwise select the first item in the list
-      const intialTag = cliPassedTag ? cliPassedTag.name : 0;
+      const initialTag = currentBranch;
       const { name }: { name: string } = await prompt([
         {
           type: 'select',
           name: 'name',
           message: `What git tag do you want to crawl?`,
-          skip: !!intialTag,
           // @NOTICE: by using choices here the initial value has to be typed as number.
           // However, passing a string works :)
-          initial: (intialTag as unknown) as number,
+          initial: (initialTag as unknown) as number,
           choices: tagChoices,
         },
       ]);
@@ -83,6 +75,34 @@ export function ensureGitTag(config: CrawlConfig): CrawlerProcess {
       };
     }
   };
+}
+
+export function ensureTagFormat(config: CrawlConfig): void {
+  if (!config.tagFormat) {
+    throw new Error(
+      `tagFormat ${config.tagFormat} invalid check your settings in ${config.configPath}`
+    );
+  }
+  if (!config.tagFormat.includes(SEMVER_TOKEN)) {
+    throw new Error(
+      `tagFormat ${config.tagFormat} has to include ${SEMVER_TOKEN} as token`
+    );
+  }
+}
+
+export function getCliParamTag(): string | false {
+  // @TODO move  cli stuff into separate task
+  // Check for tag params from cli command
+  const cliPassedTagName = (yargs.argv.tag
+    ? yargs.argv.tag
+    : yargs.argv.t
+    ? yargs.argv.t
+    : ''
+  )
+    .toString()
+    .trim();
+
+  return cliPassedTagName !== '' ? cliPassedTagName : false;
 }
 
 export async function getRelevantTagsFromBranch(
@@ -111,6 +131,15 @@ export async function getRelevantTagsFromBranch(
   return relevantBranchTags;
 }
 
+export async function getTagChoices(tags: GitTag[]): Promise<string[]> {
+  const sortedTags = semverSort(
+    tags.map((gt) => gt.name),
+    false
+  );
+  // remove any duplicates
+  return [...new Set([...sortedTags])];
+}
+
 function semverSort(semvers: string[], asc: boolean) {
   return semvers.sort(function (v1, v2) {
     const sv1 = semverRegex().exec(v1)[0] || v1;
@@ -120,13 +149,4 @@ function semverSort(semvers: string[], asc: boolean) {
       ? semverHelper.compare(sv1, sv2)
       : semverHelper.rcompare(sv1, sv2);
   });
-}
-
-export async function getTagChoices(tags: GitTag[]): Promise<string[]> {
-  const sortedTags = semverSort(
-    tags.map((gt) => gt.name),
-    false
-  );
-  // remove any duplicates
-  return [...new Set([...sortedTags])];
 }
