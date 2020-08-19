@@ -3,7 +3,7 @@ import { prompt } from 'enquirer';
 import * as semverHelper from 'semver';
 import { getCliParam, getCurrentBranchOrTag, getTags } from '../utils';
 import { escapeRegExp, template } from 'lodash';
-import { SEMVER_TOKEN } from '../constants';
+import { CRAWLER_MODES, SEMVER_TOKEN } from '../constants';
 // @TODO get rid of require
 import semverRegex = require('semver-regex');
 
@@ -27,9 +27,11 @@ export function ensureGitTag(config: CrawlConfig): CrawlerProcess {
 
     // No tags to select from
     if (relevantBranches.length <= 0) {
-      throw new Error(
-        `The repository [TODO_REMOTE_URL] does not contain merged tags in the semver format.`
-      );
+      if (process.env.__CRAWLER_MODE__ !== CRAWLER_MODES.SANDBOX) {
+        throw new Error(
+          `The repository [TODO_REMOTE_URL] does not contain merged tags in the semver format.`
+        );
+      }
     }
 
     const cliPassedTagName = getCliParam(['tag', 't']);
