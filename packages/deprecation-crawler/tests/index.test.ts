@@ -37,6 +37,7 @@ test('sandbox', async () => {
   const cliOutput = await exec(`npm run crawl -- -t master`);
 
   // verify output
+  expect(cliOutput).toMatch(/Crawling with tsconfig: tsconfig.sandbox.json/i);
   expect(cliOutput).toMatch(/Looking for deprecations/i);
   expect(cliOutput).toMatch(/Adding ruid to deprecations/i);
   expect(cliOutput).toMatch(/Regenerating raw JSON/i);
@@ -91,11 +92,14 @@ function exec(command) {
           __CRAWLER_MODE__: CRAWLER_MODES.SANDBOX,
         },
       },
-      (err, stdout) => {
+      (err, stdout, stderr) => {
         if (err) {
           return reject(err);
         }
-        resolve(stdout.toString());
+        if (stderr) {
+          return reject(stderr);
+        }
+        resolve(stdout);
       }
     );
   });

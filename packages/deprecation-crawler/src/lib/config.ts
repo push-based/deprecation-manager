@@ -8,23 +8,15 @@ import {
   DEPRECATIONS_OUTPUT_DIRECTORY,
   DEFAULT_COMMIT_MESSAGE,
   DEFAULT_DEPRECATION_MSG_TOKEN,
+  TAG_FORMAT_TEMPLATE,
 } from './constants';
-import { readFile, updateRepoConfig } from './utils';
-import * as yargs from 'yargs';
+import { getCliParam, readFile, updateRepoConfig } from './utils';
 
 export async function getConfig(): Promise<CrawlConfig> {
   // Check for path params from cli command
-  const argPath = (yargs.argv.path
-    ? yargs.argv.path
-    : yargs.argv.p
-    ? yargs.argv.p
-    : ''
-  )
-    .toString()
-    .trim();
+  const argPath = getCliParam(['path', 'p']);
   // if no param is given it is '' if param with no value is given it is true
-  const argPathGiven = argPath !== 'true' && argPath !== '';
-  const crawlerConfigPath = argPathGiven ? argPath : CRAWLER_CONFIG_PATH;
+  const crawlerConfigPath = argPath ? argPath : CRAWLER_CONFIG_PATH;
 
   const repoConfigFile = readFile(crawlerConfigPath) || '{}';
   const repoConfig = JSON.parse(repoConfigFile);
@@ -33,21 +25,6 @@ export async function getConfig(): Promise<CrawlConfig> {
   if (tsConfigFiles.length === 0) {
     throw Error('We need a tsconfig file to crawl');
   }
-
-  // Check for tag params from cli command
-  const argTag = (yargs.argv.tag
-    ? yargs.argv.tag
-    : yargs.argv.t
-    ? yargs.argv.t
-    : ''
-  )
-    .toString()
-    .trim();
-
-  // if no param is given it is '' if param with no value is given it is true
-  const argTagGiven = argTag !== 'true' && argTag !== '';
-  // select the string value if passed, otherwise select the first item in the list
-  const gitTag = argTagGiven ? argTag : undefined;
 
   const userConfig: CrawlConfig = await prompt([
     {
@@ -93,7 +70,6 @@ export async function getConfig(): Promise<CrawlConfig> {
     configPath: crawlerConfigPath,
     ...repoConfig,
     ...userConfig,
-    gitTag,
   };
 
   updateRepoConfig(config);
@@ -115,6 +91,7 @@ export function getDefaultConfig(
 ): CrawlConfigDefaults {
   return {
     outputFormatters: ['tagBasedMarkdown', 'groupBasedMarkdown'],
+    tagFormat: TAG_FORMAT_TEMPLATE,
     commitMessage: DEFAULT_COMMIT_MESSAGE,
     groups: [
       { key: 'ungrouped', matchers: [] },

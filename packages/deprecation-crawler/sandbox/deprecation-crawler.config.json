@@ -1,5 +1,7 @@
 {
   "outputFormatters": ["tagBasedMarkdown", "groupBasedMarkdown"],
+  "tagFormat": "v${semver}",
+  "commitMessage": "docs(deprecation-manager): sync deprecations",
   "groups": [
     { "key": "all-lowercase", "matchers": ["iNternal use onLy"] },
     {

@@ -1,12 +1,12 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
-import { CrawlConfig, Deprecation } from '../models';
+import { CrawlConfig, CrawledRelease, Deprecation } from '../models';
 import { ensureDirExists } from '../utils';
 import { RAW_DEPRECATION_PATH } from '../constants';
 
 export async function generateRawJson(
   config: CrawlConfig,
-  rawDeprecations: Deprecation[],
+  crawledRelease: CrawledRelease,
   options: { tagDate: string }
 ): Promise<void> {
   console.log('📝 Regenerating raw JSON');
@@ -18,7 +18,7 @@ export async function generateRawJson(
     const t = readFileSync(
       join(config.outputDirectory, `${RAW_DEPRECATION_PATH}`)
     );
-    existingData = JSON.parse(t as any);
+    existingData = JSON.parse((t as unknown) as string);
   } catch (e) {
     existingData = false;
   }
@@ -28,14 +28,14 @@ export async function generateRawJson(
       ...existingData,
       deprecations: upsertDeprecations(
         existingData.deprecations,
-        rawDeprecations
+        crawledRelease.deprecations
       ),
     };
   } else {
     content = {
-      version: config.gitTag,
+      version: crawledRelease.tag,
       date: options.tagDate,
-      deprecations: rawDeprecations,
+      deprecations: crawledRelease.deprecations,
     };
   }
 

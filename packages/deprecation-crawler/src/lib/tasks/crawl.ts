@@ -10,7 +10,7 @@ import { addRuid } from '../processors/add-ruid';
 export function crawl(config: CrawlConfig): CrawlerProcess {
   return concat([
     async (r): Promise<CrawledRelease> => {
-      const deprecations = await crawlDeprecations(config, r.remoteUrl, r.date);
+      const deprecations = await crawlDeprecations(config, r);
       return {
         ...r,
         deprecations,

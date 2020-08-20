@@ -1,16 +1,16 @@
 import { writeFileSync } from 'fs';
 import { basename, join } from 'path';
-import { CrawlConfig, Deprecation } from '../models';
+import { CrawlConfig, CrawledRelease, Deprecation } from '../models';
 import { ensureDirExists, toFileName, formatCode } from '../utils';
 import { EOL } from 'os';
 
 export async function generateTagBasedFormatter(
   config: CrawlConfig,
-  rawDeprecations: Deprecation[]
+  crawledRelease: CrawledRelease
 ): Promise<void> {
   console.log('📝 Update tag-based markdown format');
 
-  const deprecationsByGroup = rawDeprecations.reduce((acc, val) => {
+  const deprecationsByGroup = crawledRelease.deprecations.reduce((acc, val) => {
     const group = val.group || '';
     acc[group] = (acc[group] || []).concat(val);
     return acc;
@@ -52,11 +52,13 @@ export async function generateTagBasedFormatter(
     }
   );
 
-  const markdownContent = [`# ${config.gitTag}`, '', ...pagesInMd].join(EOL);
+  const markdownContent = [`# ${crawledRelease.tag}`, '', ...pagesInMd].join(
+    EOL
+  );
 
   ensureDirExists(config.outputDirectory);
   writeFileSync(
-    join(config.outputDirectory, `${toFileName(config.gitTag)}.md`),
+    join(config.outputDirectory, `${toFileName(crawledRelease.tag)}.md`),
     formatCode(markdownContent, 'markdown')
   );
   console.log('Updated tag-based markdown format');

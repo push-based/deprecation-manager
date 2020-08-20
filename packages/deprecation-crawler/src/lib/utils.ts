@@ -8,6 +8,7 @@ import {
 } from 'prettier';
 import { CRAWLER_CONFIG_PATH, CRAWLER_MODES } from './constants';
 import { prompt } from 'enquirer';
+import * as yargs from 'yargs';
 
 export function hash(str: string) {
   const s = str.replace(/ /g, '').replace(/\r\n/g, '\n');
@@ -33,9 +34,9 @@ export function ensureDirExists(dir: string) {
 export function updateRepoConfig(config: CrawlConfig) {
   // exclude gitTag from the persisted config
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { gitTag: _, ...writableConfig } = config;
+  // const { ignoredParam, ...writableConfig } = config;
   const path = config.configPath || CRAWLER_CONFIG_PATH;
-  writeFileSync(path, formatCode(JSON.stringify(writableConfig), 'json'));
+  writeFileSync(path, formatCode(JSON.stringify(config), 'json'));
 }
 
 export function formatCode(
@@ -67,6 +68,16 @@ export function toFileName(s: string): string {
     .replace(/([a-z\d])([A-Z])/g, '$1_$2')
     .toLowerCase()
     .replace(/[ _]/g, '-');
+}
+
+export function getCliParam(names: string[]): string | false {
+  // @TODO move  cli stuff into separate task
+  // Check for tag params from cli command
+  const params = Object.keys(yargs.argv)
+    .filter((k) => names.includes(k))
+    .map((k) => yargs.argv[k].toString().trim())
+    .filter((p) => !!p);
+  return params.length ? params.pop() : '';
 }
 
 export function run(
@@ -150,6 +161,19 @@ export async function getCurrentHeadName(): Promise<string> {
   ]);
 }
 
+/**
+ * @description Get all the tags for a given branch.
+ *
+ * @return - List of git tags.
+ * @throws - If the `git` command fails.
+ */
+export async function getTags(branch): Promise<string[]> {
+  return (await git(['tag', '--merged', branch]))
+    .split('\n')
+    .map((tag) => tag.trim())
+    .filter(Boolean);
+}
+
 export async function getCurrentBranchOrTag() {
   return (
     (await git(['branch', '--show-current'])) ||
@@ -163,7 +187,7 @@ export async function branchHasChanges() {
 }
 
 export async function getRemoteUrl(): Promise<string> {
-  return git([`config --get remote.origin.url`]);
+  return git([`ls-remote --get-url`]);
 }
 
 export function cmd(command: string, args: string[]): Promise<string> {
@@ -189,3 +213,5 @@ export const toggles = {
   autoAnswerQuestions: process.env.__CRAWLER_MODE__ === CRAWLER_MODES.SANDBOX,
   executeGitCommands: process.env.__CRAWLER_MODE__ !== CRAWLER_MODES.SANDBOX,
 };
+
+export const SERVER_REGEX = /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/gi;

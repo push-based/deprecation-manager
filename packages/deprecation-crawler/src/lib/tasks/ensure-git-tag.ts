@@ -1,83 +1,138 @@
-import { CrawlConfig, CrawledRelease, CrawlerProcess } from '../models';
+import { CrawlConfig, CrawledRelease, CrawlerProcess, GitTag } from '../models';
 import { prompt } from 'enquirer';
-import { getCurrentBranchOrTag, git } from '../utils';
+import * as semverHelper from 'semver';
+import {
+  getCliParam,
+  getCurrentBranchOrTag,
+  getTags,
+  SERVER_REGEX,
+} from '../utils';
+import { escapeRegExp, template } from 'lodash';
+import { CRAWLER_MODES, SEMVER_TOKEN } from '../constants';
 
-export function ensureGitTag(config): CrawlerProcess {
+/**
+ * @description
+ * returns a function that takes the current release tag and sets the current tag
+ * based on the CLI param.
+ * If not given the user is asked to select a tag form a list of tags which name is a valid semver
+ * tag.
+ * @param config
+ */
+export function ensureGitTag(config: CrawlConfig): CrawlerProcess {
   return async (r: CrawledRelease): Promise<CrawledRelease> => {
-    const tagChoices = config.gitTag
-      ? [config.gitTag]
-      : await sortTags(await getGitHubBranches(), await getGitHubTags());
-    // select the string value if passed, otherwise select the first item in the list
-    const intialTag = config.gitTag ? config.gitTag : 0;
-    const { gitTag }: CrawlConfig = await prompt([
-      {
-        type: 'select',
-        name: 'gitTag',
-        message: `What git tag do you want to crawl?`,
-        skip: !!config.gitTag,
-        // @NOTICE: by using choices here the initial value has to be typed as number.
-        // However, passing a string works :)
-        initial: (intialTag as unknown) as number,
-        choices: tagChoices,
-      },
-    ]);
-    return {
-      gitTag,
-      ...r,
-    };
+    ensureTagFormat(config);
+
+    const currentBranch = await getCurrentBranchOrTag();
+    const relevantBranches = await getRelevantTagsFromBranch(
+      config.tagFormat,
+      currentBranch
+    );
+
+    // No tags to select from
+    if (relevantBranches.length <= 0) {
+      if (process.env.__CRAWLER_MODE__ !== CRAWLER_MODES.SANDBOX) {
+        throw new Error(
+          `The repository [TODO_REMOTE_URL] does not contain merged tags in the semver format.`
+        );
+      }
+    }
+
+    const cliPassedTagName = getCliParam(['tag', 't']);
+    console.log('cliPassedTagName', typeof cliPassedTagName);
+    const cliPassedTagNameGiven = !!cliPassedTagName;
+    console.log('cliPassedTagNameGiven', typeof cliPassedTagNameGiven);
+
+    if (cliPassedTagName !== false) {
+      // user passed existing tag name
+      return {
+        // @TODO consider pass the whole object
+        tag: cliPassedTagName,
+        ...r,
+      };
+    }
+    // user did not pass tag over CLI param
+    else {
+      const gitTags = await getTagChoices(relevantBranches);
+      const tagChoices = [currentBranch, ...gitTags];
+
+      // select the string value if passed, otherwise select the first item in the list
+      const initialTag = currentBranch;
+      const { name }: { name: string } = await prompt([
+        {
+          type: 'select',
+          name: 'name',
+          message: `What git tag do you want to crawl?`,
+          // @NOTICE: by using choices here the initial value has to be typed as number.
+          // However, passing a string works :)
+          initial: (initialTag as unknown) as number,
+          choices: tagChoices,
+        },
+      ]);
+
+      return {
+        // @TODO consider pass the whole object
+        tag: relevantBranches.find((t) => t.name === name),
+        ...r,
+      };
+    }
   };
 }
 
-async function sortTags(tags: string[], branches: string[]): Promise<string[]> {
-  const currentBranchOrTag = await getCurrentBranchOrTag();
-
-  // remove any duplicates
-  const sorted = [...branches, ...tags].sort(innerSort);
-  return [...new Set([currentBranchOrTag, ...sorted])];
-
-  function innerSort(a: string, b: string): number {
-    const normalizedA = normalizeSemverIfPresent(a);
-    const normalizedB = normalizeSemverIfPresent(b);
-
-    return (
-      ((/[A-Za-z]/.test(normalizedA) as unknown) as number) -
-        ((/[A-Za-z]/.test(normalizedB) as unknown) as number) ||
-      (normalizedA.toUpperCase() < normalizedB.toUpperCase()
-        ? 1
-        : normalizedA.toUpperCase() > normalizedB.toUpperCase()
-        ? -1
-        : 0)
+export function ensureTagFormat(config: CrawlConfig): void {
+  if (!config.tagFormat) {
+    throw new Error(
+      `tagFormat ${config.tagFormat} invalid check your settings in ${config.configPath}`
     );
   }
-
-  function normalizeSemverIfPresent(str: string): string {
-    const regex = /^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$/;
-    const potentialVersionNumber =
-      str[0].toLowerCase() === 'v' ? str.slice(1) : str;
-    return regex.test(potentialVersionNumber) ? potentialVersionNumber : str;
+  if (!config.tagFormat.includes(SEMVER_TOKEN)) {
+    throw new Error(
+      `tagFormat ${config.tagFormat} has to include ${SEMVER_TOKEN} as token`
+    );
   }
 }
 
-async function getGitHubTags(): Promise<string[]> {
-  const branches = await git(['tag']);
-  return (
-    branches
-      .trim()
-      .split('\n')
-      // @TODO remove ugly hack for the `*` char of the current branch
-      .map((i) => i.split('* ').join(''))
-      .sort()
+export async function getRelevantTagsFromBranch(
+  tagFormat: string,
+  branch: string
+): Promise<GitTag[]> {
+  // Generate a regex to parse tags formatted with `tagFormat`
+  // by replacing the `version` variable in the template by `(.+)`.
+  // The `tagFormat` is compiled with space as the `version` as it's an invalid tag character,
+  // so it's guaranteed to no be present in the `tagFormat`.
+  const tagRegexp = `^${escapeRegExp(
+    template(tagFormat)({ semver: ' ' })
+  ).replace(' ', '(.+)')}`;
+
+  const relevantBranchTags = await getTags(branch).then((foundTags): GitTag[] =>
+    foundTags.reduce((tags, name) => {
+      const [, semver] = name.match(tagRegexp) || [];
+      return semver && semverHelper.valid(semverHelper.clean(semver))
+        ? [...tags, { name, semver }]
+        : tags;
+    }, [])
   );
+
+  // @NOTICE: Keep it for verbose flag
+  // console.log('found tags for branch %s: %o', branch, relevantBranchTags);
+  return relevantBranchTags;
 }
 
-async function getGitHubBranches(): Promise<string[]> {
-  const branches = await git(['branch']);
-  return (
-    branches
-      .trim()
-      .split('\n')
-      // @TODO remove ugly hack for the `*` char of the current branch
-      .map((i) => i.split('* ').join(''))
-      .sort()
+export async function getTagChoices(tags: GitTag[]): Promise<string[]> {
+  const sortedTags = semverSort(
+    tags.map((gt) => gt.name),
+    false
   );
+  // remove any duplicates
+  return [...new Set([...sortedTags])];
+}
+
+function semverSort(semvers: string[], asc: boolean) {
+  return semvers.sort(function (v1, v2) {
+    const sv1 = SERVER_REGEX.exec(v1)[0] || v1;
+    const sv2 = SERVER_REGEX.exec(v2)[0] || v2;
+
+    return asc
+      ? semverHelper.compare(sv1, sv2)
+      : semverHelper.rcompare(sv1, sv2);
+  });
 }

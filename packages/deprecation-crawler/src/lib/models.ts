@@ -1,20 +1,30 @@
 export interface CrawlConfig {
   // only form cli params
   configPath: string;
-  gitTag: string;
-  outputDirectory: string;
+  // required fields
+  tagFormat: string;
+  commitMessage: string;
   tsConfigPath: string;
   deprecationComment: string;
   deprecationLink: string;
+  groups: { key: string; matchers: string[] }[];
+  // optional fields
+  outputDirectory: string;
   outputFormatters: string[];
-  groups: Group[];
-  commitMessage?: string;
+}
+
+export interface GitTag {
+  name: string;
+  semver: string;
+  // @TODO implement
+  date?: string;
 }
 
 export interface CrawlConfigDefaults {
   outputFormatters: string[];
+  tagFormat: string;
   groups: Group[];
-  commitMessage?: string;
+  commitMessage: string;
 }
 
 export interface Group {
@@ -73,7 +83,7 @@ export interface RawDeprecation {
 }
 
 export interface CrawledRelease {
-  gitTag: string;
+  tag: string;
   date: string;
   remoteUrl: string;
   deprecations: Deprecation[];

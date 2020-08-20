@@ -11,7 +11,7 @@ import { isConstructorDeclaration, isVariableStatement } from 'typescript';
 import { normalize, relative } from 'path';
 import { existsSync } from 'fs';
 import { prompt } from 'enquirer';
-import { CrawlConfig, Deprecation } from '../models';
+import { CrawlConfig, CrawledRelease, Deprecation } from '../models';
 import { findTsConfigFiles } from '../config';
 
 // What about https://ts-morph.com/details/documentation#js-docs ?
@@ -19,24 +19,22 @@ import { findTsConfigFiles } from '../config';
 
 export async function crawlDeprecations(
   config: CrawlConfig,
-  remoteUrl: string,
-  date: string
+  crawledRelease: CrawledRelease
 ) {
   const sourceFiles = await getSourceFiles(config);
   const deprecations = sourceFiles
     // TODO: seems like these files cannot be parsed correctly?
     .filter((file) => !file.getFilePath().includes('/Observable.ts'))
-    .map((file) => crawlFileForDeprecations(file, config, remoteUrl, date))
+    .map((file) => crawlFileForDeprecations(config, crawledRelease, file))
     .reduce((acc, val) => acc.concat(val), []);
 
   return deprecations;
 }
 
 function crawlFileForDeprecations(
-  file: SourceFile,
   config: CrawlConfig,
-  remoteUrl: string,
-  date: string
+  crawledRelease: CrawledRelease,
+  file: SourceFile
 ) {
   try {
     const path = relative(process.cwd(), file.getFilePath()).replace(
@@ -78,9 +76,11 @@ function crawlFileForDeprecations(
             deprecation.comment.range.compilerObject.pos,
             deprecation.comment.range.compilerObject.end,
           ],
-          version: config.gitTag,
-          remoteUrl,
-          date,
+          // @TODO consider storing the tag directly
+          version: crawledRelease.tag,
+          // @TODO consider moving it tothe formatting step and keep the deprecation obj small.
+          remoteUrl: crawledRelease.remoteUrl,
+          date: crawledRelease.date,
         };
 
         function getHumanReadableNameForNode() {

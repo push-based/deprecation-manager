@@ -3,9 +3,10 @@ import {
   git,
   concat,
   tap,
-  getCurrentBranchOrTag,
   getRemoteUrl,
+  getCurrentBranchOrTag,
 } from '../utils';
+import { ensureGitTag } from './ensure-git-tag';
 
 /**
  * Checkout the desired branch
@@ -13,9 +14,10 @@ import {
  */
 export function checkout(config: CrawlConfig): CrawlerProcess {
   return concat([
-    tap(async () => await checkoutBranch(config)),
+    ensureGitTag(config),
+    tap((r) => checkoutBranch(r)),
     async (r): Promise<CrawledRelease> => {
-      const date = await getBranchDate(config);
+      const date = await getBranchDate(r);
       const remoteUrl = await getRemoteUrl();
       return {
         ...r,
@@ -26,14 +28,14 @@ export function checkout(config: CrawlConfig): CrawlerProcess {
   ]);
 }
 
-async function checkoutBranch(config: CrawlConfig) {
+async function checkoutBranch(r: CrawledRelease) {
   const currentBranchOrTag = await getCurrentBranchOrTag();
-  if (currentBranchOrTag !== config.gitTag) {
-    await git([`checkout`, config.gitTag]);
+  if (currentBranchOrTag !== r.tag) {
+    await git([`checkout`, r.tag]);
   }
 }
 
-async function getBranchDate(config: CrawlConfig) {
-  const date = await git([`log -1 --format=%ai ${config.gitTag}`]);
+async function getBranchDate(r: CrawledRelease) {
+  const date = await git([`log -1 --format=%ai ${r.tag}`]);
   return date;
 }

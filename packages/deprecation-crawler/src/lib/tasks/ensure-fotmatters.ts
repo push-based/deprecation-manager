@@ -1,13 +1,13 @@
 import { EOL } from 'os';
 import { builtInFormatter } from '../output-formatters';
 import { CRAWLER_CONFIG_PATH } from '../constants';
-import { CrawlConfig, Deprecation } from '../models';
+import { CrawlConfig, CrawledRelease } from '../models';
 
 export function ensureFormatter(
   config: CrawlConfig
 ): [
   string,
-  (config: CrawlConfig, rawDeprecations: Deprecation[]) => Promise<void>
+  (config: CrawlConfig, crawledRelease: CrawledRelease) => Promise<void>
 ][] {
   if (config.outputFormatters.length <= 0) {
     throw new Error(`No formatter registered! ${EOL}
