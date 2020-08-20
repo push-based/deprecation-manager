@@ -7,7 +7,7 @@ import {
   getTags,
   SERVER_REGEX,
 } from '../utils';
-import { escapeRegExp, template } from 'lodash';
+import { escapeRegExp, template } from 'lodash-es';
 import { CRAWLER_MODES, SEMVER_TOKEN } from '../constants';
 
 /**
