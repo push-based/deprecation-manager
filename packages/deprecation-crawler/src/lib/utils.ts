@@ -27,7 +27,7 @@ export function hash(str: string) {
 
 export function ensureDirExists(dir: string) {
   if (!existsSync(dir)) {
-    mkdirSync(dir);
+    mkdirSync(dir, { recursive: true });
   }
 }
 
