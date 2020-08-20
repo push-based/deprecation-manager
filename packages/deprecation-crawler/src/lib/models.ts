@@ -84,7 +84,6 @@ export interface RawDeprecation {
 
 export interface CrawledRelease {
   tag: string;
-  branch: string;
   date: string;
   remoteUrl: string;
   deprecations: Deprecation[];
