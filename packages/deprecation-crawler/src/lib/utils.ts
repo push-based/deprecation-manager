@@ -213,3 +213,5 @@ export const toggles = {
   autoAnswerQuestions: process.env.__CRAWLER_MODE__ === CRAWLER_MODES.SANDBOX,
   executeGitCommands: process.env.__CRAWLER_MODE__ !== CRAWLER_MODES.SANDBOX,
 };
+
+export const SERVER_REGEX = /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/gi;

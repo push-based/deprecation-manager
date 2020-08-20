@@ -1,11 +1,14 @@
 import { CrawlConfig, CrawledRelease, CrawlerProcess, GitTag } from '../models';
 import { prompt } from 'enquirer';
 import * as semverHelper from 'semver';
-import { getCliParam, getCurrentBranchOrTag, getTags } from '../utils';
+import {
+  getCliParam,
+  getCurrentBranchOrTag,
+  getTags,
+  SERVER_REGEX,
+} from '../utils';
 import { escapeRegExp, template } from 'lodash';
 import { CRAWLER_MODES, SEMVER_TOKEN } from '../constants';
-// @TODO get rid of require
-import semverRegex = require('semver-regex');
 
 /**
  * @description
@@ -125,8 +128,8 @@ export async function getTagChoices(tags: GitTag[]): Promise<string[]> {
 
 function semverSort(semvers: string[], asc: boolean) {
   return semvers.sort(function (v1, v2) {
-    const sv1 = semverRegex().exec(v1)[0] || v1;
-    const sv2 = semverRegex().exec(v2)[0] || v2;
+    const sv1 = SERVER_REGEX.exec(v1)[0] || v1;
+    const sv2 = SERVER_REGEX.exec(v2)[0] || v2;
 
     return asc
       ? semverHelper.compare(sv1, sv2)
