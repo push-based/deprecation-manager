@@ -6,40 +6,27 @@ import { RAW_DEPRECATION_PATH } from '../constants';
 
 export async function generateRawJson(
   config: CrawlConfig,
-  crawledRelease: CrawledRelease,
-  options: { tagDate: string }
+  crawledRelease: CrawledRelease
 ): Promise<void> {
   console.log('📝 Regenerating raw JSON');
 
   ensureDirExists(config.outputDirectory);
 
-  let existingData;
+  let existingDeprecations: Deprecation[] = [];
   try {
     const t = readFileSync(
       join(config.outputDirectory, `${RAW_DEPRECATION_PATH}`)
     );
-    existingData = JSON.parse((t as unknown) as string);
+    existingDeprecations = JSON.parse((t as unknown) as string);
   } catch (e) {
-    existingData = false;
+    existingDeprecations = [];
   }
-  let content;
-  if (existingData) {
-    content = {
-      ...existingData,
-      deprecations: upsertDeprecations(
-        existingData.deprecations,
-        crawledRelease.deprecations
-      ),
-    };
-  } else {
-    content = {
-      version: crawledRelease.tag,
-      date: options.tagDate,
-      deprecations: crawledRelease.deprecations,
-    };
-  }
+  const deprecations = upsertDeprecations(
+    existingDeprecations,
+    crawledRelease.deprecations
+  );
 
-  const json = JSON.stringify(content, null, 4);
+  const json = JSON.stringify(deprecations, null, 4);
   const path = join(config.outputDirectory, `${RAW_DEPRECATION_PATH}`);
   writeFileSync(path, json);
 

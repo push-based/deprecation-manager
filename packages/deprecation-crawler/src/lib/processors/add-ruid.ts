@@ -20,7 +20,7 @@ export function addRuid(config: CrawlConfig): CrawlerProcess {
         deprecations: await generateAndAddRuid(r.deprecations),
       };
     },
-    tap((r) => generateRawJson(config, r, { tagDate: r.date })),
+    tap((r) => generateRawJson(config, r)),
   ]);
 }
 

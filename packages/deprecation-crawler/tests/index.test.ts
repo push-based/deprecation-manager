@@ -53,32 +53,30 @@ test('sandbox', async () => {
   });
 
   // verify json
-  const jsonOutput = JSON.parse(
+  const rawDeprecations = JSON.parse(
     fs.readFileSync(
       path.join(SANDBOX_PATH, 'deprecations', RAW_DEPRECATION_PATH),
       'utf8'
     )
   );
 
-  expect(jsonOutput.deprecations).toHaveLength(14);
+  expect(rawDeprecations).toHaveLength(14);
   expect(
-    jsonOutput.deprecations.filter((d) => d.group === 'all-lowercase')
+    rawDeprecations.filter((d) => d.group === 'all-lowercase')
   ).toHaveLength(3);
   expect(
-    jsonOutput.deprecations.filter(
-      (d) => d.group === 'whitespace-normalisation'
-    )
+    rawDeprecations.filter((d) => d.group === 'whitespace-normalisation')
   ).toHaveLength(3);
   // BUG: this has to have 3 hits
   expect(
-    jsonOutput.deprecations.filter(
+    rawDeprecations.filter(
       (d) => d.group === 'multiple-string-patterns-at-once'
     )
   ).toHaveLength(0);
   // BUG: this has to have 0 hits
-  expect(
-    jsonOutput.deprecations.filter((d) => d.group === 'catch-all')
-  ).toHaveLength(3);
+  expect(rawDeprecations.filter((d) => d.group === 'catch-all')).toHaveLength(
+    3
+  );
 }, 60_000);
 
 function exec(command) {
