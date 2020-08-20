@@ -28,7 +28,6 @@
     "run-sandbox": "nx build deprecation-crawler && nx test deprecation-crawler"
   },
   "dependencies": {
-    "@types/lodash-es": "^4.17.3",
     "common-tags": "^1.8.0",
     "enquirer": "^2.3.6",
     "glob": "^7.1.6",
