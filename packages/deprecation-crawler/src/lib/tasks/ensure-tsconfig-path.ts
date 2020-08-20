@@ -1,10 +1,10 @@
 import { CrawlConfig } from '../models';
 import { prompt } from 'enquirer';
 import { normalize } from 'path';
-import { fileExists } from '@nrwl/workspace/src/utils/fileutils';
 import { updateRepoConfig } from '../utils';
 import { glob } from 'glob';
 import { CRAWLER_MODES } from '../constants';
+import * as fs from 'fs';
 
 export async function ensureTsConfigPath(
   config: CrawlConfig
@@ -54,4 +54,14 @@ export function findTsConfigFiles(): string[] {
   return glob.sync('**/*tsconfig*.json', {
     ignore: '**/node_modules/**',
   });
+}
+
+function fileExists(path: string) {
+  try {
+    if (fs.existsSync(path)) {
+      return true;
+    }
+  } catch (err) {
+    return false;
+  }
 }
