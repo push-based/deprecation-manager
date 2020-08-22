@@ -28,7 +28,9 @@ export async function ensureTsConfigPath(
     );
   }
 
-  const tsConfigPathAnswer: { tsConfigPath: string } = await prompt([
+  const newConfig = { ...config };
+
+  const { tsConfigPath }: { tsConfigPath: string } = await prompt([
     {
       type: 'select',
       name: 'tsConfigPath',
@@ -38,24 +40,38 @@ export async function ensureTsConfigPath(
         return value ? normalize(value) : '';
       },
       initial: config.tsConfigPath || (tsConfigFiles[0] as any),
-      skip: tsConfigFiles.length === 1,
+      skip: tsConfigFiles.length === 1 || !!config.tsConfigPath,
     },
   ]);
 
-  // Update repoConfig with selected tsconfig file
-  const newConfig = {
-    ...config,
-    tsConfigPath: tsConfigPathAnswer.tsConfigPath,
-  };
-  updateRepoConfig(newConfig);
+  newConfig.tsConfigPath = tsConfigPath;
 
-  if (existsSync(config.tsConfigPath)) {
-    throw Error(
-      `Config file ${
-        config.tsConfigPath
-      } does not exist. Please update your tsConfigPath setting in ${getConfigPath()}`
-    );
+  if (!existsSync(newConfig.tsConfigPath)) {
+    if (process.env.__CRAWLER_MODE__ === CRAWLER_MODES.SANDBOX) {
+      throw Error(
+        `Config file ${
+          config.tsConfigPath
+        } does not exist. Please update your tsConfigPath setting in ${getConfigPath()}`
+      );
+    }
+
+    const { tsConfigPath } = await prompt([
+      {
+        type: 'select',
+        name: 'tsConfigPath',
+        message: `tsconfig "${config.tsConfigPath}" does not exist, let's try again.`,
+        choices: findTsConfigFiles(),
+        format(value) {
+          return value ? normalize(value) : '';
+        },
+      },
+    ]);
+
+    newConfig.tsConfigPath = tsConfigPath;
   }
+
+  // Update repoConfig with selected tsconfig file
+  updateRepoConfig(newConfig);
 
   return newConfig;
 }
