@@ -11,6 +11,7 @@ import { generateRawJson } from '../output-formatters';
 import { UNGROUPED_GROUP_NAME } from '../constants';
 
 const ESCAPE_GROUPING_ANSWER = 'Stop grouping';
+const CREATE_NEW_GROUP_ANSWER = 'Create new group';
 
 interface Group {
   key: string;
@@ -51,7 +52,11 @@ export async function addGrouping(
 
     const groupKey = await getGroupNameFromExistingOrInputQuestion(
       deprecation,
-      [ESCAPE_GROUPING_ANSWER, ...getGroupNames(groups)]
+      [
+        ESCAPE_GROUPING_ANSWER,
+        CREATE_NEW_GROUP_ANSWER,
+        ...getGroupNames(groups),
+      ]
     );
     if (groupKey === ESCAPE_GROUPING_ANSWER) {
       break;
@@ -108,17 +113,13 @@ function checkForExistingGroup(groups: Group[], deprecation: Deprecation) {
 
 async function getGroupNameFromExistingOrInputQuestion(
   deprecation: Deprecation,
-  groups: string[],
-  newGroupChoice = 'Create new group'
+  groups: string[]
 ): Promise<string> {
   const answerNameFromExisting: { existingKey: string } = await prompt([
-    getGroupNameFromExistingQuestion(
-      deprecation,
-      [newGroupChoice, ...groups],
-      newGroupChoice
-    ),
+    getGroupNameFromExistingQuestion(deprecation, groups),
   ]);
-  const isExistingGroup = answerNameFromExisting.existingKey !== newGroupChoice;
+  const isExistingGroup =
+    answerNameFromExisting.existingKey !== CREATE_NEW_GROUP_ANSWER;
   return isExistingGroup
     ? answerNameFromExisting.existingKey
     : await prompt([
@@ -128,8 +129,7 @@ async function getGroupNameFromExistingOrInputQuestion(
 
 function getGroupNameFromExistingQuestion(
   deprecation: Deprecation,
-  groupChoices: string[],
-  defaultKey: string
+  groupChoices: string[]
 ) {
   return {
     // TODO: use autocomplete here? https://github.com/enquirer/enquirer/tree/master/examples/autocomplete
@@ -143,7 +143,7 @@ function getGroupNameFromExistingQuestion(
       EOL +
       deprecation.deprecationMessage +
       EOL,
-    initial: defaultKey,
+    initial: groupChoices[0],
     choices: groupChoices,
   };
 }

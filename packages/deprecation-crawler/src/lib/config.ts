@@ -68,7 +68,7 @@ export async function getConfig(): Promise<CrawlConfig> {
   ]);
 
   const config = {
-    ...getDefaultConfig(userConfig.deprecationComment),
+    ...getDefaultConfig(),
     configPath: crawlerConfigPath,
     ...repoConfig,
     ...userConfig,
