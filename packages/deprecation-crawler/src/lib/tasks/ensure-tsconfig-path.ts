@@ -1,17 +1,18 @@
 import { CrawlConfig } from '../models';
 import { prompt } from 'enquirer';
 import { normalize } from 'path';
-import { updateRepoConfig } from '../utils';
+import { getConfigPath, updateRepoConfig } from '../utils';
 import { glob } from 'glob';
 import { CRAWLER_MODES } from '../constants';
 import * as fs from 'fs';
+import { existsSync } from 'fs';
 
 export async function ensureTsConfigPath(
   config: CrawlConfig
 ): Promise<CrawlConfig> {
   // If a tsconfig files is already set proceed
   if (fileExists(config.tsConfigPath)) {
-    console.log(`Crawling with tsconfig: ${config.tsConfigPath}`);
+    console.log(`Running with tsconfig: ${config.tsConfigPath}`);
     return config;
   }
 
@@ -47,6 +48,15 @@ export async function ensureTsConfigPath(
     tsConfigPath: tsConfigPathAnswer.tsConfigPath,
   };
   updateRepoConfig(newConfig);
+
+  if (existsSync(config.tsConfigPath)) {
+    throw Error(
+      `Config file ${
+        config.tsConfigPath
+      } does not exist. Please update your tsConfigPath setting in ${getConfigPath()}`
+    );
+  }
+
   return newConfig;
 }
 

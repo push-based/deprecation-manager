@@ -3,6 +3,7 @@ import { prompt } from 'enquirer';
 import * as semverHelper from 'semver';
 import {
   getCliParam,
+  getConfigPath,
   getCurrentBranchOrTag,
   getTags,
   SERVER_REGEX,
@@ -81,7 +82,9 @@ export function ensureGitTag(config: CrawlConfig): CrawlerProcess {
 export function ensureTagFormat(config: CrawlConfig): void {
   if (!config.tagFormat) {
     throw new Error(
-      `tagFormat ${config.tagFormat} invalid check your settings in ${config.configPath}`
+      `tagFormat ${
+        config.tagFormat
+      } invalid check your settings in ${getConfigPath()}`
     );
   }
   if (!config.tagFormat.includes(SEMVER_TOKEN)) {
