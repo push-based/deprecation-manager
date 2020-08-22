@@ -9,6 +9,8 @@ import {
   DEFAULT_COMMIT_MESSAGE,
   DEFAULT_DEPRECATION_MSG_TOKEN,
   TAG_FORMAT_TEMPLATE,
+  UNGROUPED_GROUP_NAME,
+  HEALTH_CHECK_GROUP_NAME,
 } from './constants';
 import { getCliParam, readFile, updateRepoConfig } from './utils';
 
@@ -70,6 +72,13 @@ export async function getConfig(): Promise<CrawlConfig> {
     configPath: crawlerConfigPath,
     ...repoConfig,
     ...userConfig,
+    groups: [
+      { key: UNGROUPED_GROUP_NAME, matchers: [] },
+      {
+        key: HEALTH_CHECK_GROUP_NAME,
+        matchers: ['\\/\\*\\* *\\' + userConfig.deprecationComment + ' *\\*/'],
+      },
+    ],
   };
 
   updateRepoConfig(config);
@@ -86,19 +95,10 @@ export function findTsConfigFiles() {
   ];
 }
 
-export function getDefaultConfig(
-  deprecationComment: string = DEFAULT_DEPRECATION_MSG_TOKEN
-): CrawlConfigDefaults {
+export function getDefaultConfig(): CrawlConfigDefaults {
   return {
     outputFormatters: ['tagBasedMarkdown', 'groupBasedMarkdown'],
     tagFormat: TAG_FORMAT_TEMPLATE,
     commitMessage: DEFAULT_COMMIT_MESSAGE,
-    groups: [
-      { key: 'ungrouped', matchers: [] },
-      {
-        key: 'health-check',
-        matchers: ['\\/\\*\\* *\\' + deprecationComment + ' *\\*/'],
-      },
-    ],
-  };
+  } as any;
 }

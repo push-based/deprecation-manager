@@ -8,8 +8,9 @@ import {
 } from '../models';
 import { concat, tap, updateRepoConfig, toFileName } from '../utils';
 import { generateRawJson } from '../output-formatters';
+import { UNGROUPED_GROUP_NAME } from '../constants';
 
-const ungrouped = 'ungrouped';
+const ESCAPE_GROUPING_ANSWER = 'Stop grouping';
 
 interface Group {
   key: string;
@@ -50,8 +51,11 @@ export async function addGrouping(
 
     const groupKey = await getGroupNameFromExistingOrInputQuestion(
       deprecation,
-      getGroupNames(groups, ungrouped)
+      [ESCAPE_GROUPING_ANSWER, ...getGroupNames(groups)]
     );
+    if (groupKey === ESCAPE_GROUPING_ANSWER) {
+      break;
+    }
     const answerRegex: { regexp: string } = await prompt([
       getGroupRegexQuestion(),
     ]);
@@ -66,7 +70,7 @@ export async function addGrouping(
       }
     } else {
       groups.push({
-        key: groupKey || ungrouped,
+        key: groupKey || UNGROUPED_GROUP_NAME,
         matchers: parsedRegex !== '' ? [parsedRegex] : [],
       });
     }
@@ -84,13 +88,10 @@ export async function addGrouping(
   };
 }
 
-function getGroupNames(
-  groups: { key: string }[],
-  ungroupedKey: string
-): string[] {
+function getGroupNames(groups: { key: string }[]): string[] {
   return [
-    ungroupedKey,
-    ...groups.map((g) => g.key).filter((k) => k !== ungroupedKey),
+    UNGROUPED_GROUP_NAME,
+    ...groups.map((g) => g.key).filter((k) => k !== UNGROUPED_GROUP_NAME),
   ];
 }
 
@@ -158,7 +159,7 @@ function getGroupNameQuestion(deprecation: Deprecation) {
       EOL +
       deprecation.deprecationMessage +
       EOL,
-    initial: ungrouped,
+    initial: UNGROUPED_GROUP_NAME,
   };
 }
 
