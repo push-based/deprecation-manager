@@ -37,7 +37,7 @@ export async function ensureTsConfigPath(
       format(value) {
         return value ? normalize(value) : '';
       },
-      initial: tsConfigFiles[0] as any,
+      initial: config.tsConfigPath || (tsConfigFiles[0] as any),
       skip: tsConfigFiles.length === 1,
     },
   ]);
