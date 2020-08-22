@@ -12,7 +12,7 @@ import { normalize, relative } from 'path';
 import { existsSync } from 'fs';
 import { prompt } from 'enquirer';
 import { CrawlConfig, CrawledRelease, Deprecation } from '../models';
-import { findTsConfigFiles } from '../config';
+import { findTsConfigFiles } from '../tasks/ensure-tsconfig-path';
 
 // What about https://ts-morph.com/details/documentation#js-docs ?
 // Problem: can't find top level deprecations? e.g. merge

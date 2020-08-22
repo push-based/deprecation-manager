@@ -9,13 +9,12 @@ import { updateRepository } from './tasks/update-repository';
 import { addGroups } from './tasks/add-groups';
 import { generateOutput } from './tasks/generate-output';
 import { commitChanges } from './tasks/commit-changes';
-import { ensureTsConfigPath } from './tasks/ensure-tsconfig-path';
 import { CRAWLER_MODES } from './constants';
 
 (async () => {
   await guardAgainstDirtyRepo();
 
-  const config = await ensureTsConfigPath(await getConfig());
+  const config = await getConfig();
 
   const tasks = [
     checkout,
