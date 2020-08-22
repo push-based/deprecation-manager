@@ -3,6 +3,7 @@ export interface CrawlConfig {
   configPath: string;
   // required fields
   tagFormat: string;
+  commentLinkFormat: string;
   commitMessage: string;
   tsConfigPath: string;
   deprecationComment: string;

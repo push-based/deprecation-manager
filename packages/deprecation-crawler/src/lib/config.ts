@@ -9,6 +9,7 @@ import {
   DEFAULT_COMMIT_MESSAGE,
   DEFAULT_DEPRECATION_MSG_TOKEN,
   TAG_FORMAT_TEMPLATE,
+  DEFAULT_COMMENT_LINK_TEMPLATE,
 } from './constants';
 import { getCliParam, readFile, updateRepoConfig } from './utils';
 
@@ -70,6 +71,7 @@ export async function getConfig(): Promise<CrawlConfig> {
     configPath: crawlerConfigPath,
     ...repoConfig,
     ...userConfig,
+    commentLinkFormat: DEFAULT_COMMENT_LINK_TEMPLATE,
   };
 
   updateRepoConfig(config);
