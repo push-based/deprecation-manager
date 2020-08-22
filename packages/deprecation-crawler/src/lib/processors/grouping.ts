@@ -22,7 +22,7 @@ export function group(config: CrawlConfig): CrawlerProcess {
       ...r,
       ...(await addGrouping(config, r)),
     }),
-    tap((r) => generateRawJson(config, r, { tagDate: r.date })),
+    tap((r) => generateRawJson(config, r)),
   ]);
 }
 
