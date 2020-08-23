@@ -1,18 +1,4 @@
-
-import { normalize } from 'path';
-import { prompt } from 'enquirer';
-import { glob } from 'glob';
-import { CrawlConfig, CrawlConfigDefaults } from './models';
-import {
-  CRAWLER_CONFIG_PATH,
-  TSCONFIG_PATH,
-  DEPRECATIONS_OUTPUT_DIRECTORY,
-  DEFAULT_COMMIT_MESSAGE,
-  DEFAULT_DEPRECATION_MSG_TOKEN,
-  TAG_FORMAT_TEMPLATE,
-  DEFAULT_COMMENT_LINK_TEMPLATE,
-} from './constants';
-import { getCliParam, readFile, updateRepoConfig } from './utils';
+import { CrawlConfig } from './models';
 import { readRepoConfig, updateRepoConfig } from './utils';
 import { ensureDeprecationCommentConfig } from './tasks/ensure-deprecation-comment-config';
 import { ensureTsConfigPath } from './tasks/ensure-tsconfig-path';
@@ -25,7 +11,6 @@ export async function getConfig(): Promise<CrawlConfig> {
 
   const config = {
     ...repoConfig,
-    ...userConfig,
     ...(await ensureTsConfigPath(repoConfig)
       .then(ensureDeprecationUrlConfig)
       .then(ensureDeprecationCommentConfig)
