@@ -34,7 +34,7 @@ beforeAll(async () => {
 });
 
 test('sandbox', async () => {
-  const cliOutput = await exec(`npm run crawl -- -t master`);
+  const cliOutput = await exec(`npm run crawl -- -t master --verbose`);
 
   // verify output
   expect(cliOutput).toMatch(/Running with tsconfig: tsconfig.sandbox.json/i);
