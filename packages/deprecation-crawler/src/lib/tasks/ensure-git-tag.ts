@@ -33,8 +33,10 @@ export function ensureGitTag(config: CrawlConfig): CrawlerProcess {
     if (relevantBranches.length <= 0) {
       if (process.env.__CRAWLER_MODE__ !== CRAWLER_MODES.SANDBOX) {
         throw new Error(
-          `The branch ${currentBranch} does not contain merged tags in the configured semver format ${config.tagFormat}.
-          Check your tagFormat settings in ${config.configPath}.`
+          `The branch ${currentBranch} does not contain merged tags in the configured semver format ${
+            config.tagFormat
+          }.
+          Check your tagFormat settings in ${getConfigPath()}.`
         );
       }
     }
@@ -79,12 +81,16 @@ export function ensureGitTag(config: CrawlConfig): CrawlerProcess {
 export function ensureTagFormat(config: CrawlConfig): void {
   if (!config.tagFormat) {
     throw new Error(
-      `Tag format ${config.tagFormat} is invalid. Check your tagFormat settings in ${config.configPath}.`
+      `Tag format ${
+        config.tagFormat
+      } is invalid. Check your tagFormat settings in ${getConfigPath()}.`
     );
   }
   if (!config.tagFormat.includes(SEMVER_TOKEN)) {
     throw new Error(
-      `Tag format ${config.tagFormat} has to include ${SEMVER_TOKEN} as token. Check your tagFormat settings in ${config.configPath}.`
+      `Tag format ${
+        config.tagFormat
+      } has to include ${SEMVER_TOKEN} as token. Check your tagFormat settings in ${getConfigPath()}.`
     );
   }
 }
