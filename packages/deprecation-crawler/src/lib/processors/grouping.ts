@@ -2,13 +2,20 @@ import { EOL } from 'os';
 import { prompt } from 'enquirer';
 import {
   CrawlConfig,
-  CrawlerProcess,
   CrawledRelease,
+  CrawlerProcess,
   Deprecation,
 } from '../models';
-import { concat, tap, updateRepoConfig, toFileName } from '../utils';
+import { concat, tap, toFileName, updateRepoConfig } from '../utils';
 import { generateRawJson } from '../output-formatters';
 import { UNGROUPED_GROUP_NAME } from '../constants';
+import {
+  printFooterLine,
+  printHeadline,
+  printProgress,
+  ProcessFeedback,
+} from '../log';
+import * as kleur from 'kleur';
 
 const ESCAPE_GROUPING_ANSWER = 'Stop grouping';
 const CREATE_NEW_GROUP_ANSWER = 'Create new group';
@@ -32,7 +39,8 @@ export async function addGrouping(
   config: CrawlConfig,
   crawledRelease: CrawledRelease
 ): Promise<CrawledRelease> {
-  console.log('Start grouping deprecations...');
+  const groupFeedback = getGroupFeedback();
+  groupFeedback.printStart(config, crawledRelease);
   const { groups } = config as { groups: Group[] };
   const deprecationsWithGroup: Deprecation[] = [];
 
@@ -86,10 +94,45 @@ export async function addGrouping(
     });
   }
 
-  updateRepoConfig({ ...config, groups });
-  return {
+  const newConfig = { ...config, groups };
+  updateRepoConfig(newConfig);
+
+  const newCrawledRelease = {
     ...crawledRelease,
     deprecations: deprecationsWithGroup,
+  };
+  groupFeedback.printEnd(newConfig, newCrawledRelease);
+
+  return newCrawledRelease;
+}
+
+function getGroupFeedback(): ProcessFeedback {
+  return {
+    printStart: (): void => {
+      printHeadline('GROUPING PHASE');
+      console.log(kleur.gray('⚙️ Start grouping of deprecations.'));
+      console.log('');
+    },
+    printEnd(config: CrawlConfig, rawRelease: CrawledRelease): void {
+      const numAllDeprecations = rawRelease.deprecations.length;
+      const numAllGroups = config.groups.length;
+      console.log('✓  Grouping is done!');
+      console.log(
+        `Grouped ${numAllDeprecations} deprecations in ${numAllGroups} files.`
+      );
+
+      config.groups.forEach((group) => {
+        printProgress('');
+        console.log(`Group: ${group.key}`);
+        console.log(`Matchers: ${group.matchers.length}`);
+        console.log(
+          `Deprecations: ${
+            rawRelease.deprecations.filter((d) => d.group === group.key).length
+          }`
+        );
+      });
+      printFooterLine();
+    },
   };
 }
 

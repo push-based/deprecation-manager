@@ -11,6 +11,7 @@ import { isConstructorDeclaration, isVariableStatement } from 'typescript';
 import { relative } from 'path';
 import { CrawlConfig, CrawledRelease, Deprecation } from '../models';
 import { ensureTsConfigPath } from '../tasks/ensure-tsconfig-path';
+import { getVerboseFlag } from '../utils';
 
 // What about https://ts-morph.com/details/documentation#js-docs ?
 // Problem: can't find top level deprecations? e.g. merge
@@ -39,7 +40,10 @@ function crawlFileForDeprecations(
       /\\/g,
       '/'
     );
-    console.log(`🔎 Looking for deprecations in ${path}`);
+
+    if (getVerboseFlag()) {
+      console.log(`🔎 Looking for deprecations in ${path}`);
+    }
     const commentsInFile = getNodesWithCommentsForFile(file);
     const deprecationsInFile = commentsInFile
       .map((p) =>
@@ -142,13 +146,8 @@ function getNodesWithCommentsForFile(file: SourceFile) {
   return commentsInFile;
 }
 
-async function getSourceFiles(config: CrawlConfig) {
+export async function getSourceFiles(config: CrawlConfig) {
   const project = new Project();
-
-  if (!config.tsConfigPath) {
-    throw Error('We need a ts config path to be able to crawl');
-  }
-
   await ensureTsConfigPath(config);
   project.addSourceFilesFromTsConfig(config.tsConfigPath);
 

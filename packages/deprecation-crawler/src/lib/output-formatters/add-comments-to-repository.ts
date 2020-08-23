@@ -1,5 +1,9 @@
 import { Project } from 'ts-morph';
-import { CrawlConfig, Deprecation } from '../models';
+import { CrawlConfig, CrawledRelease, Deprecation } from '../models';
+import { printHeadline, printProgress, ProcessFeedback } from '../log';
+import * as kleur from 'kleur';
+
+const feedback = getRepoSyncFeedback();
 import { template } from 'lodash';
 import {
   COMMENT_LINK_URL_PARAM_TOKEN,
@@ -9,17 +13,17 @@ import { ensureCommentLinkFormat } from '../tasks/ensure-comment-link-template';
 
 export async function addCommentToRepository(
   config: CrawlConfig,
-  rawDeprecations: Deprecation[]
+  crawledRelease: CrawledRelease
 ): Promise<void> {
   ensureCommentLinkFormat(config);
 
-  console.log('Writing deprecation ids to your repository...');
+  feedback.printStart(config, crawledRelease);
 
   const project = new Project({
     tsConfigFilePath: config.tsConfigPath,
   });
 
-  const deprecationsByFile = rawDeprecations.reduce((acc, val) => {
+  const deprecationsByFile = crawledRelease.deprecations.reduce((acc, val) => {
     acc[val.path] = (acc[val.path] || []).concat(val);
     return acc;
   }, {} as { [filePath: string]: Deprecation[] });
@@ -54,9 +58,7 @@ export async function addCommentToRepository(
     });
   });
 
-  console.log(
-    '🎉 All deprecations are resolved, your repository is ready for a commit!'
-  );
+  feedback.printEnd(config);
 }
 
 function calculateLinkInsertPosition(
@@ -91,4 +93,21 @@ function calculateLinkInsertPosition(
     addedPosForText +
     endOfLineLength
   );
+}
+
+function getRepoSyncFeedback(): ProcessFeedback {
+  return {
+    printStart(config: CrawlConfig, r: CrawledRelease): void {
+      printHeadline('REPOSITORY SYNC PHASE');
+      console.log(
+        kleur.gray(`💾 Start syncing crawled result to repository`),
+        kleur.black(r.tag)
+      );
+      printProgress();
+    },
+
+    async printEnd(): Promise<void> {
+      console.log(kleur.green(`✓  `), kleur.gray(`Repository synced!`));
+    },
+  };
 }

@@ -48,6 +48,12 @@ export function getConfigPath() {
   return argPath ? argPath : CRAWLER_CONFIG_PATH;
 }
 
+export function getVerboseFlag() {
+  // Check for path params from cli command
+  const argPath = getCliParam(['verbose']);
+  return argPath ? argPath : false;
+}
+
 export function formatCode(
   code: string,
   parser: PrettierOptions['parser'] = 'typescript'
