@@ -5,7 +5,8 @@ Have a version of the [RxJS repository](https://github.com/ReactiveX/rxjs) local
 To get a real life experiance checkout the PR related to deprecation management:  
 `git fetch <remote> pull/5426/head:pr/5426 && git checkout pr/5426`
 
-**TLDR**
+**TLDR**  
+
 In this section you will use a preconfigired config file. This will generate an output without any questions asked.
 It is also a good example for a CI integreation.
 
@@ -13,7 +14,8 @@ It is also a good example for a CI integreation.
 https://raw.githubusercontent.com/timdeschryver/deprecation-manager/master/packages/deprecation-crawler/docs/config-examples/rxjs-example.deprecation-crawler.config.json
 
 
-**Run Through**
+**Run Through**  
+
 In the following steps we will walk through the whole process one by one.
 
 1. Start the crawler by running: `npx deprecation-crawler -p docs_app/deprecation-crawler.config.json`
