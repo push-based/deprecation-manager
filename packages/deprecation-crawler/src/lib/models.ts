@@ -1,17 +1,16 @@
 export interface CrawlConfig {
-  // only form cli params
-  configPath: string;
-  // required fields
+  // defaults
   tagFormat: string;
   commentLinkFormat: string;
   commitMessage: string;
+  groups: { key: string; matchers: string[] }[];
+  outputFormatters: string[];
+  // required fields
   tsConfigPath: string;
   deprecationComment: string;
   deprecationLink: string;
-  groups: { key: string; matchers: string[] }[];
   // optional fields
   outputDirectory: string;
-  outputFormatters: string[];
 }
 
 export interface GitTag {

@@ -3,6 +3,7 @@ import { prompt } from 'enquirer';
 import * as semverHelper from 'semver';
 import {
   getCliParam,
+  getConfigPath,
   getCurrentBranchOrTag,
   getTags,
   SERVER_REGEX,
@@ -32,16 +33,15 @@ export function ensureGitTag(config: CrawlConfig): CrawlerProcess {
     if (relevantBranches.length <= 0) {
       if (process.env.__CRAWLER_MODE__ !== CRAWLER_MODES.SANDBOX) {
         throw new Error(
-          `The repository [TODO_REMOTE_URL] does not contain merged tags in the semver format.`
+          `The branch ${currentBranch} does not contain merged tags in the configured semver format ${
+            config.tagFormat
+          }.
+          Check your tagFormat settings in ${getConfigPath()}.`
         );
       }
     }
 
     const cliPassedTagName = getCliParam(['tag', 't']);
-    console.log('cliPassedTagName', typeof cliPassedTagName);
-    const cliPassedTagNameGiven = !!cliPassedTagName;
-    console.log('cliPassedTagNameGiven', typeof cliPassedTagNameGiven);
-
     if (cliPassedTagName !== false) {
       // user passed existing tag name
       return {
@@ -70,8 +70,8 @@ export function ensureGitTag(config: CrawlConfig): CrawlerProcess {
       ]);
 
       return {
-        // @TODO consider pass the whole object
-        tag: relevantBranches.find((t) => t.name === name),
+        // @TODO consider store it as `GitTag`
+        tag: name,
         ...r,
       };
     }
@@ -81,12 +81,16 @@ export function ensureGitTag(config: CrawlConfig): CrawlerProcess {
 export function ensureTagFormat(config: CrawlConfig): void {
   if (!config.tagFormat) {
     throw new Error(
-      `tagFormat ${config.tagFormat} invalid check your settings in ${config.configPath}`
+      `Tag format ${
+        config.tagFormat
+      } is invalid. Check your tagFormat settings in ${getConfigPath()}.`
     );
   }
   if (!config.tagFormat.includes(SEMVER_TOKEN)) {
     throw new Error(
-      `tagFormat ${config.tagFormat} has to include ${SEMVER_TOKEN} as token`
+      `Tag format ${
+        config.tagFormat
+      } has to include ${SEMVER_TOKEN} as token. Check your tagFormat settings in ${getConfigPath()}.`
     );
   }
 }
@@ -100,7 +104,7 @@ export async function getRelevantTagsFromBranch(
   // The `tagFormat` is compiled with space as the `version` as it's an invalid tag character,
   // so it's guaranteed to no be present in the `tagFormat`.
   const tagRegexp = `^${escapeRegExp(
-    template(tagFormat)({ semver: ' ' })
+    template(tagFormat)({ [SEMVER_TOKEN]: ' ' })
   ).replace(' ', '(.+)')}`;
 
   const relevantBranchTags = await getTags(branch).then((foundTags): GitTag[] =>
