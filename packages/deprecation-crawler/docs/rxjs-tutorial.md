@@ -32,7 +32,7 @@ At any time you can reuse an existing group or create a new one.
 Select `Stop grouping` to stop the process  
 √ Add group to deprecation? · Create new group  
 √ Add human readable group name to deprecation · `internal`  
-```bash
+```
 src/internal/AsyncSubject.ts#17
 /** @deprecated This is an internal implementation detail, do not use. */
 ```
