@@ -41,7 +41,7 @@ test('sandbox', async () => {
   expect(cliOutput).toMatch(/Looking for deprecations/i);
   expect(cliOutput).toMatch(/Adding ruid to deprecations/i);
   expect(cliOutput).toMatch(/Regenerating raw JSON/i);
-  expect(cliOutput).toMatch(/Start grouping deprecations/i);
+  expect(cliOutput).toMatch(/Start grouping of deprecations/i);
   expect(cliOutput).toMatch(/Update tag-based markdown format/i);
   expect(cliOutput).toMatch(/Update group-based markdown format/i);
 
