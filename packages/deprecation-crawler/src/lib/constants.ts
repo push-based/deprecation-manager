@@ -1,7 +1,7 @@
 export const DEPRECATIONS_OUTPUT_DIRECTORY = 'deprecations';
 export const CRAWLER_CONFIG_PATH = 'deprecation-crawler.config.json';
-export const SEMVER_TOKEN = `semver`;
-export const TAG_FORMAT_TEMPLATE = `v\${${SEMVER_TOKEN}}`;
+export const SEMVER_TOKEN = `SEMVER_TOKEN`;
+export const TAG_FORMAT_TEMPLATE = `\${${SEMVER_TOKEN}}`;
 export const RAW_DEPRECATION_PATH = 'raw-deprecations.json';
 export const TSCONFIG_PATH = 'tsconfig.deprecation-crawler.json';
 export const DEFAULT_DEPRECATION_MSG_TOKEN = '@deprecated';
