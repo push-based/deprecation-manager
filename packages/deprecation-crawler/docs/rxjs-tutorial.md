@@ -13,6 +13,7 @@ It is also a good example for a CI integreation.
 1. Copy follofing content into `docs_app/deprecation-crawler.config.json`  
 https://raw.githubusercontent.com/timdeschryver/deprecation-manager/master/packages/deprecation-crawler/docs/config-examples/rxjs-example.deprecation-crawler.config.json
 
+2. Say yes to every question.
 
 **Run Through**  
 
