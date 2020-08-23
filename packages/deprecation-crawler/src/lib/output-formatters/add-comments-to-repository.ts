@@ -1,10 +1,18 @@
 import { Project } from 'ts-morph';
 import { CrawlConfig, Deprecation } from '../models';
+import { template } from 'lodash';
+import {
+  COMMENT_LINK_URL_PARAM_TOKEN,
+  COMMENT_LINK_URL_TOKEN,
+} from '../constants';
+import { ensureCommentLinkFormat } from '../tasks/ensure-comment-link-template';
 
 export async function addCommentToRepository(
   config: CrawlConfig,
   rawDeprecations: Deprecation[]
 ): Promise<void> {
+  ensureCommentLinkFormat(config);
+
   console.log('Writing deprecation ids to your repository...');
 
   const project = new Project({
@@ -27,7 +35,11 @@ export async function addCommentToRepository(
 
     sorted.forEach((deprecation) => {
       const sourceFile = project.getSourceFile(path);
-      const deprecationDetails = ` Details: {@link ${config.deprecationLink}#${deprecation.ruid}}`;
+      const commentLinkText = template(config.commentLinkFormat)({
+        [COMMENT_LINK_URL_TOKEN]: config.deprecationLink,
+        [COMMENT_LINK_URL_PARAM_TOKEN]: deprecation.ruid,
+      });
+      const deprecationDetails = ` ${commentLinkText}`;
 
       const linkPosition = calculateLinkInsertPosition(
         deprecation,

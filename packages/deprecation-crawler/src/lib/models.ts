@@ -1,6 +1,7 @@
 export interface CrawlConfig {
   // defaults
   tagFormat: string;
+  commentLinkFormat: string;
   commitMessage: string;
   groups: { key: string; matchers: string[] }[];
   outputFormatters: string[];
