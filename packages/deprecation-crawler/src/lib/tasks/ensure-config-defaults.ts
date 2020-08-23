@@ -1,5 +1,10 @@
 import { CrawlConfig } from '../models';
-import { DEFAULT_COMMIT_MESSAGE, TAG_FORMAT_TEMPLATE } from '../constants';
+import {
+  DEFAULT_COMMIT_MESSAGE,
+  HEALTH_CHECK_GROUP_NAME,
+  TAG_FORMAT_TEMPLATE,
+  UNGROUPED_GROUP_NAME,
+} from '../constants';
 
 export async function ensureConfigDefaults(
   userConfig: CrawlConfig
@@ -9,9 +14,9 @@ export async function ensureConfigDefaults(
     tagFormat: TAG_FORMAT_TEMPLATE,
     commitMessage: DEFAULT_COMMIT_MESSAGE,
     groups: [
-      { key: 'ungrouped', matchers: [] },
+      { key: UNGROUPED_GROUP_NAME, matchers: [] },
       {
-        key: 'health-check',
+        key: HEALTH_CHECK_GROUP_NAME,
         matchers: ['\\/\\*\\* *\\' + userConfig.deprecationComment + ' *\\*/'],
       },
     ],
