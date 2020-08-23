@@ -10,6 +10,7 @@ import {
   COMMENT_LINK_URL_TOKEN,
 } from '../constants';
 import { ensureCommentLinkFormat } from '../tasks/ensure-comment-link-template';
+import { getVerboseFlag } from '../utils';
 
 export async function addCommentToRepository(
   config: CrawlConfig,
@@ -29,7 +30,9 @@ export async function addCommentToRepository(
   }, {} as { [filePath: string]: Deprecation[] });
 
   Object.entries(deprecationsByFile).forEach(([path, deprecations]) => {
-    console.log(`🔧 ${path}`);
+    if (getVerboseFlag()) {
+      console.log(kleur.gray(`🔧 ${path}`));
+    }
 
     let addedPosForText = 0;
 

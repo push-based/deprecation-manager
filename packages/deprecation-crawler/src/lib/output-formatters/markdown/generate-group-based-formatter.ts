@@ -3,6 +3,7 @@ import { readFile, formatCode } from '../../utils';
 import { writeFileSync } from 'fs';
 import * as path from 'path';
 import { EOL } from 'os';
+import { HEALTH_CHECK_GROUP_NAME, UNGROUPED_GROUP_NAME } from '../../constants';
 
 // @TODO consider the content to update within the comments
 const MD_GROUP_OPENER = '<!-- ruid-groups';
@@ -60,7 +61,12 @@ export async function updateGroupMd(
     MD_GROUP_CLOSER,
     sections.length === 1 ? sections[0] : sections[2],
     // We update already existing
-    sections.length === 1 ? getInitialGroupContent(group.key) : '',
+    sections.length === 1
+      ? group.key === HEALTH_CHECK_GROUP_NAME ||
+        group.key === UNGROUPED_GROUP_NAME
+        ? await getHealthCheckContent(groupedDeprecationsByFileAndTag)
+        : getInitialGroupContent(group.key)
+      : '',
   ];
 
   const newMd = updatedSections.join(EOL + EOL) + newlines;
@@ -106,7 +112,14 @@ the following version specifier are set for the rxjs dependencies in StackBlitz:
 \`\`\`
 `;
 }
-
+async function getHealthCheckContent(groupedDeprecationsByFileAndTag: {
+  [g: string]: Deprecation[];
+}) {
+  return `
+# Following deprecations need a check:
+${await getDeprecationList(groupedDeprecationsByFileAndTag)}
+`;
+}
 async function getDeprecationList(groupedDeprecations: {
   [version: string]: Deprecation[];
 }): Promise<string> {

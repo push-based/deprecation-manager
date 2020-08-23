@@ -44,6 +44,7 @@ export async function addGrouping(
   const { groups } = config as { groups: Group[] };
   const deprecationsWithGroup: Deprecation[] = [];
 
+  let escapeGrouping = false;
   for (const deprecation of crawledRelease.deprecations) {
     const deprecationHasExistingGroup = checkForExistingGroup(
       groups,
@@ -58,6 +59,9 @@ export async function addGrouping(
       continue;
     }
 
+    if (escapeGrouping) {
+      continue;
+    }
     const groupKey = await getGroupNameFromExistingOrInputQuestion(
       deprecation,
       [
@@ -66,9 +70,12 @@ export async function addGrouping(
         ...getGroupNames(groups),
       ]
     );
-    if (groupKey === ESCAPE_GROUPING_ANSWER) {
-      break;
+
+    if (groupKey === ESCAPE_GROUPING_ANSWER || escapeGrouping) {
+      escapeGrouping = true;
+      continue;
     }
+
     const answerRegex: { regexp: string } = await prompt([
       getGroupRegexQuestion(),
     ]);
@@ -180,7 +187,7 @@ function getGroupNameFromExistingQuestion(
     type: 'select',
     name: 'existingKey',
     message:
-      `Add human readable group name to deprecation` +
+      `Add group to deprecation?` +
       EOL +
       `${deprecation.path}#${deprecation.lineNumber}` +
       EOL +

@@ -19,9 +19,9 @@ import { CRAWLER_MODES } from './constants';
   const tasks = [
     checkout,
     crawl,
-    updateRepository,
     addGroups,
     generateOutput,
+    updateRepository,
     commitChanges,
   ];
 

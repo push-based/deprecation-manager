@@ -1,18 +1,21 @@
 import { CrawlConfig } from '../models';
 import { prompt } from 'enquirer';
 import { normalize } from 'path';
-import { getConfigPath, updateRepoConfig } from '../utils';
+import { getConfigPath, getVerboseFlag, updateRepoConfig } from '../utils';
 import { glob } from 'glob';
 import { CRAWLER_MODES } from '../constants';
 import * as fs from 'fs';
 import { existsSync } from 'fs';
+import * as kleur from 'kleur';
 
 export async function ensureTsConfigPath(
   config: CrawlConfig
 ): Promise<CrawlConfig> {
   // If a tsconfig files is already set proceed
   if (fileExists(config.tsConfigPath)) {
-    console.log(`Running with tsconfig: ${config.tsConfigPath}`);
+    if (getVerboseFlag()) {
+      console.log(kleur.gray(`Running with tsconfig: ${config.tsConfigPath}`));
+    }
     return config;
   }
 
@@ -34,7 +37,7 @@ export async function ensureTsConfigPath(
     {
       type: 'select',
       name: 'tsConfigPath',
-      message: "What's the location of the base ts config file to extend from?",
+      message: 'What tsconfig file do you want to use?',
       choices: tsConfigFiles,
       format(value) {
         return value ? normalize(value) : '';

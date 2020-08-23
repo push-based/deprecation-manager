@@ -60,9 +60,11 @@ function getCrawlFeedback(): ProcessFeedback {
       const files = await getSourceFiles(config);
       console.log(
         kleur.green('✓ '),
-        kleur.gray(
-          `Found ${rawRelease.deprecations.length} in ${files.length} files.`
-        )
+        kleur.gray(`Found `),
+        kleur.black(`${rawRelease.deprecations.length}`),
+        kleur.gray(` in `),
+        kleur.gray(files.length),
+        kleur.gray(` files.`)
       );
       printFooterLine();
     },
