@@ -1,5 +1,5 @@
 {
-  "outputFormatters": ["tagBasedMarkdown", "groupBasedMarkdown"],
+  "outputFormatters": ["groupBasedMarkdown"],
   "groups": [
     {
       "key": "ungrouped",
@@ -19,7 +19,13 @@
     },
     {
       "key": "internal-implementation ",
-      "matchers": ["internal implementation", "internal use only", "no longer checked", "private API", "not for public use"]
+      "matchers": [
+        "internal implementation",
+        "internal use only",
+        "no longer checked",
+        "private API",
+        "not for public use"
+      ]
     },
     {
       "key": "notification",
@@ -31,11 +37,21 @@
         "try to create POJOs matching the signature outlined in \\{\\@link ObservableNotification\\}"
       ]
     },
-    { "key": "observer-vs-callback", "matchers": ["^(?=.*observer)(?=.*callback)..."] },
-    { "key": "resultSelector", "matchers": ["resultselector", "use \\{\\@link deserializer\\}"] },
+    {
+      "key": "observer-vs-callback",
+      "matchers": ["^(?=.*observer)(?=.*callback)..."]
+    },
+    {
+      "key": "resultSelector",
+      "matchers": ["resultselector", "use \\{\\@link deserializer\\}"]
+    },
     {
       "key": "scheduler-argument",
-      "matchers": ["^(?=.*scheduler)(?=.*deprecated)...", "^(?=.*scheduled)(?=.*instead)...", "@deprecated use static {@link merge}"]
+      "matchers": [
+        "^(?=.*scheduler)(?=.*deprecated)...",
+        "^(?=.*scheduled)(?=.*instead)...",
+        "@deprecated use static {@link merge}"
+      ]
     },
     {
       "key": "xwith",
@@ -49,11 +65,14 @@
         "with}"
       ]
     },
-    { "key": "typings", "matchers": [
-      "use mapto<r>\\(value: r\\): operatorfunction<any, r> signature instead",
-      "array of observables instead"
-    ] },
-    { "key": "heanth-check", "matchers": ["\\/\\*\\* *\\@deprecated *\\*/"] },
+    {
+      "key": "typings",
+      "matchers": [
+        "use mapto<r>\\(value: r\\): operatorfunction<any, r> signature instead",
+        "array of observables instead"
+      ]
+    },
+    { "key": "health-check", "matchers": ["\\/\\*\\* *\\@deprecated *\\*/"] },
     {
       "key": "alias-renamed-replace",
       "matchers": [
@@ -69,8 +88,11 @@
     }
   ],
   "configPath": "tmp/deprecation-crawler.config.json",
-  "outputDirectory": "./docs_app/content/deprecations",
+  "outputDirectory": "./tmp/content/deprecations",
   "deprecationComment": "@deprecated",
   "deprecationLink": "https://rxjs.dev/deprecations",
-  "tsConfigPath": "src/tsconfig.base.json"
+  "tsConfigPath": "src/tsconfig.base.json",
+  "tagFormat": "${SEMVER_TOKEN}",
+  "commitMessage": "docs(deprecation-manager): sync deprecations",
+  "commentLinkFormat": "Details: {@link ${COMMENT_LINK_URL_TOKEN}#${COMMENT_LINK_URL_PARAM_TOKEN}}"
 }
