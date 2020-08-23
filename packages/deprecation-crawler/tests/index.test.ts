@@ -38,12 +38,14 @@ test('sandbox', async () => {
 
   // verify output
   expect(cliOutput).toMatch(/Running with tsconfig: tsconfig.sandbox.json/i);
-  expect(cliOutput).toMatch(/Looking for deprecations/i);
-  expect(cliOutput).toMatch(/Adding ruid to deprecations/i);
-  expect(cliOutput).toMatch(/Regenerating raw JSON/i);
-  expect(cliOutput).toMatch(/Start grouping of deprecations/i);
+  expect(cliOutput).toMatch(/SETUP PHASE/i);
+  expect(cliOutput).toMatch(/tsconfig.sandbox.json/i);
+  expect(cliOutput).toMatch(/CRAWL PHASE/i);
+  expect(cliOutput).toMatch(/GROUPING PHASE/i);
+  expect(cliOutput).toMatch(/FORMAT OUTPUT/i);
   expect(cliOutput).toMatch(/Update tag-based markdown format/i);
   expect(cliOutput).toMatch(/Update group-based markdown format/i);
+  // expect(cliOutput).toMatch(/REPOSITORY SYNC PHASE/i);
 
   // verify changes to repo
   testcases.forEach((testcase) => {
