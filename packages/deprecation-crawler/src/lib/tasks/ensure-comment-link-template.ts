@@ -3,11 +3,14 @@ import {
   COMMENT_LINK_URL_PARAM_TOKEN,
   COMMENT_LINK_URL_TOKEN,
 } from '../constants';
+import { getConfigPath } from '../utils';
 
-export function ensureTagFormat(config: CrawlConfig): void {
+export function ensureCommentLinkFormat(config: CrawlConfig): void {
   if (!config.commentLinkFormat) {
     throw new Error(
-      `Comment link template ${config.deprecationComment} invalid check your settings in ${config.configPath}`
+      `Comment link template ${
+        config.deprecationComment
+      } invalid check your settings in ${getConfigPath()}`
     );
   }
   if (

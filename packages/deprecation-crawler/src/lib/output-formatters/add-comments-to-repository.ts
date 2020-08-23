@@ -5,11 +5,14 @@ import {
   COMMENT_LINK_URL_PARAM_TOKEN,
   COMMENT_LINK_URL_TOKEN,
 } from '../constants';
+import { ensureCommentLinkFormat } from '../tasks/ensure-comment-link-template';
 
 export async function addCommentToRepository(
   config: CrawlConfig,
   rawDeprecations: Deprecation[]
 ): Promise<void> {
+  ensureCommentLinkFormat(config);
+
   console.log('Writing deprecation ids to your repository...');
 
   const project = new Project({
