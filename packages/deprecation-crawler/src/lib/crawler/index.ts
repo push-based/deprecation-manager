@@ -8,11 +8,9 @@ import {
   TypeElementTypes,
 } from 'ts-morph';
 import { isConstructorDeclaration, isVariableStatement } from 'typescript';
-import { normalize, relative } from 'path';
-import { existsSync } from 'fs';
-import { prompt } from 'enquirer';
+import { relative } from 'path';
 import { CrawlConfig, CrawledRelease, Deprecation } from '../models';
-import { findTsConfigFiles } from '../config';
+import { ensureTsConfigPath } from '../tasks/ensure-tsconfig-path';
 
 // What about https://ts-morph.com/details/documentation#js-docs ?
 // Problem: can't find top level deprecations? e.g. merge
@@ -151,23 +149,8 @@ async function getSourceFiles(config: CrawlConfig) {
     throw Error('We need a ts config path to be able to crawl');
   }
 
-  if (existsSync(config.tsConfigPath)) {
-    project.addSourceFilesFromTsConfig(config.tsConfigPath);
-  } else {
-    const { tsConfigPath } = await prompt([
-      {
-        type: 'select',
-        name: 'tsConfigPath',
-        message: `tsconfig "${config.tsConfigPath}" does not exist, let's try again`,
-        choices: findTsConfigFiles(),
-        format(value) {
-          return value ? normalize(value) : '';
-        },
-      },
-    ]);
-    config.tsConfigPath = tsConfigPath;
-    project.addSourceFilesFromTsConfig(tsConfigPath);
-  }
+  await ensureTsConfigPath(config);
+  project.addSourceFilesFromTsConfig(config.tsConfigPath);
 
   return project.getSourceFiles();
 }

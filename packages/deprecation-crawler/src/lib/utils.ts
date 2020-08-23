@@ -31,12 +31,21 @@ export function ensureDirExists(dir: string) {
   }
 }
 
-export function updateRepoConfig(config: CrawlConfig) {
-  // exclude gitTag from the persisted config
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // const { ignoredParam, ...writableConfig } = config;
-  const path = config.configPath || CRAWLER_CONFIG_PATH;
-  writeFileSync(path, formatCode(JSON.stringify(config), 'json'));
+export function updateRepoConfig(config: CrawlConfig): void {
+  const crawlerConfigPath = getConfigPath();
+  writeFileSync(crawlerConfigPath, formatCode(JSON.stringify(config), 'json'));
+}
+
+export function readRepoConfig(): CrawlConfig {
+  const crawlerConfigPath = getConfigPath();
+  const repoConfigFile = readFile(crawlerConfigPath) || '{}';
+  return JSON.parse(repoConfigFile);
+}
+
+export function getConfigPath() {
+  // Check for path params from cli command
+  const argPath = getCliParam(['path', 'p']);
+  return argPath ? argPath : CRAWLER_CONFIG_PATH;
 }
 
 export function formatCode(
@@ -77,7 +86,7 @@ export function getCliParam(names: string[]): string | false {
     .filter((k) => names.includes(k))
     .map((k) => yargs.argv[k].toString().trim())
     .filter((p) => !!p);
-  return params.length ? params.pop() : '';
+  return params.length ? params.pop() : false;
 }
 
 export function run(
@@ -214,4 +223,4 @@ export const toggles = {
   executeGitCommands: process.env.__CRAWLER_MODE__ !== CRAWLER_MODES.SANDBOX,
 };
 
-export const SERVER_REGEX = /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/gi;
+export const SERVER_REGEX = /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/i;
