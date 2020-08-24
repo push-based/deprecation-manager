@@ -15,7 +15,7 @@ https://raw.githubusercontent.com/timdeschryver/deprecation-manager/master/packa
 
 2. Say yes to every question.
 
-**Run Through**  
+**Full Run Through**  
 
 In the following steps, we will walk through the whole process one by one.
 
