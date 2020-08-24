@@ -32,8 +32,8 @@ Answer the questions to set up the crawler:
 3. Grouping  
 √ Grouping? (Y/n) · true  
 
-At any time you can reuse an existing group or create a new one.  
-Select `Stop grouping` to stop the process  
+- 💡 At any time you can reuse an existing group or create a new one.  
+  Select `Stop grouping` to stop the process  
 
 √ Add group to deprecation? · Create new group  
 √ Add human readable group name to deprecation · `internal`  
@@ -48,12 +48,14 @@ In practice you will run through this process a couple of times until you have a
 
 Every now and than go to your config file and anopt rename the groupnames or matchers as you like.
 
-The grouping mechanism helps with 2 gefauts, `ungrouped` and `helath-check`. 
-`ungrouped` can be used to decide later on a group but have it "marked as todo" and `helath-check` can be used to validate your deprecations.
+- 💡 The grouping mechanism helps with 2 gefauts, `ungrouped` and `helath-check`. 
+  `ungrouped` can be used to decide later on a group but have it "marked as todo" and `helath-check` can be used to validate your deprecations.
 
 4. Output Formatter  
 √ Update Formatted Output? (Y/n) · true  
 You will generate the default output formats. Edit the config.json to change them.
+
+- 💡 The group-based output is very useful to provide static content for your users. You can put any static markdorw in the file and the formatting process will keep the linked deprecations up to date at the top of the file as hidden commens.  
 
 5. Sync Repository  
 √ Repo Update? (Y/n) · true  
