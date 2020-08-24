@@ -3,13 +3,12 @@ import { join } from 'path';
 import { CrawlConfig, CrawledRelease, Deprecation } from '../models';
 import { ensureDirExists } from '../utils';
 import { RAW_DEPRECATION_PATH } from '../constants';
+import * as kleur from 'kleur';
 
 export async function generateRawJson(
   config: CrawlConfig,
   crawledRelease: CrawledRelease
 ): Promise<void> {
-  console.log('📝 Regenerating raw JSON');
-
   ensureDirExists(config.outputDirectory);
 
   let existingDeprecations: Deprecation[] = [];
@@ -30,7 +29,7 @@ export async function generateRawJson(
   const path = join(config.outputDirectory, `${RAW_DEPRECATION_PATH}`);
   writeFileSync(path, json);
 
-  console.log(`📝 Raw JSON data up to date under ${path}`);
+  console.log(kleur.gray(`📝 Raw JSON data up to date under ${path}`));
 }
 
 function upsertDeprecations(

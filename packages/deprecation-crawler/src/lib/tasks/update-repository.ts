@@ -9,7 +9,7 @@ import { addCommentToRepository } from '../output-formatters';
 export function updateRepository(config: CrawlConfig): CrawlerProcess {
   return askToSkip(
     'Repo Update?',
-    tap((r) => addCommentToRepository(config, r.deprecations)),
+    tap((r) => addCommentToRepository(config, r)),
     {
       precondition: async (r) => r.deprecations?.length > 0,
     }

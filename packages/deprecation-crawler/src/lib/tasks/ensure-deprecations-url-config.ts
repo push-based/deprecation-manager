@@ -8,8 +8,7 @@ export async function ensureDeprecationUrlConfig(
     {
       type: 'input',
       name: 'deprecationLink',
-      message:
-        "What's the deprecation link to the docs (the deprecation ruid will be appended to this)?",
+      message: "What's the deprecation link to the docs?",
       // @TODO consider other default
       initial: config.deprecationLink || 'https://rxjs.dev/deprecations',
       skip: !!config.deprecationLink,

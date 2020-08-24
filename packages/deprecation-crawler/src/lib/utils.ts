@@ -48,6 +48,12 @@ export function getConfigPath() {
   return argPath ? argPath : CRAWLER_CONFIG_PATH;
 }
 
+export function getVerboseFlag() {
+  // Check for path params from cli command
+  const argPath = getCliParam(['verbose']);
+  return argPath ? argPath : false;
+}
+
 export function formatCode(
   code: string,
   parser: PrettierOptions['parser'] = 'typescript'
@@ -76,7 +82,8 @@ export function toFileName(s: string): string {
   return s
     .replace(/([a-z\d])([A-Z])/g, '$1_$2')
     .toLowerCase()
-    .replace(/[ _]/g, '-');
+    .replace(/[ _]/g, '-')
+    .replace(/[/\\]/g, '-');
 }
 
 export function getCliParam(names: string[]): string | false {
