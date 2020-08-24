@@ -13,7 +13,7 @@ It is also a good example of a CI integration.
 1. Copy the following content into `docs_app/deprecation-crawler.config.json`  
 https://raw.githubusercontent.com/timdeschryver/deprecation-manager/master/packages/deprecation-crawler/docs/config-examples/rxjs-example.deprecation-crawler.config.json
 
-2. Say yes to every question.
+2. Run `npx deprecation-crawler -p docs_app/deprecation-crawler.config.json` and say yes to every question.
 
 **Full Run Through**  
 
