@@ -42,12 +42,12 @@ src/internal/AsyncSubject.ts#17
 ```
 √ Which part of the deprecation message do you want to use as a matcher? · `internal implementation`
 
-4. Output Formatter
-√ Update Formatted Output? (Y/n) · true
+4. Output Formatter  
+√ Update Formatted Output? (Y/n) · true  
 You will generate the default output formats. Edit the config.json to change them.
 
-5. Sync Repository
-√ Repo Update? (Y/n) · true
+5. Sync Repository  
+√ Repo Update? (Y/n) · true  
 Now all detected deprecation comments are updated with the link appended e.g. ` Details: {@link https://rxjs.dev/deprecations#2473769302}`
 
 
