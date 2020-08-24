@@ -14,6 +14,7 @@ It is also a good example of a CI integration.
 https://raw.githubusercontent.com/timdeschryver/deprecation-manager/master/packages/deprecation-crawler/docs/config-examples/rxjs-example.deprecation-crawler.config.json
 
 2. Run `npx deprecation-crawler -p docs_app/deprecation-crawler.config.json` and say yes to every question.
+- 💡 place `deprecation-crawler.config.json` into `tmp` folder and also point the output folder there to avoid changes in the repository. 
 
 **Full Run Through**  
 
