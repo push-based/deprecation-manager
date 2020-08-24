@@ -103,7 +103,7 @@ function getRepoSyncFeedback(): ProcessFeedback {
     printStart(config: CrawlConfig, r: CrawledRelease): void {
       printHeadline('REPOSITORY SYNC PHASE');
       console.log(
-        kleur.gray(`💾 Start syncing crawled result to repository`),
+        kleur.gray(`💾 Start syncing crawled results to repository`),
         kleur.black(r.tag)
       );
       printProgress();

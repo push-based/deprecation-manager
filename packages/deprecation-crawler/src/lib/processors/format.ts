@@ -36,7 +36,7 @@ function getFormatFeedback(): ProcessFeedback {
           kleur.gray(`Updated`),
           kleur.gray(`formats:`),
           kleur.gray(config.outputFormatters.join(',')),
-          kleur.gray(`in`),
+          kleur.gray(`for`),
           kleur.black(rawRelease.deprecations.length),
           kleur.gray(`deprecations`),
         ].join(' ')

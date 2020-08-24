@@ -58,7 +58,7 @@ function getSetupFeedback(): ProcessFeedback & {
     printInitialEnd(config: CrawlConfig): void {
       console.log(
         kleur.green(`✓ `),
-        kleur.gray(`Repository configured for deprecation management in done!`)
+        kleur.gray(`Repository configured for deprecation management is done!`)
       );
       console.log(kleur.gray(`Configuration saved under: ${getConfigPath()}`));
       console.log(kleur.gray(JSON.stringify(config, null, 4)));
