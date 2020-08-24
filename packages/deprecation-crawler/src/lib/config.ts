@@ -62,8 +62,12 @@ function getSetupFeedback(): ProcessFeedback & {
       );
       console.log(kleur.gray(`Configuration saved under: ${getConfigPath()}`));
       console.log(kleur.gray(JSON.stringify(config, null, 4)));
-      console.log(`From now on the crawler will go to deprecation-crawler.config.json and crawl files referenced under tsconfig.deprecation-crawler.ts and this questions will not get asked next time.
-                   If you want to change something edit the content of deprecation-crawler.config.json or tsconfig.deprecation-crawler.ts.
+      console.log(`From now on the crawler will go to ${getConfigPath()} and crawl files referenced under ${
+        config.tsConfigPath
+      } and these questions will not get asked next time.
+                   If you want to change something edit the content of ${getConfigPath()} or ${
+        config.tsConfigPath
+      } or create a custom tsconfig file.
                   `);
     },
   };
