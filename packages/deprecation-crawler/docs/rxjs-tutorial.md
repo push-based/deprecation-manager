@@ -43,6 +43,14 @@ src/internal/AsyncSubject.ts#17
 ```
 √ Which part of the deprecation message do you want to use as a matcher? · `internal implementation`
 
+These 2 questions will get asked for every deprecation that is not automatically assigned to a group.
+In practice you will run through this process a couple of times until you have a nice grouping setup.
+
+Every now and than go to your config file and anopt rename the groupnames or matchers as you like.
+
+The grouping mechanism helps with 2 gefauts, `ungrouped` and `helath-check`. 
+`ungrouped` can be used to decide later on a group but have it "marked as todo" and `helath-check` can be used to validate your deprecations.
+
 4. Output Formatter  
 √ Update Formatted Output? (Y/n) · true  
 You will generate the default output formats. Edit the config.json to change them.
