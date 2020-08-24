@@ -7,25 +7,25 @@ To get a real life experiance checkout the PR related to deprecation management:
 
 **TLDR**  
 
-In this section you will use a preconfigired config file. This will generate an output without any questions asked.
-It is also a good example for a CI integreation.
+In this section, you will use a pre-configured config file. This will generate an output without any questions asked.
+It is also a good example of a CI integration.
 
-1. Copy follofing content into `docs_app/deprecation-crawler.config.json`  
+1. Copy the following content into `docs_app/deprecation-crawler.config.json`  
 https://raw.githubusercontent.com/timdeschryver/deprecation-manager/master/packages/deprecation-crawler/docs/config-examples/rxjs-example.deprecation-crawler.config.json
 
 2. Say yes to every question.
 
 **Run Through**  
 
-In the following steps we will walk through the whole process one by one.
+In the following steps, we will walk through the whole process one by one.
 
 1. Start the crawler by running: `npx deprecation-crawler -p docs_app/deprecation-crawler.config.json`
-Answer the questions to setup the crawler:
+Answer the questions to set up the crawler:
 - √ What tsconfig file do you want to use? · `src\tsconfig.base.json`
 - √ What's the deprecation link to the docs? · `https://rxjs.dev/deprecations`
 - √ What's the deprecation keyword to look for? · `@deprecated`
-- √ What's the output directory? · docs_app/constent/deprecations
-2. Crawl the repositrory
+- √ What's the output directory? · docs_app/content/deprecations
+2. Crawl the repository
 √ What git tag do you want to crawl? · pr/5426
 
 3. Grouping
@@ -43,7 +43,7 @@ src/internal/AsyncSubject.ts#17
 
 4. Output Formatter
 √ Update Formatted Output? (Y/n) · true
-You will generated the default output formats. Edit the config.json to change them.
+You will generate the default output formats. Edit the config.json to change them.
 
 5. Sync Repository
 √ Repo Update? (Y/n) · true
