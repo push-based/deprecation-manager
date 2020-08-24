@@ -12,6 +12,7 @@ import { relative } from 'path';
 import { CrawlConfig, CrawledRelease, Deprecation } from '../models';
 import { ensureTsConfigPath } from '../tasks/ensure-tsconfig-path';
 import { getVerboseFlag } from '../utils';
+import * as kleur from 'kleur';
 
 // What about https://ts-morph.com/details/documentation#js-docs ?
 // Problem: can't find top level deprecations? e.g. merge
@@ -42,7 +43,7 @@ function crawlFileForDeprecations(
     );
 
     if (getVerboseFlag()) {
-      console.log(`🔎 Looking for deprecations in ${path}`);
+      console.log(kleur.gray(`🔎 Looking for deprecations in ${path}`));
     }
     const commentsInFile = getNodesWithCommentsForFile(file);
     const deprecationsInFile = commentsInFile
