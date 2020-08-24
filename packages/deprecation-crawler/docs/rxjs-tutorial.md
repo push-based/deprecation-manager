@@ -29,11 +29,12 @@ Answer the questions to set up the crawler:
 2. Crawl the repository
 √ What git tag do you want to crawl? · pr/5426
 
-3. Grouping
-√ Grouping? (Y/n) · true
+3. Grouping  
+√ Grouping? (Y/n) · true  
 
 At any time you can reuse an existing group or create a new one.  
 Select `Stop grouping` to stop the process  
+
 √ Add group to deprecation? · Create new group  
 √ Add human readable group name to deprecation · `internal`  
 ```
