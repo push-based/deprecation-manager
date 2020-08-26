@@ -1,7 +1,14 @@
 import { getConfig } from './config';
 import { CrawledRelease } from './models';
 import { stripIndent } from 'common-tags';
-import { branchHasChanges, run } from './utils';
+import {
+  _git,
+  branchHasChanges,
+  git,
+  isCrawlerModeCi,
+  isCrawlerModeSandbox,
+  run,
+} from './utils';
 import { logError } from './log';
 import { checkout } from './tasks/checkout';
 import { crawl } from './tasks/crawl';
@@ -9,11 +16,13 @@ import { updateRepository } from './tasks/update-repository';
 import { addGroups } from './tasks/add-groups';
 import { generateOutput } from './tasks/generate-output';
 import { commitChanges } from './tasks/commit-changes';
-import { CRAWLER_MODES } from './constants';
 
 (async () => {
-  await guardAgainstDirtyRepo();
-
+  console.log('rem2ote', await git(['describe', ' --tags --exact-match']));
+  console.log('rem2ote', await _git.tags(['describe exact-match']));
+  if (isCrawlerModeCi()) {
+    await guardAgainstDirtyRepo();
+  }
   const config = await getConfig();
 
   const tasks = [
@@ -31,7 +40,7 @@ import { CRAWLER_MODES } from './constants';
 })();
 
 async function guardAgainstDirtyRepo() {
-  if (process.env.__CRAWLER_MODE__ === CRAWLER_MODES.SANDBOX) {
+  if (isCrawlerModeSandbox()) {
     return;
   }
   const isDirty = await branchHasChanges();

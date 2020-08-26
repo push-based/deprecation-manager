@@ -1,5 +1,5 @@
 import { CrawlConfig, CrawlerProcess } from '../models';
-import { tap, askToSkip, branchHasChanges, git } from '../utils';
+import { tap, askToSkip, branchHasChanges, _git } from '../utils';
 import { DEFAULT_COMMIT_MESSAGE } from '../constants';
 
 /**
@@ -17,6 +17,6 @@ export function commitChanges(config: CrawlConfig): CrawlerProcess {
 }
 
 async function commit(commitMessage = DEFAULT_COMMIT_MESSAGE) {
-  await git(['add', '.']);
-  await git(['commit', `-m "${commitMessage}"`]);
+  await _git.add('.');
+  await _git.commit(commitMessage);
 }

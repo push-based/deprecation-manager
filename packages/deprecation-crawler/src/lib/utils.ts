@@ -9,6 +9,9 @@ import {
 import { CRAWLER_CONFIG_PATH, CRAWLER_MODES } from './constants';
 import { prompt } from 'enquirer';
 import * as yargs from 'yargs';
+import simpleGit from 'simple-git';
+
+export const _git = simpleGit();
 
 export function hash(str: string) {
   const s = str.replace(/ /g, '').replace(/\r\n/g, '\n');
@@ -184,7 +187,7 @@ export async function getCurrentHeadName(): Promise<string> {
  * @throws - If the `git` command fails.
  */
 export async function getTags(branch): Promise<string[]> {
-  return (await git(['tag', '--merged', branch]))
+  return (await _git.tag(['--merged', branch]))
     .split('\n')
     .map((tag) => tag.trim())
     .filter(Boolean);
@@ -192,18 +195,17 @@ export async function getTags(branch): Promise<string[]> {
 
 export async function getCurrentBranchOrTag() {
   return (
-    (await git(['branch', '--show-current'])) ||
+    (await _git.branch().then((r) => r.current)) ||
     (await git(['describe', ' --tags --exact-match']))
   );
 }
 
-export async function branchHasChanges() {
-  const out = await git(['status', '-s']);
-  return Boolean(out);
+export async function branchHasChanges(): Promise<boolean> {
+  return await _git.status(['-s']).then((r) => Boolean(r.files.length));
 }
 
 export async function getRemoteUrl(): Promise<string> {
-  return git([`ls-remote --get-url`]);
+  return _git.listRemote([`--get-url`]);
 }
 
 export function cmd(command: string, args: string[]): Promise<string> {
@@ -222,12 +224,23 @@ export function exec(command: string, args: string[]): Promise<string> {
   });
 }
 
+export function getCrawlerMode() {
+  return process.env.__CRAWLER_MODE__;
+}
+
+export function isCrawlerModeSandbox(): boolean {
+  return getCrawlerMode() === CRAWLER_MODES.SANDBOX;
+}
+export function isCrawlerModeCi(): boolean {
+  return getCrawlerMode() === CRAWLER_MODES.SANDBOX;
+}
+
 /**
  * Feature toggles for different modes
  */
 export const toggles = {
-  autoAnswerQuestions: process.env.__CRAWLER_MODE__ === CRAWLER_MODES.SANDBOX,
-  executeGitCommands: process.env.__CRAWLER_MODE__ !== CRAWLER_MODES.SANDBOX,
+  autoAnswerQuestions: isCrawlerModeSandbox(),
+  executeGitCommands: !isCrawlerModeSandbox(),
 };
 
 export const SERVER_REGEX = /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/i;
