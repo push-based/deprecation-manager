@@ -1,6 +1,6 @@
 import { CrawlConfig, CrawledRelease, CrawlerProcess } from '../models';
 import {
-  _git,
+  git,
   concat,
   getCurrentBranchOrTag,
   getRemoteUrl,
@@ -31,11 +31,11 @@ export function checkout(config: CrawlConfig): CrawlerProcess {
 async function checkoutBranch(r: CrawledRelease) {
   const currentBranchOrTag = await getCurrentBranchOrTag();
   if (currentBranchOrTag !== r.tag) {
-    await _git.checkout(r.tag);
+    await git.checkout(r.tag);
   }
 }
 
 async function getBranchDate(r: CrawledRelease) {
-  const date = await _git.log({ from: r.tag }).then((r) => r.latest.date);
+  const date = await git.log({ from: r.tag }).then((r) => r.latest.date);
   return date;
 }

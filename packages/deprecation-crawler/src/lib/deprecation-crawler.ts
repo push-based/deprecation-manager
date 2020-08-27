@@ -2,9 +2,7 @@ import { getConfig } from './config';
 import { CrawledRelease } from './models';
 import { stripIndent } from 'common-tags';
 import {
-  _git,
   branchHasChanges,
-  git,
   isCrawlerModeCi,
   isCrawlerModeSandbox,
   run,
@@ -18,8 +16,6 @@ import { generateOutput } from './tasks/generate-output';
 import { commitChanges } from './tasks/commit-changes';
 
 (async () => {
-  console.log('rem2ote', await git(['describe', ' --tags --exact-match']));
-  console.log('rem2ote', await _git.tags(['describe exact-match']));
   if (isCrawlerModeCi()) {
     await guardAgainstDirtyRepo();
   }

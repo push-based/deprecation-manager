@@ -1,17 +1,55 @@
 import * as cp from 'child_process';
-import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
-import { CrawlConfig, CrawlerProcess, CrawledRelease } from './models';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { CrawlConfig, CrawledRelease, CrawlerProcess } from './models';
 import {
   format as prettier,
-  resolveConfig,
   Options as PrettierOptions,
+  resolveConfig,
 } from 'prettier';
 import { CRAWLER_CONFIG_PATH, CRAWLER_MODES } from './constants';
 import { prompt } from 'enquirer';
 import * as yargs from 'yargs';
 import simpleGit from 'simple-git';
+import * as kleur from 'kleur';
 
-export const _git = simpleGit();
+export const git = proxyMethodToggles(
+  simpleGit(),
+  ['commit', 'push', 'clone'],
+  () => toggles.executeGitCommands
+);
+
+export function proxyMethodToggles<T>(
+  obj: T,
+  methodNames: string[],
+  condition: () => boolean
+): T {
+  const handler = {
+    get(target, propKey) {
+      const origMethod = target[propKey];
+
+      if (typeof origMethod === 'function') {
+        return function (...args) {
+          if (methodNames.includes(propKey)) {
+            if (condition()) {
+              return origMethod.apply(this, args);
+            }
+            if (getVerboseFlag()) {
+              console.log(
+                kleur.gray(
+                  `Call of method ${propKey} got ignored through toggle.`
+                )
+              );
+            }
+            return Promise.resolve();
+          }
+          return origMethod.apply(this, args);
+        };
+      }
+      return origMethod;
+    },
+  };
+  return new Proxy(obj, handler);
+}
 
 export function hash(str: string) {
   const s = str.replace(/ /g, '').replace(/\r\n/g, '\n');
@@ -163,21 +201,13 @@ async function shouldProceed(question: string) {
   return answer.proceed;
 }
 
-export async function git(args: string[]): Promise<string> {
-  if (!toggles.executeGitCommands) {
-    return '';
-  }
-  const out = await cmd('git', args);
-  return out.trim();
-}
-
 export async function getCurrentHeadName(): Promise<string> {
   // That will output the value of HEAD,
   // if it's not detached, or emit the tag name,
   // if it's an exact match. It'll show you an error otherwise.
-  return git([
-    'symbolic-ref -q --short HEAD || git describe --tags --exact-match',
-  ]);
+  return cmd('git', ['symbolic-ref -q --short HEAD'])
+    .then((out) => out.trim())
+    .catch(() => cmd('git', ['describe --tags --exact-match']));
 }
 
 /**
@@ -187,7 +217,7 @@ export async function getCurrentHeadName(): Promise<string> {
  * @throws - If the `git` command fails.
  */
 export async function getTags(branch): Promise<string[]> {
-  return (await _git.tag(['--merged', branch]))
+  return (await git.tag(['--merged', branch]))
     .split('\n')
     .map((tag) => tag.trim())
     .filter(Boolean);
@@ -195,17 +225,20 @@ export async function getTags(branch): Promise<string[]> {
 
 export async function getCurrentBranchOrTag() {
   return (
-    (await _git.branch().then((r) => r.current)) ||
-    (await git(['describe', ' --tags --exact-match']))
+    (await git.branch().then((r) => r.current)) ||
+    // @TODO rplace with simple git
+    (await cmd('git', ['describe --tags --exact-match']).then((out) =>
+      out.trim()
+    ))
   );
 }
 
 export async function branchHasChanges(): Promise<boolean> {
-  return await _git.status(['-s']).then((r) => Boolean(r.files.length));
+  return await git.status(['-s']).then((r) => Boolean(r.files.length));
 }
 
 export async function getRemoteUrl(): Promise<string> {
-  return _git.listRemote([`--get-url`]);
+  return git.listRemote([`--get-url`]);
 }
 
 export function cmd(command: string, args: string[]): Promise<string> {
