@@ -226,7 +226,7 @@ export async function getTags(branch): Promise<string[]> {
 export async function getCurrentBranchOrTag() {
   return (
     (await git.branch().then((r) => r.current)) ||
-    // @TODO rplace with simple git
+    // @TODO replace with simple git
     (await cmd('git', ['describe --tags --exact-match']).then((out) =>
       out.trim()
     ))
