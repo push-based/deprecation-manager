@@ -5,6 +5,11 @@ import * as rimraf from 'rimraf';
 import { RAW_DEPRECATION_PATH, CRAWLER_MODES } from '../src/lib/constants';
 
 const SANDBOX_PATH = path.join(__dirname, '..', 'sandbox');
+const RAW_DEPRECATION_FILE = path.join(
+  SANDBOX_PATH,
+  'deprecations',
+  RAW_DEPRECATION_PATH
+);
 
 const testcases = fs
   .readdirSync(SANDBOX_PATH)
@@ -45,7 +50,6 @@ test('sandbox', async () => {
   expect(cliOutput).toMatch(/FORMAT OUTPUT/i);
   expect(cliOutput).toMatch(/Update tag-based markdown format/i);
   expect(cliOutput).toMatch(/Update group-based markdown format/i);
-  // expect(cliOutput).toMatch(/REPOSITORY SYNC PHASE/i);
 
   // verify changes to repo
   testcases.forEach((testcase) => {
@@ -56,10 +60,7 @@ test('sandbox', async () => {
 
   // verify json
   const rawDeprecations = JSON.parse(
-    fs.readFileSync(
-      path.join(SANDBOX_PATH, 'deprecations', RAW_DEPRECATION_PATH),
-      'utf8'
-    )
+    fs.readFileSync(RAW_DEPRECATION_FILE, 'utf8')
   );
 
   expect(rawDeprecations).toHaveLength(14);
@@ -79,6 +80,19 @@ test('sandbox', async () => {
   expect(rawDeprecations.filter((d) => d.group === 'catch-all')).toHaveLength(
     3
   );
+
+  // without passing a version via the CLI, new deprecations shouldn't have a version
+  expect(rawDeprecations.filter((d) => d.version !== '')).toHaveLength(0);
+
+  // by passing a version via the CLI (existing) deprecations should be updated to the version
+  const version = '5.4.2';
+  await exec(`npm run crawl -- -t master --next-version ${version}`);
+  const updatedRawDeprecations = JSON.parse(
+    fs.readFileSync(RAW_DEPRECATION_FILE, 'utf8')
+  );
+  expect(
+    updatedRawDeprecations.filter((d) => d.version !== version)
+  ).toHaveLength(0);
 }, 60_000);
 
 function exec(command) {

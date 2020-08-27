@@ -1,7 +1,7 @@
 import { getConfig } from './config';
 import { CrawledRelease } from './models';
 import { stripIndent } from 'common-tags';
-import { branchHasChanges, run } from './utils';
+import { branchHasChanges, getVersion, run } from './utils';
 import { logError } from './log';
 import { checkout } from './tasks/checkout';
 import { crawl } from './tasks/crawl';
@@ -10,6 +10,7 @@ import { addGroups } from './tasks/add-groups';
 import { generateOutput } from './tasks/generate-output';
 import { commitChanges } from './tasks/commit-changes';
 import { CRAWLER_MODES } from './constants';
+import { addVersion } from './tasks/add-version';
 
 (async () => {
   await guardAgainstDirtyRepo();
@@ -19,6 +20,7 @@ import { CRAWLER_MODES } from './constants';
   const tasks = [
     checkout,
     crawl,
+    addVersion,
     addGroups,
     generateOutput,
     updateRepository,
@@ -26,7 +28,9 @@ import { CRAWLER_MODES } from './constants';
   ];
 
   // Run all processors
-  const initial = ({} as unknown) as CrawledRelease;
+  const initial = {
+    version: getVersion(),
+  } as CrawledRelease;
   run(tasks, config)(initial);
 })();
 

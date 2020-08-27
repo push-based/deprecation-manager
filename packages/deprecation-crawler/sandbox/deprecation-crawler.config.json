@@ -19,5 +19,6 @@
   "outputDirectory": "./deprecations",
   "tsConfigPath": "tsconfig.sandbox.json",
   "deprecationComment": "@deprecated",
-  "deprecationLink": "sandbox-deprecation-link"
+  "deprecationLink": "sandbox-deprecation-link",
+  "commentLinkFormat": "Details: {@link ${COMMENT_LINK_URL_TOKEN}#${COMMENT_LINK_URL_PARAM_TOKEN}}"
 }
