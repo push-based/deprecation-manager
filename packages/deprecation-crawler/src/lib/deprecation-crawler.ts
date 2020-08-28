@@ -1,12 +1,7 @@
 import { getConfig } from './config';
 import { CrawledRelease } from './models';
 import { stripIndent } from 'common-tags';
-import {
-  branchHasChanges,
-  isCrawlerModeCi,
-  isCrawlerModeSandbox,
-  run,
-} from './utils';
+import { branchHasChanges, isCrawlerModeCi, run } from './utils';
 import { logError } from './log';
 import { checkout } from './tasks/checkout';
 import { crawl } from './tasks/crawl';
@@ -36,9 +31,6 @@ import { commitChanges } from './tasks/commit-changes';
 })();
 
 async function guardAgainstDirtyRepo() {
-  if (isCrawlerModeSandbox()) {
-    return;
-  }
   const isDirty = await branchHasChanges();
   if (isDirty) {
     logError(
