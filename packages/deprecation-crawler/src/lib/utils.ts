@@ -1,4 +1,3 @@
-import * as cp from 'child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { CrawlConfig, CrawledRelease, CrawlerProcess } from './models';
 import {
@@ -205,9 +204,10 @@ export async function getCurrentHeadName(): Promise<string> {
   // That will output the value of HEAD,
   // if it's not detached, or emit the tag name,
   // if it's an exact match. It'll show you an error otherwise.
-  return cmd('git', ['symbolic-ref -q --short HEAD'])
+  return git
+    .raw(['symbolic-ref -q --short HEAD'])
     .then((out) => out.trim())
-    .catch(() => cmd('git', ['describe --tags --exact-match']));
+    .catch(() => git.raw(['describe --tags --exact-match']));
 }
 
 /**
@@ -227,9 +227,7 @@ export async function getCurrentBranchOrTag() {
   return (
     (await git.branch().then((r) => r.current)) ||
     // @TODO replace with simple git
-    (await cmd('git', ['describe --tags --exact-match']).then((out) =>
-      out.trim()
-    ))
+    (await git.raw(['describe --tags --exact-match']).then((out) => out.trim()))
   );
 }
 
@@ -239,22 +237,6 @@ export async function branchHasChanges(): Promise<boolean> {
 
 export async function getRemoteUrl(): Promise<string> {
   return git.listRemote([`--get-url`]);
-}
-
-export function cmd(command: string, args: string[]): Promise<string> {
-  return exec(command, args);
-}
-
-export function exec(command: string, args: string[]): Promise<string> {
-  return new Promise((resolve, reject) => {
-    cp.exec(command + ' ' + args.join(' '), (err, stdout) => {
-      if (err) {
-        return reject(err);
-      }
-
-      resolve(stdout.toString());
-    });
-  });
 }
 
 export function getCrawlerMode() {
