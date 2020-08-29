@@ -1,7 +1,6 @@
 import { setup } from './processors/setup';
 import { CrawledRelease } from './models';
 import { stripIndent } from 'common-tags';
-
 import {
   branchHasChanges,
   isCrawlerModeCi,
@@ -16,6 +15,7 @@ import { addGroups } from './tasks/add-groups';
 import { generateOutput } from './tasks/generate-output';
 import { commitChanges } from './tasks/commit-changes';
 import { addVersion } from './tasks/add-version';
+
 
 (async () => {
   if (isCrawlerModeCi()) {

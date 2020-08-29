@@ -15,3 +15,5 @@ export const enum CRAWLER_MODES {
   'SANDBOX' = 'SANDBOX_MODE',
   'CI' = 'CI',
 }
+export const MD_GROUP_OPENER = '<!-- ruid-groups';
+export const MD_GROUP_CLOSER = 'ruid-groups -->';
