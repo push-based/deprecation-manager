@@ -6,7 +6,7 @@ export {generateTaggedCommentsInRepository} from './git/tag-comments.git.formatt
 export { generateRawJson } from './json/raw.json.formatter';
 
 export const builtInFormatter = {
-  tagBasedMarkdown: generateGroupBasedFormat,
-  groupBasedMarkdown: generateTagBasedFormat,
-  deprecationIndex: generateDeprecationIndex
+  tagBasedMarkdown: generateTagBasedFormat,
+  groupBasedMarkdown: generateGroupBasedFormat,
+  deprecationIndex: generateDeprecationIndex,
 };
