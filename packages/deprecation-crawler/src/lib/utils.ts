@@ -1,4 +1,3 @@
-import * as cp from 'child_process';
 import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
 import {
   CrawlConfig,
@@ -6,10 +5,11 @@ import {
   CrawledRelease,
   Deprecation,
 } from './models';
+
 import {
   format as prettier,
-  resolveConfig,
   Options as PrettierOptions,
+  resolveConfig,
 } from 'prettier';
 import {
   CRAWLER_CONFIG_PATH,
@@ -19,6 +19,47 @@ import {
 import { prompt } from 'enquirer';
 import * as yargs from 'yargs';
 import { join } from 'path';
+import simpleGit from 'simple-git';
+import * as kleur from 'kleur';
+
+export const git = proxyMethodToggles(
+  simpleGit(),
+  ['commit', 'push', 'clone'],
+  () => toggles.executeGitCommands
+);
+
+export function proxyMethodToggles<T>(
+  obj: T,
+  methodNames: string[],
+  condition: () => boolean
+): T {
+  const handler = {
+    get(target, propKey) {
+      const origMethod = target[propKey];
+
+      if (typeof origMethod === 'function') {
+        return function (...args) {
+          if (methodNames.includes(propKey)) {
+            if (condition()) {
+              return origMethod.apply(this, args);
+            }
+            if (getVerboseFlag()) {
+              console.log(
+                kleur.gray(
+                  `Call of method ${propKey} got ignored through toggle.`
+                )
+              );
+            }
+            return Promise.resolve();
+          }
+          return origMethod.apply(this, args);
+        };
+      }
+      return origMethod;
+    },
+  };
+  return new Proxy(obj, handler);
+}
 
 export function hash(str: string) {
   const s = str.replace(/ /g, '').replace(/\r\n/g, '\n');
@@ -208,21 +249,14 @@ async function shouldProceed(question: string) {
   return answer.proceed;
 }
 
-export async function git(args: string[]): Promise<string> {
-  if (!toggles.executeGitCommands) {
-    return '';
-  }
-  const out = await cmd('git', args);
-  return out.trim();
-}
-
 export async function getCurrentHeadName(): Promise<string> {
   // That will output the value of HEAD,
   // if it's not detached, or emit the tag name,
   // if it's an exact match. It'll show you an error otherwise.
-  return git([
-    'symbolic-ref -q --short HEAD || git describe --tags --exact-match',
-  ]);
+  return git
+    .raw(['symbolic-ref -q --short HEAD'])
+    .then((out) => out.trim())
+    .catch(() => git.raw(['describe --tags --exact-match']));
 }
 
 /**
@@ -232,7 +266,7 @@ export async function getCurrentHeadName(): Promise<string> {
  * @throws - If the `git` command fails.
  */
 export async function getTags(branch): Promise<string[]> {
-  return (await git(['tag', '--merged', branch]))
+  return (await git.tag(['--merged', branch]))
     .split('\n')
     .map((tag) => tag.trim())
     .filter(Boolean);
@@ -240,42 +274,37 @@ export async function getTags(branch): Promise<string[]> {
 
 export async function getCurrentBranchOrTag() {
   return (
-    (await git(['branch', '--show-current'])) ||
-    (await git(['describe', ' --tags --exact-match']))
+    (await git.branch().then((r) => r.current)) ||
+    // @TODO replace with simple git
+    (await git.raw(['describe --tags --exact-match']).then((out) => out.trim()))
   );
 }
 
-export async function branchHasChanges() {
-  const out = await git(['status', '-s']);
-  return Boolean(out);
+export async function branchHasChanges(): Promise<boolean> {
+  return await git.status(['-s']).then((r) => Boolean(r.files.length));
 }
 
 export async function getRemoteUrl(): Promise<string> {
-  return git([`ls-remote --get-url`]);
+  return git.listRemote([`--get-url`]);
 }
 
-export function cmd(command: string, args: string[]): Promise<string> {
-  return exec(command, args);
+export function getCrawlerMode() {
+  return process.env.__CRAWLER_MODE__;
 }
 
-export function exec(command: string, args: string[]): Promise<string> {
-  return new Promise((resolve, reject) => {
-    cp.exec(command + ' ' + args.join(' '), (err, stdout) => {
-      if (err) {
-        return reject(err);
-      }
-
-      resolve(stdout.toString());
-    });
-  });
+export function isCrawlerModeSandbox(): boolean {
+  return getCrawlerMode() === CRAWLER_MODES.SANDBOX;
+}
+export function isCrawlerModeCi(): boolean {
+  return getCrawlerMode() === CRAWLER_MODES.CI;
 }
 
 /**
  * Feature toggles for different modes
  */
 export const toggles = {
-  autoAnswerQuestions: process.env.__CRAWLER_MODE__ === CRAWLER_MODES.SANDBOX,
-  executeGitCommands: process.env.__CRAWLER_MODE__ !== CRAWLER_MODES.SANDBOX,
+  autoAnswerQuestions: isCrawlerModeSandbox(),
+  executeGitCommands: !isCrawlerModeSandbox(),
 };
 
 export const SERVER_REGEX = /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/i;

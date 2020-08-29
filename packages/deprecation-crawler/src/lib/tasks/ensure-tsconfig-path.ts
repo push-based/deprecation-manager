@@ -1,9 +1,13 @@
 import { CrawlConfig } from '../models';
 import { prompt } from 'enquirer';
 import { normalize } from 'path';
-import { getConfigPath, getVerboseFlag, updateRepoConfig } from '../utils';
+import {
+  getConfigPath,
+  getVerboseFlag,
+  isCrawlerModeSandbox,
+  updateRepoConfig,
+} from '../utils';
 import { glob } from 'glob';
-import { CRAWLER_MODES } from '../constants';
 import * as fs from 'fs';
 import { existsSync } from 'fs';
 import * as kleur from 'kleur';
@@ -19,7 +23,7 @@ export async function ensureTsConfigPath(
     return config;
   }
 
-  if (process.env.__CRAWLER_MODE__ === CRAWLER_MODES.SANDBOX) {
+  if (isCrawlerModeSandbox()) {
     throw new Error(`${config.tsConfigPath} does not exist.`);
   }
 
@@ -52,7 +56,7 @@ export async function ensureTsConfigPath(
   newConfig.tsConfigPath = tsConfigPath;
 
   if (!existsSync(newConfig.tsConfigPath)) {
-    if (process.env.__CRAWLER_MODE__ === CRAWLER_MODES.SANDBOX) {
+    if (isCrawlerModeSandbox()) {
       throw Error(
         `Config file ${
           config.tsConfigPath
