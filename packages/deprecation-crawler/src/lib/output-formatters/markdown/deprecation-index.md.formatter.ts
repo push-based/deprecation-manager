@@ -10,20 +10,9 @@ export async function generateDeprecationIndex(
 ): Promise<void> {
   console.log('📝 Update deprecation index markdown format');
 
-  config.groups.forEach((g) => {
-    updateGroupMd(config, g, crawledRelease.deprecations);
-  });
-
-  console.log('Updated group-based markdown format');
-}
-
-export async function updateGroupMd(
-  config: CrawlConfig,
-  group: { key: string; matchers: string[] },
-  rawDeprecations: Deprecation[]
-): Promise<void> {
-  const deprecationsByFileAndTag = rawDeprecations.reduce(
-    (tags, deprecation) => {
+  const deprecationsByFileAndTag = crawledRelease.deprecations
+    .map((d) => ({ ...d, version: d.version ? d.version : crawledRelease.tag }))
+    .reduce((tags, deprecation) => {
       return {
         ...tags,
         [deprecation.version]: [
@@ -31,18 +20,22 @@ export async function updateGroupMd(
           deprecation,
         ],
       };
-    },
-    {}
-  );
+    }, {});
 
   const filePath = path.join(config.outputDirectory, 'deprecation-index.md');
 
   const newlines = '';
 
-  const updatedSections = [await getDeprecationList(deprecationsByFileAndTag)];
+  const updatedSections = [
+    '# Deprecations Index',
+    newlines,
+    await getDeprecationList(deprecationsByFileAndTag),
+  ];
 
   const newMd = updatedSections.join(EOL + EOL) + newlines;
   writeFileSync(filePath, formatCode(newMd, 'markdown'));
+
+  console.log('Updated group-based markdown format');
 }
 
 async function getDeprecationList(groupedDeprecations: {
@@ -50,8 +43,10 @@ async function getDeprecationList(groupedDeprecations: {
 }): Promise<string> {
   return Object.entries(groupedDeprecations)
     .map(([version, deprecations]) => {
+      const treeName = deprecations[0].version;
+      const baseUrl = deprecations[0].remoteUrl.split('.git')[0];
       return (
-        `- ${version}: ` +
+        `- [${version}](${baseUrl}/tree${treeName}/): ` +
         EOL +
         deprecations.map((d) => `  - ${getLink(d)}`).join(EOL)
       );
@@ -61,6 +56,6 @@ async function getDeprecationList(groupedDeprecations: {
   function getLink(deprecation: Deprecation): string {
     const treeName = deprecation.version;
     const baseUrl = deprecation.remoteUrl.split('.git')[0];
-    return `${baseUrl}/tree/${treeName}/${deprecation.path}#L${deprecation.lineNumber}`;
+    return `[${deprecation.path}#L${deprecation.lineNumber}](${baseUrl}/tree${treeName}/${deprecation.path}#L${deprecation.lineNumber})`;
   }
 }
