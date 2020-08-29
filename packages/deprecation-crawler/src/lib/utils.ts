@@ -298,7 +298,7 @@ export function isCrawlerModeSandbox(): boolean {
   return getCrawlerMode() === CRAWLER_MODES.SANDBOX;
 }
 export function isCrawlerModeCi(): boolean {
-  return getCrawlerMode() === CRAWLER_MODES.SANDBOX;
+  return getCrawlerMode() === CRAWLER_MODES.CI;
 }
 
 /**

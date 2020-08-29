@@ -5,7 +5,6 @@ import { stripIndent } from 'common-tags';
 import {
   branchHasChanges,
   isCrawlerModeCi,
-  isCrawlerModeSandbox,
   run,
   getVersion
 } from './utils';
@@ -16,11 +15,10 @@ import { updateRepository } from './tasks/update-repository';
 import { addGroups } from './tasks/add-groups';
 import { generateOutput } from './tasks/generate-output';
 import { commitChanges } from './tasks/commit-changes';
-import { CRAWLER_MODES } from './constants';
 import { addVersion } from './tasks/add-version';
 
 (async () => {
-  if (!isCrawlerModeSandbox() && !isCrawlerModeCi()) {
+  if (isCrawlerModeCi()) {
     await guardAgainstDirtyRepo();
   }
   const config = await getConfig();
