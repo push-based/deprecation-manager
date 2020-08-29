@@ -285,7 +285,12 @@ export async function branchHasChanges(): Promise<boolean> {
 }
 
 export async function getRemoteUrl(): Promise<string> {
-  return git.listRemote([`--get-url`]);
+  return (
+    git
+      .listRemote([`--get-url`])
+      // remove line ending
+      .then((x) => x.trim())
+  );
 }
 
 export function getCrawlerMode() {
