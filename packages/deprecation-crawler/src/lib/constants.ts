@@ -14,3 +14,5 @@ export const HEALTH_CHECK_GROUP_NAME = 'health-check';
 export const enum CRAWLER_MODES {
   'SANDBOX' = 'SANDBOX_MODE',
 }
+export const MD_GROUP_OPENER = '<!-- ruid-groups';
+export const MD_GROUP_CLOSER = 'ruid-groups -->';

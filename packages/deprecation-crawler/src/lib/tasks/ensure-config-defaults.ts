@@ -11,7 +11,11 @@ export async function ensureConfigDefaults(
   userConfig: CrawlConfig
 ): Promise<CrawlConfig> {
   return await {
-    outputFormatters: ['tagBasedMarkdown', 'groupBasedMarkdown'],
+    outputFormatters: [
+      'tagBasedMarkdown',
+      'groupBasedMarkdown',
+      'deprecationIndex',
+    ],
     tagFormat: TAG_FORMAT_TEMPLATE,
     commitMessage: DEFAULT_COMMIT_MESSAGE,
     commentLinkFormat: DEFAULT_COMMENT_LINK_TEMPLATE,
