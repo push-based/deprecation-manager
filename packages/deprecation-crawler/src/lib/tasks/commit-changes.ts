@@ -17,6 +17,6 @@ export function commitChanges(config: CrawlConfig): CrawlerProcess {
 }
 
 async function commit(commitMessage = DEFAULT_COMMIT_MESSAGE) {
-  await git(['add', '.']);
-  await git(['commit', `-m "${commitMessage}"`]);
+  await git.add('.');
+  await git.commit(commitMessage);
 }

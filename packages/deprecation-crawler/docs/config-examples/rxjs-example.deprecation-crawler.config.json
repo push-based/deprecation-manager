@@ -87,8 +87,7 @@
       ]
     }
   ],
-  "configPath": "tmp/deprecation-crawler.config.json",
-  "outputDirectory": "./tmp/content/deprecations",
+  "outputDirectory": "./docs_app/content/deprecations",
   "deprecationComment": "@deprecated",
   "deprecationLink": "https://rxjs.dev/deprecations",
   "tsConfigPath": "src/tsconfig.base.json",
