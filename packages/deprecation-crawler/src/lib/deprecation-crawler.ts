@@ -16,7 +16,7 @@ import { generateOutput } from './tasks/generate-output';
 import { commitChanges } from './tasks/commit-changes';
 
 (async () => {
-  if (!isCrawlerModeSandbox() || isCrawlerModeCi()) {
+  if (!isCrawlerModeSandbox() && !isCrawlerModeCi()) {
     await guardAgainstDirtyRepo();
   }
   const config = await getConfig();
