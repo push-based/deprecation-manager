@@ -79,8 +79,7 @@ function crawlFileForDeprecations(
             deprecation.comment.range.compilerObject.pos,
             deprecation.comment.range.compilerObject.end,
           ],
-          // @TODO consider storing the tag directly
-          version: crawledRelease.tag,
+          version: '',
           // @TODO consider moving it tothe formatting step and keep the deprecation obj small.
           remoteUrl: crawledRelease.remoteUrl,
           date: crawledRelease.date,
