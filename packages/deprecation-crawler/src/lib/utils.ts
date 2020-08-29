@@ -1,13 +1,25 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
-import { CrawlConfig, CrawledRelease, CrawlerProcess } from './models';
+import * as cp from 'child_process';
+import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
+import {
+  CrawlConfig,
+  CrawlerProcess,
+  CrawledRelease,
+  Deprecation,
+} from './models';
+
 import {
   format as prettier,
   Options as PrettierOptions,
   resolveConfig,
 } from 'prettier';
-import { CRAWLER_CONFIG_PATH, CRAWLER_MODES } from './constants';
+import {
+  CRAWLER_CONFIG_PATH,
+  CRAWLER_MODES,
+  RAW_DEPRECATION_PATH,
+} from './constants';
 import { prompt } from 'enquirer';
 import * as yargs from 'yargs';
+import { join } from 'path';
 import simpleGit from 'simple-git';
 import * as kleur from 'kleur';
 
@@ -50,6 +62,7 @@ export function proxyMethodToggles<T>(
   return new Proxy(obj, handler);
 }
 
+
 export function hash(str: string) {
   const s = str.replace(/ /g, '').replace(/\r\n/g, '\n');
   let hash = 5381;
@@ -82,16 +95,54 @@ export function readRepoConfig(): CrawlConfig {
   return JSON.parse(repoConfigFile);
 }
 
+export function readRawDeprecations(config: CrawlConfig) {
+  ensureDirExists(config.outputDirectory);
+  const path = join(config.outputDirectory, `${RAW_DEPRECATION_PATH}`);
+
+  let deprecations: Deprecation[] = [];
+  try {
+    const t = readFileSync(path);
+    deprecations = JSON.parse((t as unknown) as string);
+  } catch (e) {
+    deprecations = [];
+  }
+
+  return { deprecations, path };
+}
+
+export function writeRawDeprecations(
+  deprecations: Deprecation[],
+  config: CrawlConfig
+): void {
+  ensureDirExists(config.outputDirectory);
+  const path = join(config.outputDirectory, `${RAW_DEPRECATION_PATH}`);
+
+  const json = JSON.stringify(deprecations, null, 4);
+  writeFileSync(path, json);
+}
+
+/**
+ * Check for path params from cli command
+ */
 export function getConfigPath() {
-  // Check for path params from cli command
   const argPath = getCliParam(['path', 'p']);
   return argPath ? argPath : CRAWLER_CONFIG_PATH;
 }
 
+/**
+ * Check for verbose params from cli command
+ */
 export function getVerboseFlag() {
-  // Check for path params from cli command
   const argPath = getCliParam(['verbose']);
   return argPath ? argPath : false;
+}
+
+/**
+ * Check for version params from cli command
+ */
+export function getVersion() {
+  const argPath = getCliParam(['next-version', 'v']);
+  return argPath ? argPath : '';
 }
 
 export function formatCode(

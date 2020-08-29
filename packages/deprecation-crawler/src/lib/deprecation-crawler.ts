@@ -1,11 +1,13 @@
 import { getConfig } from './config';
 import { CrawledRelease } from './models';
 import { stripIndent } from 'common-tags';
+
 import {
   branchHasChanges,
   isCrawlerModeCi,
   isCrawlerModeSandbox,
   run,
+  getVersion
 } from './utils';
 import { logError } from './log';
 import { checkout } from './tasks/checkout';
@@ -14,6 +16,8 @@ import { updateRepository } from './tasks/update-repository';
 import { addGroups } from './tasks/add-groups';
 import { generateOutput } from './tasks/generate-output';
 import { commitChanges } from './tasks/commit-changes';
+import { CRAWLER_MODES } from './constants';
+import { addVersion } from './tasks/add-version';
 
 (async () => {
   if (!isCrawlerModeSandbox() && !isCrawlerModeCi()) {
@@ -24,6 +28,7 @@ import { commitChanges } from './tasks/commit-changes';
   const tasks = [
     checkout,
     crawl,
+    addVersion,
     addGroups,
     generateOutput,
     updateRepository,
@@ -31,7 +36,9 @@ import { commitChanges } from './tasks/commit-changes';
   ];
 
   // Run all processors
-  const initial = ({} as unknown) as CrawledRelease;
+  const initial = {
+    version: getVersion(),
+  } as CrawledRelease;
   run(tasks, config)(initial);
 })();
 
