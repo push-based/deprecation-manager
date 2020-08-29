@@ -1,7 +1,12 @@
 import { getConfig } from './config';
 import { CrawledRelease } from './models';
 import { stripIndent } from 'common-tags';
-import { branchHasChanges, isCrawlerModeCi, run } from './utils';
+import {
+  branchHasChanges,
+  isCrawlerModeCi,
+  isCrawlerModeSandbox,
+  run,
+} from './utils';
 import { logError } from './log';
 import { checkout } from './tasks/checkout';
 import { crawl } from './tasks/crawl';
@@ -11,7 +16,7 @@ import { generateOutput } from './tasks/generate-output';
 import { commitChanges } from './tasks/commit-changes';
 
 (async () => {
-  if (isCrawlerModeCi()) {
+  if (!isCrawlerModeSandbox() || isCrawlerModeCi()) {
     await guardAgainstDirtyRepo();
   }
   const config = await getConfig();
