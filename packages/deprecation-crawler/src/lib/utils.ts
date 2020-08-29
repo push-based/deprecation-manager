@@ -1,4 +1,3 @@
-import * as cp from 'child_process';
 import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
 import {
   CrawlConfig,
@@ -61,7 +60,6 @@ export function proxyMethodToggles<T>(
   };
   return new Proxy(obj, handler);
 }
-
 
 export function hash(str: string) {
   const s = str.replace(/ /g, '').replace(/\r\n/g, '\n');
