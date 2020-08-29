@@ -6,10 +6,11 @@ import {
   getConfigPath,
   getCurrentBranchOrTag,
   getTags,
+  isCrawlerModeSandbox,
   SERVER_REGEX,
 } from '../utils';
 import { escapeRegExp, template } from 'lodash';
-import { CRAWLER_MODES, SEMVER_TOKEN } from '../constants';
+import { SEMVER_TOKEN } from '../constants';
 
 /**
  * @description
@@ -31,7 +32,7 @@ export function ensureGitTag(config: CrawlConfig): CrawlerProcess {
 
     // No tags to select from
     if (relevantBranches.length <= 0) {
-      if (process.env.__CRAWLER_MODE__ !== CRAWLER_MODES.SANDBOX) {
+      if (isCrawlerModeSandbox()) {
         throw new Error(
           `The branch ${currentBranch} does not contain merged tags in the configured semver format ${
             config.tagFormat

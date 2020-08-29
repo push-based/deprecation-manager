@@ -13,4 +13,5 @@ export const UNGROUPED_GROUP_NAME = 'ungrouped';
 export const HEALTH_CHECK_GROUP_NAME = 'health-check';
 export const enum CRAWLER_MODES {
   'SANDBOX' = 'SANDBOX_MODE',
+  'CI' = 'CI',
 }
