@@ -1,9 +1,9 @@
 <!-- ruid-groups
 
-- :
-  - /tree//all-lowercase/crawled.ts#L12
-  - /tree//all-lowercase/crawled.ts#L18
-  - /tree//all-lowercase/crawled.ts#L24
+- master:
+  - https://github.com/timdeschryver/find-deprecations/tree/master/all-lowercase/crawled.ts#L12
+  - https://github.com/timdeschryver/find-deprecations/tree/master/all-lowercase/crawled.ts#L18
+  - https://github.com/timdeschryver/find-deprecations/tree/master/all-lowercase/crawled.ts#L24
 
 ruid-groups -->
 

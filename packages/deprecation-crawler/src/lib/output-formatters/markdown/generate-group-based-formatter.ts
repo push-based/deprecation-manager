@@ -16,7 +16,7 @@ export async function generateGroupBasedFormatter(
   console.log('📝 Update group-based markdown format');
 
   config.groups.forEach((g) => {
-    updateGroupMd(config, g, crawledRelease.deprecations);
+    updateGroupMd(config, g, crawledRelease);
   });
 
   console.log('Updated group-based markdown format');
@@ -25,9 +25,9 @@ export async function generateGroupBasedFormatter(
 export async function updateGroupMd(
   config: CrawlConfig,
   group: { key: string; matchers: string[] },
-  rawDeprecations: Deprecation[]
+  crawledRelease: CrawledRelease
 ): Promise<void> {
-  const groupedDeprecationsByFileAndTag = rawDeprecations
+  const groupedDeprecationsByFileAndTag = crawledRelease.deprecations
     .filter((deprecation) => deprecation.group === group.key)
     .reduce((tags, deprecation) => {
       return {
@@ -57,14 +57,20 @@ export async function updateGroupMd(
 
   const updatedSections = [
     MD_GROUP_OPENER,
-    await getDeprecationList(groupedDeprecationsByFileAndTag),
+    await getDeprecationList(
+      groupedDeprecationsByFileAndTag,
+      crawledRelease.tag
+    ),
     MD_GROUP_CLOSER,
     sections.length === 1 ? sections[0] : sections[2],
     // We update already existing
     sections.length === 1
       ? group.key === HEALTH_CHECK_GROUP_NAME ||
         group.key === UNGROUPED_GROUP_NAME
-        ? await getHealthCheckContent(groupedDeprecationsByFileAndTag)
+        ? await getHealthCheckContent(
+            groupedDeprecationsByFileAndTag,
+            crawledRelease.tag
+          )
         : getInitialGroupContent(group.key)
       : '',
   ];
@@ -112,21 +118,29 @@ the following version specifier are set for the rxjs dependencies in StackBlitz:
 \`\`\`
 `;
 }
-async function getHealthCheckContent(groupedDeprecationsByFileAndTag: {
-  [g: string]: Deprecation[];
-}) {
+
+async function getHealthCheckContent(
+  groupedDeprecationsByFileAndTag: {
+    [g: string]: Deprecation[];
+  },
+  tag: string
+) {
   return `
 # Following deprecations need a check:
-${await getDeprecationList(groupedDeprecationsByFileAndTag)}
+${await getDeprecationList(groupedDeprecationsByFileAndTag, tag)}
 `;
 }
-async function getDeprecationList(groupedDeprecations: {
-  [version: string]: Deprecation[];
-}): Promise<string> {
+
+async function getDeprecationList(
+  groupedDeprecations: {
+    [version: string]: Deprecation[];
+  },
+  tag: string
+): Promise<string> {
   return Object.entries(groupedDeprecations)
     .map(([version, deprecations]) => {
       return (
-        `- ${version}: ` +
+        `- ${version || tag}: ` +
         EOL +
         deprecations.map((d) => `  - ${getLink(d)}`).join(EOL)
       );
@@ -134,7 +148,7 @@ async function getDeprecationList(groupedDeprecations: {
     .join(EOL);
 
   function getLink(deprecation: Deprecation): string {
-    const treeName = deprecation.version;
+    const treeName = deprecation.version || tag;
     const baseUrl = deprecation.remoteUrl.split('.git')[0];
     return `${baseUrl}/tree/${treeName}/${deprecation.path}#L${deprecation.lineNumber}`;
   }
