@@ -1,6 +1,14 @@
 import { getConfig } from './config';
 import { CrawledRelease } from './models';
-import { getVersion, run } from './utils';
+import { stripIndent } from 'common-tags';
+
+import {
+  branchHasChanges,
+  isCrawlerModeCi,
+  run,
+  getVersion
+} from './utils';
+import { logError } from './log';
 import { checkout } from './tasks/checkout';
 import { crawl } from './tasks/crawl';
 import { updateRepository } from './tasks/update-repository';
@@ -10,6 +18,9 @@ import { commitChanges } from './tasks/commit-changes';
 import { addVersion } from './tasks/add-version';
 
 (async () => {
+  if (isCrawlerModeCi()) {
+    await guardAgainstDirtyRepo();
+  }
   const config = await getConfig();
 
   const tasks = [
@@ -28,11 +39,8 @@ import { addVersion } from './tasks/add-version';
   } as CrawledRelease;
   run(tasks, config)(initial);
 })();
-/*
+
 async function guardAgainstDirtyRepo() {
-  if (process.env.__CRAWLER_MODE__ === CRAWLER_MODES.SANDBOX) {
-    return;
-  }
   const isDirty = await branchHasChanges();
   if (isDirty) {
     logError(
@@ -44,4 +52,4 @@ async function guardAgainstDirtyRepo() {
     process.exit(1);
   }
 }
-*/
+
