@@ -9,7 +9,7 @@ import { HEALTH_CHECK_GROUP_NAME, UNGROUPED_GROUP_NAME } from '../../constants';
 const MD_GROUP_OPENER = '<!-- ruid-groups';
 const MD_GROUP_CLOSER = 'ruid-groups -->';
 
-export async function generateGroupBasedFormatter(
+export async function generateGroupBasedFormat(
   config: CrawlConfig,
   crawledRelease: CrawledRelease
 ): Promise<void> {
