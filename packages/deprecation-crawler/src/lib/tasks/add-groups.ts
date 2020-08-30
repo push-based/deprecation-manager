@@ -1,6 +1,6 @@
 import { CrawlConfig, CrawlerProcess } from '../models';
 import { askToSkip } from '../utils';
-import { group } from '../processors/grouping';
+import { group } from '../processors/group';
 
 /**
  * Ask for a group for each found deprecation
