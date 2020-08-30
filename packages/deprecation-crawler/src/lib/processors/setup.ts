@@ -14,7 +14,7 @@ import { printHeadline, ProcessFeedback } from '../log';
 import * as kleur from 'kleur';
 
 const feedback = getSetupFeedback();
-export async function getConfig(): Promise<CrawlConfig> {
+export async function setup(): Promise<CrawlConfig> {
   const repoConfig = readRepoConfig();
   const isFirstRun = Object.keys(repoConfig).length <= 0;
   if (isFirstRun || getVerboseFlag()) {
