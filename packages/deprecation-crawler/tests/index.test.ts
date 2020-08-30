@@ -76,7 +76,7 @@ test('sandbox', async () => {
       (d) => d.group === 'multiple-string-patterns-at-once'
     )
   ).toHaveLength(0);
-  // BUG: this has to have 0 hits
+  // @TODO BUG: this has to have 0 hits
   expect(rawDeprecations.filter((d) => d.group === 'catch-all')).toHaveLength(
     3
   );

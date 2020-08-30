@@ -139,7 +139,7 @@ export function getVerboseFlag() {
  * Check for version params from cli command
  */
 export function getVersion() {
-  const argPath = getCliParam(['next-version', 'v']);
+  const argPath = getCliParam(['next-version', 'n']);
   return argPath ? argPath : '';
 }
 
