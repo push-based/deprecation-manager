@@ -1,9 +1,9 @@
-import { CrawlConfig, CrawledRelease, Deprecation } from '../models';
+import { CrawlConfig, CrawledRelease, Deprecation } from '../../models';
 import {
   ensureDirExists,
   readRawDeprecations,
   writeRawDeprecations,
-} from '../utils';
+} from '../../utils';
 import * as kleur from 'kleur';
 
 export async function generateRawJson(
