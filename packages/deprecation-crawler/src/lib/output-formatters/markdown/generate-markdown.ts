@@ -1,7 +1,7 @@
 import { writeFileSync } from 'fs';
 import { basename, join } from 'path';
-import { CrawlConfig, CrawledRelease, Deprecation } from '../models';
-import { ensureDirExists, toFileName, formatCode } from '../utils';
+import { CrawlConfig, CrawledRelease, Deprecation } from '../../models';
+import { ensureDirExists, toFileName, formatCode } from '../../utils';
 import { EOL } from 'os';
 
 export async function generateTagBasedFormatter(
