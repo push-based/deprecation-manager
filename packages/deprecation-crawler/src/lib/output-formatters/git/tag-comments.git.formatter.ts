@@ -12,7 +12,7 @@ import {
 import { ensureCommentLinkFormat } from '../../tasks/ensure-comment-link-template';
 import { getVerboseFlag } from '../../utils';
 
-export async function addCommentToRepository(
+export async function generateTaggedCommentsInRepository(
   config: CrawlConfig,
   crawledRelease: CrawledRelease
 ): Promise<void> {
