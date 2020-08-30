@@ -11,6 +11,7 @@ export async function generateDeprecationIndex(
   console.log('📝 Update deprecation index markdown format');
 
   const deprecationsByFileAndTag = crawledRelease.deprecations
+    // NOTICE: This is a fallback for empty versions (a deprecation in suspense)
     .map((d) => ({ ...d, version: d.version ? d.version : crawledRelease.tag }))
     .reduce((tags, deprecation) => {
       return {
