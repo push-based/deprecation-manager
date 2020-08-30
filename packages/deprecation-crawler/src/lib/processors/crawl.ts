@@ -1,7 +1,7 @@
 import { CrawlConfig, CrawledRelease, CrawlerProcess } from '../models';
 import { concat, tap } from '../utils';
 import { crawlDeprecations, getSourceFiles } from '../crawler';
-import { addRuid } from '../processors/add-ruid';
+import { addRuid } from '../tasks/add-ruid';
 import {
   printFooterLine,
   printHeadline,

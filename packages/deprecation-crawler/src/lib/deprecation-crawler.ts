@@ -1,4 +1,4 @@
-import { getConfig } from './config';
+import { setup } from './processors/setup';
 import { CrawledRelease } from './models';
 import { stripIndent } from 'common-tags';
 
@@ -10,7 +10,7 @@ import {
 } from './utils';
 import { logError } from './log';
 import { checkout } from './tasks/checkout';
-import { crawl } from './tasks/crawl';
+import { crawl } from './processors/crawl';
 import { updateRepository } from './tasks/update-repository';
 import { addGroups } from './tasks/add-groups';
 import { generateOutput } from './tasks/generate-output';
@@ -21,7 +21,7 @@ import { addVersion } from './tasks/add-version';
   if (isCrawlerModeCi()) {
     await guardAgainstDirtyRepo();
   }
-  const config = await getConfig();
+  const config = await setup();
 
   const tasks = [
     checkout,

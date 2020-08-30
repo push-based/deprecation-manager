@@ -1,20 +1,20 @@
-import { CrawlConfig } from './models';
+import { CrawlConfig } from '../models';
 import {
   getConfigPath,
   getVerboseFlag,
   readRepoConfig,
   updateRepoConfig,
-} from './utils';
-import { ensureDeprecationCommentConfig } from './tasks/ensure-deprecation-comment-config';
-import { ensureTsConfigPath } from './tasks/ensure-tsconfig-path';
-import { ensureDeprecationUrlConfig } from './tasks/ensure-deprecations-url-config';
-import { ensureOutputDirectoryConfig } from './tasks/ensure-output-directory-config';
-import { ensureConfigDefaults } from './tasks/ensure-config-defaults';
-import { printHeadline, ProcessFeedback } from './log';
+} from '../utils';
+import { ensureDeprecationCommentConfig } from '../tasks/ensure-deprecation-comment-config';
+import { ensureTsConfigPath } from '../tasks/ensure-tsconfig-path';
+import { ensureDeprecationUrlConfig } from '../tasks/ensure-deprecations-url-config';
+import { ensureOutputDirectoryConfig } from '../tasks/ensure-output-directory-config';
+import { ensureConfigDefaults } from '../tasks/ensure-config-defaults';
+import { printHeadline, ProcessFeedback } from '../log';
 import * as kleur from 'kleur';
 
 const feedback = getSetupFeedback();
-export async function getConfig(): Promise<CrawlConfig> {
+export async function setup(): Promise<CrawlConfig> {
   const repoConfig = readRepoConfig();
   const isFirstRun = Object.keys(repoConfig).length <= 0;
   if (isFirstRun || getVerboseFlag()) {
