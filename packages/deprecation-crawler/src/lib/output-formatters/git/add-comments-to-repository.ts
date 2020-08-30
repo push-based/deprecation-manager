@@ -1,6 +1,6 @@
 import { Project } from 'ts-morph';
-import { CrawlConfig, CrawledRelease, Deprecation } from '../models';
-import { printHeadline, printProgress, ProcessFeedback } from '../log';
+import { CrawlConfig, CrawledRelease, Deprecation } from '../../models';
+import { printHeadline, printProgress, ProcessFeedback } from '../../log';
 import * as kleur from 'kleur';
 
 const feedback = getRepoSyncFeedback();
@@ -8,9 +8,9 @@ import { template } from 'lodash';
 import {
   COMMENT_LINK_URL_PARAM_TOKEN,
   COMMENT_LINK_URL_TOKEN,
-} from '../constants';
-import { ensureCommentLinkFormat } from '../tasks/ensure-comment-link-template';
-import { getVerboseFlag } from '../utils';
+} from '../../constants';
+import { ensureCommentLinkFormat } from '../../tasks/ensure-comment-link-template';
+import { getVerboseFlag } from '../../utils';
 
 export async function addCommentToRepository(
   config: CrawlConfig,
