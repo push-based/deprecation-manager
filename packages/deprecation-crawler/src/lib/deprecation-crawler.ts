@@ -1,4 +1,4 @@
-import { getConfig } from './config';
+import { getConfig } from './processors/config';
 import { CrawledRelease } from './models';
 import { stripIndent } from 'common-tags';
 
