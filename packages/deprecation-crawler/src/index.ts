@@ -1,1 +1,1 @@
-export * from './lib/deprecation-crawler';
+export * from './lib';
