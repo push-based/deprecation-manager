@@ -1,6 +1,6 @@
 import { CrawlConfig, CrawlerProcess } from '../models';
 import { tap, askToSkip } from '../utils';
-import { addCommentToRepository } from '../output-formatters';
+import { generateTaggedCommentsInRepository } from '../output-formatters';
 
 /**
  * Updates the target repository
@@ -9,7 +9,7 @@ import { addCommentToRepository } from '../output-formatters';
 export function updateRepository(config: CrawlConfig): CrawlerProcess {
   return askToSkip(
     'Repo Update?',
-    tap((r) => addCommentToRepository(config, r)),
+    tap((r) => generateTaggedCommentsInRepository(config, r)),
     {
       precondition: async (r) => r.deprecations?.length > 0,
     }
