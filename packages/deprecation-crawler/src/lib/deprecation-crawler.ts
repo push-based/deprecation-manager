@@ -1,54 +1,16 @@
-import { getConfig } from './config';
-import { CrawledRelease } from './models';
-import { stripIndent } from 'common-tags';
-
-import {
-  branchHasChanges,
-  isCrawlerModeCi,
-  run,
-  getVersion
-} from './utils';
-import { logError } from './log';
-import { checkout } from './tasks/checkout';
-import { crawl } from './tasks/crawl';
-import { updateRepository } from './tasks/update-repository';
-import { addGroups } from './tasks/add-groups';
-import { generateOutput } from './tasks/generate-output';
-import { commitChanges } from './tasks/commit-changes';
-import { addVersion } from './tasks/add-version';
+import { isCrawlerModeCi } from "./utils";
+import { guardAgainstDirtyRepo } from "./tasks/guard-against-dirty-repository";
+import { COMMANDS, OPTIONS, setupYargsCommands } from "./commands";
 
 (async () => {
   if (isCrawlerModeCi()) {
     await guardAgainstDirtyRepo();
   }
-  const config = await getConfig();
+  const yargs = setupYargsCommands().options(OPTIONS);
+  const argv = yargs.argv;
 
-  const tasks = [
-    checkout,
-    crawl,
-    addVersion,
-    addGroups,
-    generateOutput,
-    updateRepository,
-    commitChanges,
-  ];
-
-  // Run all processors
-  const initial = {
-    version: getVersion(),
-  } as CrawledRelease;
-  run(tasks, config)(initial);
-})();
-
-async function guardAgainstDirtyRepo() {
-  const isDirty = await branchHasChanges();
-  if (isDirty) {
-    logError(
-      stripIndent`
-        Repository should be clean before we ruid links can be added.
-        Commit your local changes or stash them before running the deprecation-crawler.
-      `
-    );
-    process.exit(1);
+  const defaultCommand = argv._[0] === undefined;
+  if (defaultCommand) {
+    COMMANDS.find(c => c.command === "default-command").module.handler(argv);
   }
-}
+})();
