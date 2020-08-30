@@ -10,7 +10,7 @@ import {
 } from './utils';
 import { logError } from './log';
 import { checkout } from './tasks/checkout';
-import { crawl } from './tasks/crawl';
+import { crawl } from './processors/crawl';
 import { updateRepository } from './tasks/update-repository';
 import { addGroups } from './tasks/add-groups';
 import { generateOutput } from './tasks/generate-output';
