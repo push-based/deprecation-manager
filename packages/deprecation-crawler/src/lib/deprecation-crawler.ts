@@ -1,4 +1,4 @@
-import { getConfig } from './processors/config';
+import { setup } from './processors/setup';
 import { CrawledRelease } from './models';
 import { stripIndent } from 'common-tags';
 
@@ -21,7 +21,7 @@ import { addVersion } from './tasks/add-version';
   if (isCrawlerModeCi()) {
     await guardAgainstDirtyRepo();
   }
-  const config = await getConfig();
+  const config = await setup();
 
   const tasks = [
     checkout,
