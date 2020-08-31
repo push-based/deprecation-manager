@@ -21,6 +21,19 @@ import * as yargs from 'yargs';
 import { join } from 'path';
 import simpleGit from 'simple-git';
 import * as kleur from 'kleur';
+import * as path from 'path';
+
+export function getSiblingPgkJson(
+  pathOrFile: string
+): {
+  version: string;
+  homepage?: string;
+  repository?: { url: string };
+} {
+  return JSON.parse(
+    readFile(path.join(path.dirname(pathOrFile), 'package.json')) || '{}'
+  );
+}
 
 export const git = proxyMethodToggles(
   simpleGit(),
