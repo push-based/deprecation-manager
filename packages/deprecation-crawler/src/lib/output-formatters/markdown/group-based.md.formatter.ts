@@ -3,11 +3,12 @@ import { readFile, formatCode } from '../../utils';
 import { writeFileSync } from 'fs';
 import * as path from 'path';
 import { EOL } from 'os';
-import { HEALTH_CHECK_GROUP_NAME, UNGROUPED_GROUP_NAME } from '../../constants';
-
-// @TODO consider the content to update within the comments
-const MD_GROUP_OPENER = '<!-- ruid-groups';
-const MD_GROUP_CLOSER = 'ruid-groups -->';
+import {
+  HEALTH_CHECK_GROUP_NAME,
+  MD_GROUP_CLOSER,
+  MD_GROUP_OPENER,
+  UNGROUPED_GROUP_NAME,
+} from '../../constants';
 
 export async function generateGroupBasedFormat(
   config: CrawlConfig,

@@ -2,12 +2,7 @@ import { setup } from './processors/setup';
 import { CrawledRelease } from './models';
 import { stripIndent } from 'common-tags';
 
-import {
-  branchHasChanges,
-  isCrawlerModeCi,
-  run,
-  getVersion
-} from './utils';
+import { branchHasChanges, isCrawlerModeCi, run, getVersion } from './utils';
 import { logError } from './log';
 import { checkout } from './tasks/checkout';
 import { crawl } from './processors/crawl';
