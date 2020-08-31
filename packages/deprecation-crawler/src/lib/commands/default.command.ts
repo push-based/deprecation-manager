@@ -1,6 +1,5 @@
-import { getConfig } from '../config';
+import { setup } from '../processors/setup';
 import { checkout } from '../tasks/checkout';
-import { crawl } from '../tasks/crawl';
 import { addVersion } from '../tasks/add-version';
 import { addGroups } from '../tasks/add-groups';
 import { generateOutput } from '../tasks/generate-output';
@@ -10,13 +9,14 @@ import { getVersion, run } from '../utils';
 import { CrawledRelease } from '../models';
 import { YargsCommandObject } from '../cli/model';
 import { DEFAULT_COMMAND_NAME } from '../cli';
+import { crawl } from '../processors/crawl';
 
 export const defaultCommand: YargsCommandObject = {
   command: DEFAULT_COMMAND_NAME,
   description: 'Run default processors',
   module: {
     handler: () => {
-      getConfig().then((config) => {
+      setup().then((config) => {
         const tasks = [
           checkout,
           crawl,
