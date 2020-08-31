@@ -1,5 +1,7 @@
 import { prompt } from 'enquirer';
 import { CrawlConfig } from '../models';
+import { readFile } from '../utils';
+import * as path from 'path';
 
 export async function ensureDeprecationUrlConfig(
   config: CrawlConfig
@@ -9,8 +11,7 @@ export async function ensureDeprecationUrlConfig(
       type: 'input',
       name: 'deprecationLink',
       message: "What's the deprecation link to the docs?",
-      // @TODO consider other default
-      initial: config.deprecationLink || 'https://rxjs.dev/deprecations',
+      initial: config.deprecationLink || getSuggestionsFormPackageJson(config),
       skip: !!config.deprecationLink,
     },
   ]);
@@ -19,4 +20,19 @@ export async function ensureDeprecationUrlConfig(
     ...config,
     ...userConfig,
   };
+}
+
+export function getSuggestionsFormPackageJson(config: CrawlConfig): string {
+  const pkg = JSON.parse(
+    readFile(path.join(path.dirname(config.tsConfigPath), 'package.json')) ||
+      '{}'
+  );
+  let url = '';
+  if (pkg.homepage) {
+    url = pkg.homepage;
+  } else if (pkg.repository && pkg.repository.url) {
+    url = pkg.repository.url;
+  }
+
+  return url + '/deprecations';
 }
