@@ -39,7 +39,7 @@ export const OPTIONS: { [key: string]: Options } = {
     type: 'string',
     description: 'Tag to crawler',
   },
-  'next-version': {
+  nextVersion: {
     alias: 'n',
     type: 'string',
     description: 'Version of the crawled results',
@@ -47,4 +47,3 @@ export const OPTIONS: { [key: string]: Options } = {
 };
 
 export const COMMANDS: YargsCommandObject[] = [groupCommand, defaultCommand];
-

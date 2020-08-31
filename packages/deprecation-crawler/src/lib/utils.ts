@@ -153,7 +153,7 @@ export function logVerbose(message: string, enforceLog = false): void {
  * Check for version params from cli command
  */
 export function getVersion() {
-  const argPath = getCliParam(['next-version', 'n']);
+  const argPath = getCliParam(['nextVersion', 'n']);
   return argPath ? argPath : '';
 }
 
