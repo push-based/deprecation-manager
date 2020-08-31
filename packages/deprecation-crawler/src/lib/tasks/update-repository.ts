@@ -1,6 +1,6 @@
 import { CrawlConfig, CrawlerProcess } from '../models';
 import { tap, askToSkip } from '../utils';
-import { generateTaggedCommentsInRepository } from '../output-formatters';
+import { generateTaggedCommentsInRepository } from '../output-formatters/git/tag-comments.git.formatter';
 
 /**
  * Updates the target repository
