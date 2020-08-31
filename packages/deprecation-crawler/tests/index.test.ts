@@ -39,7 +39,9 @@ beforeAll(async () => {
 });
 
 test('sandbox', async () => {
-  const cliOutput = await exec(`npm run crawl -- -t master --verbose`);
+  const cliOutput = await exec(
+    `npm run crawl -- -t master --verbose --unhandled-rejections=strict`
+  ).catch(console.error);
 
   // verify output
   expect(cliOutput).toMatch(/Running with tsconfig: tsconfig.sandbox.json/i);
@@ -86,9 +88,9 @@ test('sandbox', async () => {
 
   // by passing a version via the CLI (existing) deprecations should be updated to the version
   const version = '5.4.2';
-  await exec(`npm run crawl -- -t master --next-version ${version}`).catch(
-    console.error
-  );
+  await exec(
+    `npm run crawl -- -t master --next-version ${version} --unhandled-rejections=strict`
+  ).catch(console.error);
   const updatedRawDeprecations = JSON.parse(
     fs.readFileSync(RAW_DEPRECATION_FILE, 'utf8')
   );
