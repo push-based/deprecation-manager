@@ -151,8 +151,8 @@ export function logVerbose(message: string, enforceLog = false): void {
 /**
  * Check for version params from cli command
  */
-export function getVersion(): string {
-  const argPath = getCliParam(['next-version']);
+export function getVersion() {
+  const argPath = getCliParam(['next-version', 'n']);
   return argPath ? argPath : '';
 }
 
