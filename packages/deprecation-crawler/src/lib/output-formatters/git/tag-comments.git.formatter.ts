@@ -10,7 +10,7 @@ import {
   COMMENT_LINK_URL_TOKEN,
 } from '../../constants';
 import { ensureCommentLinkFormat } from '../../tasks/ensure-comment-link-template';
-import { getVerboseFlag } from '../../utils';
+import { logVerbose } from '../../utils';
 
 export async function generateTaggedCommentsInRepository(
   config: CrawlConfig,
@@ -30,9 +30,7 @@ export async function generateTaggedCommentsInRepository(
   }, {} as { [filePath: string]: Deprecation[] });
 
   Object.entries(deprecationsByFile).forEach(([path, deprecations]) => {
-    if (getVerboseFlag()) {
-      console.log(kleur.gray(`🔧 ${path}`));
-    }
+    logVerbose(`🔧 ${path}`);
 
     let addedPosForText = 0;
 

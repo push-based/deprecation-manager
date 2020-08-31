@@ -56,13 +56,8 @@ export function proxyMethodToggles<T>(
             if (condition()) {
               return origMethod.apply(this, args);
             }
-            if (getVerboseFlag()) {
-              console.log(
-                kleur.gray(
-                  `Call of method ${propKey} got ignored through toggle.`
-                )
-              );
-            }
+            logVerbose(`Call of method ${propKey} got ignored through toggle.`);
+
             return Promise.resolve();
           }
           return origMethod.apply(this, args);
@@ -135,7 +130,7 @@ export function writeRawDeprecations(
 /**
  * Check for path params from cli command
  */
-export function getConfigPath() {
+export function getConfigPath(): string {
   const argPath = getCliParam(['path', 'p']);
   return argPath ? argPath : CRAWLER_CONFIG_PATH;
 }
@@ -143,16 +138,22 @@ export function getConfigPath() {
 /**
  * Check for verbose params from cli command
  */
-export function getVerboseFlag() {
-  const argPath = getCliParam(['verbose']);
-  return argPath ? argPath : false;
+export function getVerboseFlag(): boolean {
+  const argPath = getCliParam(['verbose', 'v']);
+  return !!argPath;
+}
+
+export function logVerbose(message: string, enforceLog = false): void {
+  if (getVerboseFlag() || enforceLog) {
+    return console.log(kleur.gray(message));
+  }
 }
 
 /**
  * Check for version params from cli command
  */
 export function getVersion() {
-  const argPath = getCliParam(['next-version', 'v']);
+  const argPath = getCliParam(['next-version', 'n']);
   return argPath ? argPath : '';
 }
 
