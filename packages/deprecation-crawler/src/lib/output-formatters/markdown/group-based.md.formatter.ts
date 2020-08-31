@@ -1,5 +1,5 @@
 import { CrawlConfig, CrawledRelease, Deprecation } from '../../models';
-import { readFile, formatCode } from '../../utils';
+import { readFile, formatCode, getVerboseFlag } from '../../utils';
 import { writeFileSync } from 'fs';
 import * as path from 'path';
 import { EOL } from 'os';
@@ -39,6 +39,12 @@ export async function updateGroupMd(
         ],
       };
     }, {});
+
+  if (Object(groupedDeprecationsByFileAndTag).keys().length <= 0) {
+    if (getVerboseFlag()) {
+      console.log(`Skipped group ${group.key} as it is empty`);
+    }
+  }
 
   const filePath = path.join(config.outputDirectory, group.key + '.md');
   const fileContent: string = readFile(filePath);
