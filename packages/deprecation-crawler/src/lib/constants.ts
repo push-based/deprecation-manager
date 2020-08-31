@@ -47,3 +47,4 @@ export const OPTIONS: { [key: string]: Options } = {
 };
 
 export const COMMANDS: YargsCommandObject[] = [groupCommand, defaultCommand];
+
