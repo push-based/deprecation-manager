@@ -1,7 +1,6 @@
 import { prompt } from 'enquirer';
 import { CrawlConfig } from '../models';
-import { readFile } from '../utils';
-import * as path from 'path';
+import { getSiblingPgkJson } from '../utils';
 
 export async function ensureDeprecationUrlConfig(
   config: CrawlConfig
@@ -23,14 +22,11 @@ export async function ensureDeprecationUrlConfig(
 }
 
 export function getSuggestionsFormPackageJson(config: CrawlConfig): string {
-  const pkg = JSON.parse(
-    readFile(path.join(path.dirname(config.tsConfigPath), 'package.json')) ||
-      '{}'
-  );
+  const pkg = getSiblingPgkJson(config.tsConfigPath);
   let url = '';
   if (pkg.homepage) {
     url = pkg.homepage;
-  } else if (pkg.repository && pkg.repository.url) {
+  } else if (pkg.repository?.url) {
     url = pkg.repository.url;
   }
 
