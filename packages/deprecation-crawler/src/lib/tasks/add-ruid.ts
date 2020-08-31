@@ -5,7 +5,7 @@ import {
   Deprecation,
 } from '../models';
 import { concat, tap, hash } from '../utils';
-import { generateRawJson } from '../output-formatters';
+import { generateRawJson } from '../output-formatters/json/raw.json.formatter';
 
 /**
  * Generates a RUID for every deprecation
