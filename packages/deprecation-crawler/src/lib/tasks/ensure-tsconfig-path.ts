@@ -3,23 +3,20 @@ import { prompt } from 'enquirer';
 import { normalize } from 'path';
 import {
   getConfigPath,
-  getVerboseFlag,
   isCrawlerModeSandbox,
+  logVerbose,
   updateRepoConfig,
 } from '../utils';
 import { glob } from 'glob';
 import * as fs from 'fs';
 import { existsSync } from 'fs';
-import * as kleur from 'kleur';
 
 export async function ensureTsConfigPath(
   config: CrawlConfig
 ): Promise<CrawlConfig> {
   // If a tsconfig files is already set proceed
   if (fileExists(config.tsConfigPath)) {
-    if (getVerboseFlag()) {
-      console.log(kleur.gray(`Running with tsconfig: ${config.tsConfigPath}`));
-    }
+    logVerbose(`Running with tsconfig: ${config.tsConfigPath}`);
     return config;
   }
 
