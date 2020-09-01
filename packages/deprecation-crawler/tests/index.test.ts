@@ -86,7 +86,7 @@ test('sandbox', async () => {
 
   // by passing a version via the CLI (existing) deprecations should be updated to the version
   const version = '5.4.2';
-  await exec(`npm run crawl -- -t master --next-version ${version}`);
+  await exec(`npm run crawl -- -t master --nextVersion ${version}`);
   const updatedRawDeprecations = JSON.parse(
     fs.readFileSync(RAW_DEPRECATION_FILE, 'utf8')
   );
