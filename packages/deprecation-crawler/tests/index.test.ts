@@ -42,7 +42,6 @@ test('sandbox', async () => {
   const cliOutput = await exec(`npm run crawl -- -t master --verbose`);
 
   // verify output
-  expect(cliOutput).toMatch(/Running with tsconfig: tsconfig.sandbox.json/i);
   expect(cliOutput).toMatch(/SETUP PHASE/i);
   expect(cliOutput).toMatch(/tsconfig.sandbox.json/i);
   expect(cliOutput).toMatch(/CRAWL PHASE/i);

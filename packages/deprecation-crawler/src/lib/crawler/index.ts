@@ -10,8 +10,11 @@ import {
 import { isConstructorDeclaration, isVariableStatement } from 'typescript';
 import { relative } from 'path';
 import { CrawlConfig, CrawledRelease, Deprecation } from '../models';
-import { ensureTsConfigPath } from '../tasks/ensure-tsconfig-path';
-import { logVerbose } from '../utils';
+import {
+  createCrawlerTsConfig,
+  deleteCrawlerTsConfig,
+  logVerbose,
+} from '../utils';
 
 // What about https://ts-morph.com/details/documentation#js-docs ?
 // Problem: can't find top level deprecations? e.g. merge
@@ -144,11 +147,13 @@ function getNodesWithCommentsForFile(file: SourceFile) {
 }
 
 export async function getSourceFiles(config: CrawlConfig) {
-  const project = new Project();
-  await ensureTsConfigPath(config);
-  project.addSourceFilesFromTsConfig(config.tsConfigPath);
-
-  return project.getSourceFiles();
+  const tsconfig = createCrawlerTsConfig(config);
+  const project = new Project({
+    tsConfigFilePath: tsconfig,
+  });
+  const sourceFiles = project.getSourceFiles();
+  deleteCrawlerTsConfig(config);
+  return sourceFiles;
 }
 
 interface NodesWithComment {
