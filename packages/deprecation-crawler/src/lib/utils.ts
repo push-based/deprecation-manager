@@ -1,8 +1,8 @@
-import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import {
   CrawlConfig,
-  CrawlerProcess,
   CrawledRelease,
+  CrawlerProcess,
   Deprecation,
 } from './models';
 
@@ -18,10 +18,10 @@ import {
 } from './constants';
 import { prompt } from 'enquirer';
 import * as yargs from 'yargs';
-import { join } from 'path';
-import simpleGit from 'simple-git';
-import * as kleur from 'kleur';
 import * as path from 'path';
+import { join } from 'path';
+import simpleGit, { DiffResultTextFile } from 'simple-git';
+import * as kleur from 'kleur';
 
 export function getSiblingPgkJson(
   pathOrFile: string
@@ -306,6 +306,32 @@ export async function getRemoteUrl(): Promise<string> {
   );
 }
 
+export async function getFilesWithDeletionsWithin2Hashes(
+  config: CrawlConfig,
+  diffConfig: {
+    from: string;
+    to: string;
+  }
+) {
+  // NOTICE: maybe diff directly is better
+  // git.diff([`${diffConfig.from}...${diffConfig.to}`, `--diff-filter=DRM`, `-G"${config.deprecationComment}"`, `-U0`, `--stat`]);
+  const gitDiff = await git.diffSummary([
+    `${diffConfig.from}...${diffConfig.to}`,
+    // Docs: https://git-scm.com/docs/git-diff#Documentation/git-diff.txt---diff-filterACDMRTUXB82308203
+    // Uppercase e.g. M includes files, lowercase e.g. m removes files
+    `--diff-filter=TMRD`,
+    `-G"deprecated"`,
+    // @TODO add config.pathFilter here
+  ]);
+  return gitDiff.files
+    .filter(
+      (f) =>
+        (!f.binary && (f as DiffResultTextFile).deletions > 0) ||
+        (f as DiffResultTextFile).changes > 0
+    )
+    .map((f) => f.file);
+}
+
 export function getCrawlerMode() {
   return process.env.__CRAWLER_MODE__;
 }
@@ -313,6 +339,7 @@ export function getCrawlerMode() {
 export function isCrawlerModeSandbox(): boolean {
   return getCrawlerMode() === CRAWLER_MODES.SANDBOX;
 }
+
 export function isCrawlerModeCi(): boolean {
   return getCrawlerMode() === CRAWLER_MODES.CI;
 }
