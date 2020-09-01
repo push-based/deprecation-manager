@@ -11,7 +11,8 @@ import { isConstructorDeclaration, isVariableStatement } from 'typescript';
 import { relative } from 'path';
 import { CrawlConfig, CrawledRelease, Deprecation } from '../models';
 import { ensureTsConfigPath } from '../tasks/ensure-tsconfig-path';
-import { logVerbose } from '../utils';
+import { getPathFilter, logVerbose } from '../utils';
+import * as minimatch from 'minimatch';
 
 // What about https://ts-morph.com/details/documentation#js-docs ?
 // Problem: can't find top level deprecations? e.g. merge
@@ -24,6 +25,15 @@ export async function crawlDeprecations(
   const deprecations = sourceFiles
     // TODO: seems like these files cannot be parsed correctly?
     .filter((file) => !file.getFilePath().includes('/Observable.ts'))
+    .filter((file) => {
+      console.log(file.getFilePath());
+      return true;
+    })
+    .filter((file) => minimatch(file.getFilePath(), getPathFilter()))
+    .filter((file) => {
+      console.log(file.getFilePath());
+      return true;
+    })
     .map((file) => crawlFileForDeprecations(config, crawledRelease, file))
     .reduce((acc, val) => acc.concat(val), []);
 
