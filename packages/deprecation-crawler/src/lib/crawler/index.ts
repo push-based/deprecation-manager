@@ -26,13 +26,8 @@ export async function crawlDeprecations(
     // TODO: seems like these files cannot be parsed correctly?
     .filter((file) => !file.getFilePath().includes('/Observable.ts'))
     .filter((file) => {
-      console.log(file.getFilePath());
-      return true;
-    })
-    .filter((file) => minimatch(file.getFilePath(), getPathFilter()))
-    .filter((file) => {
-      console.log(file.getFilePath());
-      return true;
+      const pathFilter = getPathFilter() || config.pathFilter;
+      return pathFilter ? minimatch(file.getFilePath(), pathFilter) : true;
     })
     .map((file) => crawlFileForDeprecations(config, crawledRelease, file))
     .reduce((acc, val) => acc.concat(val), []);

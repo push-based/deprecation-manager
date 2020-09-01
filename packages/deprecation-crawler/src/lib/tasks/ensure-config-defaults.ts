@@ -16,6 +16,7 @@ export async function ensureConfigDefaults(
       'groupBasedMarkdown',
       'deprecationIndex',
     ],
+    pathFilter: '',
     tagFormat: TAG_FORMAT_TEMPLATE,
     commitMessage: DEFAULT_COMMIT_MESSAGE,
     commentLinkFormat: DEFAULT_COMMENT_LINK_TEMPLATE,

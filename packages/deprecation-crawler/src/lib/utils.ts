@@ -137,9 +137,9 @@ export function getConfigPath(): string {
 /**
  * Check for path-filter params from cli command
  */
-export function getPathFilter(): string {
+export function getPathFilter(): string | false {
   const argPath = getCliParam(['pathFilter', 'path-filter', 'f']);
-  return argPath && argPath !== 'true' ? argPath : '';
+  return argPath && argPath !== 'true' ? argPath : false;
 }
 
 /**
