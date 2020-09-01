@@ -57,6 +57,7 @@ export function proxyMethodToggles<T>(
               return origMethod.apply(this, args);
             }
             logVerbose(`Call of method ${propKey} got ignored through toggle.`);
+
             return Promise.resolve();
           }
           return origMethod.apply(this, args);
@@ -160,7 +161,7 @@ export function logVerbose(message: string, enforceLog = false): void {
  * Check for version params from cli command
  */
 export function getVersion() {
-  const argPath = getCliParam(['next-version', 'n']);
+  const argPath = getCliParam(['nextVersion', 'n']);
   return argPath ? argPath : '';
 }
 
