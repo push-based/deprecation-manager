@@ -1,5 +1,6 @@
 export interface CrawlConfig {
   // defaults
+  pathFilter: string;
   tagFormat: string;
   commentLinkFormat: string;
   commitMessage: string;
@@ -8,10 +9,10 @@ export interface CrawlConfig {
   // required fields
   deprecationComment: string;
   deprecationLink: string;
-  // optional fields
   outputDirectory: string;
   include: string[];
   exclude: string[];
+  // optional fields
 }
 
 export interface GitTag {

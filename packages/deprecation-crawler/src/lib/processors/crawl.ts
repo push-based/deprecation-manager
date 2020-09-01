@@ -1,5 +1,5 @@
 import { CrawlConfig, CrawledRelease, CrawlerProcess } from '../models';
-import { concat, tap } from '../utils';
+import { concat, getPathFilter, tap } from '../utils';
 import { crawlDeprecations, getSourceFiles } from '../crawler';
 import { addRuid } from '../tasks/add-ruid';
 import {
@@ -9,6 +9,7 @@ import {
   ProcessFeedback,
 } from '../log';
 import * as kleur from 'kleur';
+import * as minimatch from 'minimatch';
 
 const feedback = getCrawlFeedback();
 
@@ -63,8 +64,23 @@ function getCrawlFeedback(): ProcessFeedback {
         kleur.gray(`Found `),
         kleur.black(`${rawRelease.deprecations.length}`),
         kleur.gray(` in `),
-        kleur.gray(files.length),
+        kleur.black(
+          files
+            // @TODO reuse this logic or better implement it before the .getSourceFiles method is called
+            .filter((file) => {
+              const pathFilter = getPathFilter() || config.pathFilter;
+              return pathFilter
+                ? minimatch(file.getFilePath(), pathFilter)
+                : true;
+            }).length
+        ),
         kleur.gray(` files.`)
+      );
+      console.log(
+        kleur.gray(`Used tsConfig `),
+        kleur.black(`${config.tsConfigPath}`),
+        kleur.gray(` and pathFilter of `),
+        kleur.black(`'${config.pathFilter}'`)
       );
       printFooterLine();
     },
