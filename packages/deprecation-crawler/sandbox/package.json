@@ -1,6 +1,4 @@
 {
-  "version1": "deprecation-crawler@0.0.0-sandbox",
-  "version2": "0.0.0-sandbox",
   "version": "v0.0.0-sandbox",
   "name": "deprecation-crawler-sandbox",
   "scripts": {
