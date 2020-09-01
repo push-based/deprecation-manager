@@ -10,7 +10,7 @@ export async function ensureDeprecationUrlConfig(
       type: 'input',
       name: 'deprecationLink',
       message: "What's the deprecation link to the docs?",
-      initial: config.deprecationLink || getSuggestionsFormPackageJson(config),
+      initial: config.deprecationLink || getSuggestionsFormPackageJson(),
       skip: !!config.deprecationLink,
     },
   ]);
@@ -21,8 +21,8 @@ export async function ensureDeprecationUrlConfig(
   };
 }
 
-export function getSuggestionsFormPackageJson(config: CrawlConfig): string {
-  const pkg = getSiblingPgkJson(config.tsConfigPath);
+export function getSuggestionsFormPackageJson(): string {
+  const pkg = getSiblingPgkJson('./');
   let url = '';
   if (pkg.homepage) {
     url = pkg.homepage;

@@ -10,7 +10,11 @@ import {
   COMMENT_LINK_URL_TOKEN,
 } from '../../constants';
 import { ensureCommentLinkFormat } from '../../tasks/ensure-comment-link-template';
-import { logVerbose } from '../../utils';
+import {
+  createCrawlerTsConfig,
+  deleteCrawlerTsConfig,
+  logVerbose,
+} from '../../utils';
 
 export async function generateTaggedCommentsInRepository(
   config: CrawlConfig,
@@ -20,8 +24,9 @@ export async function generateTaggedCommentsInRepository(
 
   feedback.printStart(config, crawledRelease);
 
+  const tsconfig = createCrawlerTsConfig(config);
   const project = new Project({
-    tsConfigFilePath: config.tsConfigPath,
+    tsConfigFilePath: tsconfig,
   });
 
   const deprecationsByFile = crawledRelease.deprecations.reduce((acc, val) => {
@@ -60,6 +65,7 @@ export async function generateTaggedCommentsInRepository(
   });
 
   feedback.printEnd(config);
+  deleteCrawlerTsConfig(config);
 }
 
 function calculateLinkInsertPosition(
