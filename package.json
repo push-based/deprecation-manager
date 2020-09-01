@@ -34,6 +34,7 @@
     "kleur": "^4.0.3",
     "lodash": "^4.17.20",
     "lodash-es": "^4.17.15",
+    "minimatch": "^3.0.4",
     "semver": "^7.3.2",
     "simple-git": "^2.20.1",
     "ts-morph": "^7.1.3",

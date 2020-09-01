@@ -175,6 +175,13 @@ export function getConfigPath(): string {
 }
 
 /**
+ * Check for path-filter params from cli command
+ */
+export function getPathFilter(): string {
+  const argPath = getCliParam(['pathFilter', 'path-filter', 'f']);
+  return argPath && argPath !== 'true' ? argPath : '';
+}
+/**
  * Check for path params from cli command
  */
 export function getInteractive(): boolean {
