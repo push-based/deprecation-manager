@@ -37,8 +37,6 @@ export async function ensureConfigDefaults(
         matchers: ['\\/\\*\\* *\\' + userConfig.deprecationComment + ' *\\*/'],
       },
     ],
-    include: ['./**/*.ts'],
-    exclude: ['./**/*.(spec|test|d).ts'],
     // override defaults with user settings
     ...userConfig,
   };
