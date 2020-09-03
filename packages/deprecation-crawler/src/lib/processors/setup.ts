@@ -11,6 +11,10 @@ import { ensureOutputDirectoryConfig } from '../tasks/ensure-output-directory-co
 import { ensureConfigDefaults } from '../tasks/ensure-config-defaults';
 import { printHeadline, ProcessFeedback } from '../log';
 import * as kleur from 'kleur';
+import {
+  ensureExcludeGlobConfig,
+  ensureIncludeGlobConfig,
+} from '../tasks/ensure-includes-excludes-config';
 
 const feedback = getSetupFeedback();
 export async function setup(): Promise<CrawlConfig> {
@@ -27,6 +31,8 @@ export async function setup(): Promise<CrawlConfig> {
     ...(await ensureDeprecationUrlConfig(repoConfig)
       .then(ensureDeprecationCommentConfig)
       .then(ensureOutputDirectoryConfig)
+      .then(ensureIncludeGlobConfig)
+      .then(ensureExcludeGlobConfig)
       // defaults should be last as it takes user settings
       .then(ensureConfigDefaults)),
   };
