@@ -6,13 +6,15 @@ import {
   getRemoteUrl,
   tap,
 } from '../utils';
+import { ensureGitTag } from './ensure-git-tag';
 
 /**
  * Checkout the desired branch
  * Adds the branch date to the release
  */
-export function checkout(_config: CrawlConfig): CrawlerProcess {
+export function checkout(config: CrawlConfig): CrawlerProcess {
   return concat([
+    ensureGitTag(config),
     tap((r) => checkoutBranch(r)),
     async (r): Promise<CrawledRelease> => {
       const date = await getBranchDate(r);

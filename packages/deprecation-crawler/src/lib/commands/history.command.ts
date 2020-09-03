@@ -1,10 +1,9 @@
 import { setup } from '../processors/setup';
-import { CrawledRelease, Deprecation } from '../models';
+import { CrawledRelease, Deprecation, GitTag } from '../models';
 import {
   getCurrentBranchOrTag,
   git,
   run,
-  SERVER_REGEX,
   writeRawDeprecations,
 } from '../utils';
 import { YargsCommandObject } from '../cli/model';
@@ -13,11 +12,11 @@ import { crawl } from '../processors/crawl';
 import { addVersion } from '../tasks/add-version';
 import { prompt } from 'enquirer';
 import { existsSync } from 'fs';
-import * as semverHelper from 'semver';
 import { join } from 'path';
 import { RAW_DEPRECATION_PATH } from '../constants';
 import { logError } from '../log';
 import { commitChanges } from '../tasks/commit-changes';
+import { getTagChoices } from '../tasks/ensure-git-tag';
 
 export const historyCommand: YargsCommandObject = {
   command: 'history',
@@ -40,7 +39,9 @@ export const historyCommand: YargsCommandObject = {
 
       const current = await getCurrentBranchOrTag();
       const tags = await git.tags();
-      const tagsSorted = await getTagChoices(tags.all);
+      const tagsSorted = await getTagChoices(
+        tags.all.map((t) => ({ name: t } as GitTag))
+      );
 
       const { startingTag }: { startingTag: string } = await prompt([
         {
@@ -77,19 +78,3 @@ export const historyCommand: YargsCommandObject = {
     },
   },
 };
-
-async function getTagChoices(tags: string[]): Promise<string[]> {
-  const sortedTags = semverSort(tags, false);
-  return [...new Set([...sortedTags])];
-}
-
-function semverSort(semvers: string[], asc: boolean) {
-  return semvers.sort(function (v1, v2) {
-    const sv1 = SERVER_REGEX.exec(v1)[0] || v1;
-    const sv2 = SERVER_REGEX.exec(v2)[0] || v2;
-
-    return asc
-      ? semverHelper.compare(sv1, sv2)
-      : semverHelper.rcompare(sv1, sv2);
-  });
-}
