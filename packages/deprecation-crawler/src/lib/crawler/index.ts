@@ -11,7 +11,7 @@ import { isConstructorDeclaration, isVariableStatement } from 'typescript';
 import { relative } from 'path';
 import { CrawlConfig, CrawledRelease, Deprecation } from '../models';
 import { ensureTsConfigPath } from '../tasks/ensure-tsconfig-path';
-import { getPathFilter, logVerbose } from '../utils';
+import {  createCrawlerTsConfig, deleteCrawlerTsConfig, getPathFilter, logVerbose } from '../utils';
 import * as minimatch from 'minimatch';
 
 // What about https://ts-morph.com/details/documentation#js-docs ?
@@ -149,11 +149,13 @@ function getNodesWithCommentsForFile(file: SourceFile) {
 }
 
 export async function getSourceFiles(config: CrawlConfig) {
-  const project = new Project();
-  await ensureTsConfigPath(config);
-  project.addSourceFilesFromTsConfig(config.tsConfigPath);
-
-  return project.getSourceFiles();
+  const tsconfig = createCrawlerTsConfig(config);
+  const project = new Project({
+    tsConfigFilePath: tsconfig,
+  });
+  const sourceFiles = project.getSourceFiles();
+  deleteCrawlerTsConfig(config);
+  return sourceFiles;
 }
 
 interface NodesWithComment {

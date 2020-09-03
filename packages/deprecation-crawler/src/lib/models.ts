@@ -7,11 +7,11 @@ export interface CrawlConfig {
   groups: { key: string; matchers: string[] }[];
   outputFormatters: string[];
   // required fields
-  tsConfigPath: string;
   deprecationComment: string;
   deprecationLink: string;
   outputDirectory: string;
-  // optional fields
+  include: string[];
+  exclude: string[];
 }
 
 export interface GitTag {
