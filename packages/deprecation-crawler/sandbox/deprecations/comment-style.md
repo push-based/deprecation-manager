@@ -1,11 +1,11 @@
 <!-- ruid-groups
 
-- undefined:
-  - https://github.com/timdeschryver/find-deprecations/tree/undefined/deprecation-comments/crawled.ts#L6
-  - https://github.com/timdeschryver/find-deprecations/tree/undefined/deprecation-comments/crawled.ts#L14
-  - https://github.com/timdeschryver/find-deprecations/tree/undefined/deprecation-comments/crawled.ts#L24
-  - https://github.com/timdeschryver/find-deprecations/tree/undefined/deprecation-comments/crawled.ts#L29
-  - https://github.com/timdeschryver/find-deprecations/tree/undefined/deprecation-comments/crawled.ts#L34
+- master:
+  - https://github.com/timdeschryver/find-deprecations/tree/master/deprecation-comments/crawled.ts#L6
+  - https://github.com/timdeschryver/find-deprecations/tree/master/deprecation-comments/crawled.ts#L14
+  - https://github.com/timdeschryver/find-deprecations/tree/master/deprecation-comments/crawled.ts#L24
+  - https://github.com/timdeschryver/find-deprecations/tree/master/deprecation-comments/crawled.ts#L29
+  - https://github.com/timdeschryver/find-deprecations/tree/master/deprecation-comments/crawled.ts#L34
 
 ruid-groups -->
 
