@@ -1,9 +1,23 @@
 {
   "outputFormatters": ["tagBasedMarkdown", "groupBasedMarkdown"],
-  "groups": [],
-  "configPath": "./deprecation-crawler.config.githib-action.json",
-  "outputDirectory": "deprecations",
-  "tsConfigPath": "packages/deprecation-crawler/sandbox/tsconfig.sandbox.json",
+  "tagFormat": "${SEMVER_TOKEN}",
+  "commitMessage": "docs(deprecation-manager): sync deprecations",
+  "groups": [
+    { "key": "all-lowercase", "matchers": ["iNternal use onLy"] },
+    {
+      "key": "whitespace-normalisation",
+      "matchers": ["This  const is  deprecated"]
+    },
+    {
+      "key": "multiple-string-patterns-at-once",
+      "matchers": ["/^(?=.*This const named!)(?=.*deprecated!)(?=.*xyz!).../"]
+    },
+    { "key": "comment-style", "matchers": ["comment-style"] },
+    { "key": "catch-all", "matchers": ["(.*?)"] }
+  ],
+  "outputDirectory": "./deprecations",
+  "tsConfigPath": "tsconfig.sandbox.json",
   "deprecationComment": "@deprecated",
-  "deprecationLink": "https://rxjs.dev/deprecations"
+  "deprecationLink": "sandbox-deprecation-link",
+  "commentLinkFormat": "Details: {@link ${COMMENT_LINK_URL_TOKEN}#${COMMENT_LINK_URL_PARAM_TOKEN}}"
 }
