@@ -1,4 +1,10 @@
-import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
+import {
+  existsSync,
+  mkdirSync,
+  writeFileSync,
+  readFileSync,
+  unlinkSync,
+} from 'fs';
 import {
   CrawlConfig,
   CrawlerProcess,
@@ -305,6 +311,27 @@ export async function getRemoteUrl(): Promise<string> {
       // remove line ending
       .then((x) => x.trim())
   );
+}
+
+function crawlerTsConfig() {
+  return join('./', 'deprecation.tsconfig.json');
+}
+
+export function createCrawlerTsConfig(config: CrawlConfig) {
+  ensureDirExists(config.outputDirectory);
+  const tsconfig = crawlerTsConfig();
+  writeFileSync(
+    tsconfig,
+    JSON.stringify({
+      include: config.include,
+      exclude: config.exclude,
+    })
+  );
+  return tsconfig;
+}
+export function deleteCrawlerTsConfig(_config: CrawlConfig) {
+  const tsconfig = crawlerTsConfig();
+  unlinkSync(tsconfig);
 }
 
 export function getCrawlerMode() {

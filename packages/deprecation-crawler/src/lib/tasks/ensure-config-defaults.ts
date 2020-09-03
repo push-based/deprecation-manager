@@ -18,7 +18,7 @@ export async function ensureConfigDefaults(
       'groupBasedMarkdown',
       'deprecationIndex',
     ],
-    tagFormat: getSuggestedTagFormat(userConfig),
+    tagFormat: getSuggestedTagFormat(),
     commitMessage: DEFAULT_COMMIT_MESSAGE,
     commentLinkFormat: DEFAULT_COMMENT_LINK_TEMPLATE,
     groups: [
@@ -28,13 +28,15 @@ export async function ensureConfigDefaults(
         matchers: ['\\/\\*\\* *\\' + userConfig.deprecationComment + ' *\\*/'],
       },
     ],
+    include: ['./**/*.ts'],
+    exclude: ['./**/*.(spec|test|d).ts'],
     // override defaults with user settings
     ...userConfig,
   };
 }
 
-export function getSuggestedTagFormat(config: CrawlConfig): string {
-  const pkg = getSiblingPgkJson(config.tsConfigPath);
+export function getSuggestedTagFormat(): string {
+  const pkg = getSiblingPgkJson('./');
 
   if (!pkg.version) {
     return TAG_FORMAT_TEMPLATE;
