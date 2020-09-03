@@ -41,6 +41,7 @@ function updateVersion(
 
 function updateExistingDeprecations(config: CrawlConfig, version: string) {
   const { deprecations } = readRawDeprecations(config);
+  if (deprecations.length === 0) return;
   const deprecationsWithVersion = updateVersion(deprecations, version);
   writeRawDeprecations(deprecationsWithVersion, config);
 }

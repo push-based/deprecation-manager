@@ -25,10 +25,6 @@ export function runCli(
 ) {
   const yargs = setupYargs(cliCfg.commands, cliCfg.options);
   const argv = yargs.argv;
-  const isDefaultCommand = argv._[0] === undefined;
-  if (isDefaultCommand) {
-    cliCfg.commands
-      .find((c) => c.command === defaultCommand)
-      .module.handler(argv);
-  }
+  const command = argv._[0] || defaultCommand;
+  cliCfg.commands.find((c) => c.command === command).module.handler(argv);
 }

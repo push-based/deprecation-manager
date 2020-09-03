@@ -14,13 +14,6 @@ export interface CrawlConfig {
   exclude: string[];
 }
 
-export interface GitTag {
-  name: string;
-  semver: string;
-  // @TODO implement
-  date?: string;
-}
-
 export interface CrawlConfigDefaults {
   outputFormatters: string[];
   tagFormat: string;
