@@ -15,24 +15,26 @@ export const defaultCommand: YargsCommandObject = {
   command: DEFAULT_COMMAND_NAME,
   description: 'Run default processors',
   module: {
-    handler: () => {
-      setup().then((config) => {
-        const tasks = [
-          checkout,
-          crawl,
-          addVersion,
-          addGroups,
-          generateOutput,
-          updateRepository,
-          commitChanges,
-        ];
+    handler: (): void => {
+      setup()
+        .then((config) => {
+          const tasks = [
+            checkout,
+            crawl,
+            addVersion,
+            addGroups,
+            generateOutput,
+            updateRepository,
+            commitChanges,
+          ];
 
-        // Run all processors
-        const initial = {
-          version: getVersion(),
-        } as CrawledRelease;
-        run(tasks, config)(initial);
-      });
+          // Run all processors
+          const initial = {
+            version: getVersion(),
+          } as CrawledRelease;
+          run(tasks, config)(initial);
+        })
+        .catch((e) => console.error(e));
     },
   },
 };

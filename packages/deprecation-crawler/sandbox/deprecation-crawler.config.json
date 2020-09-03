@@ -15,7 +15,6 @@
     { "key": "comment-style", "matchers": ["comment-style"] },
     { "key": "catch-all", "matchers": ["(.*?)"] }
   ],
-  "configPath": "deprecation-crawler.config.json",
   "outputDirectory": "./deprecations",
   "tsConfigPath": "tsconfig.sandbox.json",
   "deprecationComment": "@deprecated",
