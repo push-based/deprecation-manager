@@ -49,7 +49,7 @@ function getCrawlFeedback(): ProcessFeedback {
         kleur.gray(`🔎 Looking for deprecations in: `),
         kleur.black(`${r.tag}`)
       );
-      console.log(kleur.gray(`Date: ${r}`));
+      console.log(kleur.gray(`Date: ${r.date}`));
       printProgress();
     },
 

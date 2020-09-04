@@ -42,7 +42,7 @@ export function ensureGitTag(config: CrawlConfig): CrawlerProcess {
       }
     }
 
-    const cliPassedTagName = getCliParam(['tag', 't']);
+    const cliPassedTagName = r.tag || getCliParam(['tag', 't']);
     if (cliPassedTagName !== false) {
       // user passed existing tag name
       return {
