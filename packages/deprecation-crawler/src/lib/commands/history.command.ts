@@ -16,6 +16,7 @@ import { join } from 'path';
 import { RAW_DEPRECATION_PATH } from '../constants';
 import { logError } from '../log';
 import { getTagChoices } from '../tasks/ensure-git-tag';
+import { ensureCleanGit } from '../tasks/ensure-clean-git';
 
 export const historyCommand: YargsCommandObject = {
   command: 'history',
@@ -59,7 +60,7 @@ export const historyCommand: YargsCommandObject = {
 
       const deprecations: Deprecation[] = [];
       for (const tag of tagsToCrawl) {
-        const tasks = [checkout, crawl, addVersion];
+        const tasks = [checkout, crawl, addVersion, ensureCleanGit];
         const initial = {
           version: tag,
           tag: tag,
