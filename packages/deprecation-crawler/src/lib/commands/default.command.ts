@@ -1,15 +1,14 @@
 import { setup } from '../processors/setup';
 import { checkout } from '../tasks/checkout';
 import { addVersion } from '../tasks/add-version';
-import { addGroups } from '../tasks/add-groups';
 import { generateOutput } from '../tasks/generate-output';
 import { updateRepository } from '../tasks/update-repository';
-import { commitChanges } from '../tasks/commit-changes';
-import { getVersion, run } from '../utils';
-import { CrawledRelease } from '../models';
+import { askToSkip, getVersion, run } from '../utils';
+import { CrawlConfig, CrawledRelease, CrawlerProcess } from '../models';
 import { YargsCommandObject } from '../cli/model';
 import { DEFAULT_COMMAND_NAME } from '../cli';
 import { crawl } from '../processors/crawl';
+import { group } from '../processors/group';
 
 export const defaultCommand: YargsCommandObject = {
   command: DEFAULT_COMMAND_NAME,
@@ -22,10 +21,13 @@ export const defaultCommand: YargsCommandObject = {
             checkout,
             crawl,
             addVersion,
-            addGroups,
+            (config: CrawlConfig): CrawlerProcess =>
+              askToSkip('Grouping?', group(config), {
+                precondition: async (r) =>
+                  r.deprecations?.some((d) => !d.group),
+              }),
             generateOutput,
             updateRepository,
-            commitChanges,
           ];
 
           // Run all processors
