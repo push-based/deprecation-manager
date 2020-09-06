@@ -15,7 +15,6 @@ import { existsSync } from 'fs';
 import { join } from 'path';
 import { RAW_DEPRECATION_PATH } from '../constants';
 import { logError } from '../log';
-import { commitChanges } from '../tasks/commit-changes';
 import { getTagChoices } from '../tasks/ensure-git-tag';
 
 export const historyCommand: YargsCommandObject = {
@@ -60,7 +59,7 @@ export const historyCommand: YargsCommandObject = {
 
       const deprecations: Deprecation[] = [];
       for (const tag of tagsToCrawl) {
-        const tasks = [checkout, crawl, addVersion, commitChanges];
+        const tasks = [checkout, crawl, addVersion];
         const initial = {
           version: tag,
           tag: tag,
