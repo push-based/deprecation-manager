@@ -109,7 +109,9 @@ export function readRepoConfig(): CrawlConfig {
   return JSON.parse(repoConfigFile);
 }
 
-export function readRawDeprecations(config: CrawlConfig) {
+export function readRawDeprecations(
+  config: CrawlConfig
+): { deprecations: Deprecation[]; path: string } {
   ensureDirExists(config.outputDirectory);
   const path = join(config.outputDirectory, `${RAW_DEPRECATION_PATH}`);
 
@@ -245,10 +247,10 @@ export function run(
 }
 
 export function concat(processes: CrawlerProcess[]): CrawlerProcess {
-  return async function (d: CrawledRelease): Promise<CrawledRelease | void> {
+  return async function (r: CrawledRelease): Promise<CrawledRelease | void> {
     return await processes.reduce(
       async (deps, processor) => await processor(await deps),
-      Promise.resolve(d)
+      Promise.resolve(r)
     );
   };
 }
