@@ -99,6 +99,7 @@ export function ensureDirExists(dir: string) {
 
 export function updateRepoConfig(config: CrawlConfig): void {
   const crawlerConfigPath = getConfigPath();
+  logVerbose(`update config under ${crawlerConfigPath}`);
   writeFileSync(crawlerConfigPath, formatCode(JSON.stringify(config), 'json'));
 }
 
