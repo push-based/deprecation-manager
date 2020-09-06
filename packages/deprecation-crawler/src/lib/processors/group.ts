@@ -6,7 +6,13 @@ import {
   CrawlerProcess,
   Deprecation,
 } from '../models';
-import { concat, tap, toFileName, updateRepoConfig } from '../utils';
+import {
+  concat,
+  logVerbose,
+  tap,
+  toFileName,
+  updateRepoConfig,
+} from '../utils';
 import { generateRawJson } from '../output-formatters/json/raw.json.formatter';
 import { UNGROUPED_GROUP_NAME } from '../constants';
 import {
@@ -46,7 +52,12 @@ export async function addGrouping(
 
   let escapeGrouping = false;
   for (const deprecation of crawledRelease.deprecations) {
-    const deprecationHasExistingGroup = checkForExistingGroup(
+    if (deprecation?.group?.length >= 1) {
+      logVerbose('Deprecation already grouped');
+      continue;
+    }
+
+    const deprecationHasExistingGroup = getGroupFromDeprecationMessage(
       groups,
       deprecation
     );
@@ -150,7 +161,10 @@ function getGroupNames(groups: { key: string }[]): string[] {
   ];
 }
 
-function checkForExistingGroup(groups: Group[], deprecation: Deprecation) {
+function getGroupFromDeprecationMessage(
+  groups: Group[],
+  deprecation: Deprecation
+): string | undefined {
   return groups.find((group) => {
     // If matchers are present test them else return false
     return group.matchers.length
