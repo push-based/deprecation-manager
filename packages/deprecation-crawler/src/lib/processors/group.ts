@@ -115,9 +115,18 @@ export async function addGrouping(
   const newConfig = { ...config, groups };
   updateRepoConfig(newConfig);
 
+  const uniqueDeprecations = [
+    ...new Map(
+      [...deprecationsWithGroup, ...crawledRelease.deprecations].map((r) => [
+        r.ruid,
+        r,
+      ])
+    ).values(),
+  ];
+
   const newCrawledRelease = {
     ...crawledRelease,
-    deprecations: deprecationsWithGroup,
+    deprecations: uniqueDeprecations,
   };
   groupFeedback.printEnd(newConfig, newCrawledRelease);
 
