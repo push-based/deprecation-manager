@@ -25,7 +25,7 @@ import {
 import { prompt } from 'enquirer';
 import * as yargs from 'yargs';
 import { join } from 'path';
-import simpleGit from 'simple-git';
+import simpleGit, { DiffResultTextFile } from 'simple-git';
 import * as kleur from 'kleur';
 import * as path from 'path';
 
@@ -302,6 +302,18 @@ export async function getCurrentBranchOrTag() {
 
 export async function branchHasChanges(): Promise<boolean> {
   return await git.status(['-s']).then((r) => Boolean(r.files.length));
+}
+
+export async function getFilesWithInsertionWithin2Hashes(diffConfig: {
+  from: string;
+  to: string;
+}) {
+  const gitDiff = await git.diffSummary([
+    `${diffConfig.from}...${diffConfig.to}`,
+  ]);
+  return gitDiff.files
+    .filter((f) => !f.binary && (f as DiffResultTextFile).insertions > 0)
+    .map((f) => f.file);
 }
 
 export async function getRemoteUrl(): Promise<string> {
