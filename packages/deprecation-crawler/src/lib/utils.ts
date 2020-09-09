@@ -29,6 +29,7 @@ import simpleGit from 'simple-git';
 import * as kleur from 'kleur';
 import * as path from 'path';
 import * as semverHelper from 'semver';
+import { logError } from './log';
 
 export function getSiblingPgkJson(
   pathOrFile: string
@@ -155,16 +156,21 @@ export function semverSort(
   asc: boolean,
   pick: (v: any) => string = (v: string): string => v
 ) {
-  return semvers.sort(function (v1, v2) {
-    const p1 = pick(v1);
-    const p2 = pick(v2);
-    const sv1 = SERVER_REGEX.exec(p1)[0] || p1;
-    const sv2 = SERVER_REGEX.exec(p2)[0] || p2;
+  try {
+    return semvers.sort(function (v1, v2) {
+      const p1 = pick(v1);
+      const p2 = pick(v2);
+      const sv1 = SERVER_REGEX.exec(p1)?.[0] || p1;
+      const sv2 = SERVER_REGEX.exec(p2)?.[0] || p2;
 
-    return asc
-      ? semverHelper.compare(sv1, sv2)
-      : semverHelper.rcompare(sv1, sv2);
-  });
+      return asc
+        ? semverHelper.compare(sv1, sv2)
+        : semverHelper.rcompare(sv1, sv2);
+    });
+  } catch (err) {
+    logError(err);
+    return semvers;
+  }
 }
 
 /**
