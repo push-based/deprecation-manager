@@ -1,6 +1,6 @@
 import { concat, tap } from '../utils';
 import { CrawlConfig, CrawledRelease, CrawlerProcess } from '../models';
-import { ensureFormatter } from '../tasks/ensure-fotmatters';
+import { ensureFormatter } from '../tasks/ensure-config/ensure-fotmatters';
 import {
   printFooterLine,
   printHeadline,

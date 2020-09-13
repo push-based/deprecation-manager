@@ -1,14 +1,11 @@
 import { EOL } from 'os';
-import { builtInFormatter } from '../output-formatters';
-import { CRAWLER_CONFIG_PATH } from '../constants';
-import { CrawlConfig, CrawledRelease } from '../models';
+import { builtInFormatter } from '../../output-formatters';
+import { CRAWLER_CONFIG_PATH } from '../../constants';
+import { CrawlConfig } from '../../models';
 
-export function ensureFormatter(
+export async function ensureFormatter(
   config: CrawlConfig
-): [
-  string,
-  (config: CrawlConfig, crawledRelease: CrawledRelease) => Promise<void>
-][] {
+): Promise<CrawlConfig> {
   if (config.outputFormatters.length <= 0) {
     throw new Error(`No formatter registered! ${EOL}
     builtInFormatter: ${Object.keys(builtInFormatter).join(', ')}${EOL}
@@ -17,7 +14,8 @@ export function ensureFormatter(
 
   const configuredAndExistingFormatter = Object.entries(builtInFormatter)
     // Run only registered formatters
-    .filter(([formatterKey]) => config.outputFormatters.includes(formatterKey));
+    .filter(([formatterKey]) => config.outputFormatters.includes(formatterKey))
+    .map(([formatterKey]) => formatterKey);
 
   if (configuredAndExistingFormatter.length <= 0) {
     throw new Error(`No registered formatter available! ${EOL}
@@ -38,5 +36,8 @@ export function ensureFormatter(
     Update outputFormatters to ${CRAWLER_CONFIG_PATH} with correct formatters.`);
   }
 
-  return configuredAndExistingFormatter;
+  return await {
+    ...config,
+    outputFormatters: configuredAndExistingFormatter
+  };
 }

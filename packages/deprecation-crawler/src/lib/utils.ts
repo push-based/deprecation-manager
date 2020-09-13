@@ -176,6 +176,21 @@ export function getConfigPath(): string {
 }
 
 /**
+ * Check for path params from cli command
+ */
+export function getInteractive(): boolean {
+  const argPath = getCliParam(['interactive']);
+  return getBooleanParam(argPath);
+}
+
+function getBooleanParam(paramValue: string | boolean): boolean {
+  if(paramValue === false) {
+    return false;
+  }
+  return paramValue !== 'false';
+}
+
+/**
  * Check for verbose params from cli command
  */
 export function getVerboseFlag(): boolean {

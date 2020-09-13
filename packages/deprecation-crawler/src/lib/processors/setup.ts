@@ -5,16 +5,16 @@ import {
   readRepoConfig,
   updateRepoConfig,
 } from '../utils';
-import { ensureDeprecationCommentConfig } from '../tasks/ensure-deprecation-comment-config';
-import { ensureDeprecationUrlConfig } from '../tasks/ensure-deprecations-url-config';
-import { ensureOutputDirectoryConfig } from '../tasks/ensure-output-directory-config';
-import { ensureConfigDefaults } from '../tasks/ensure-config-defaults';
+import { ensureDeprecationCommentConfig } from '../tasks/ensure-config/ensure-deprecation-comment-config';
+import { ensureDeprecationUrlConfig } from '../tasks/ensure-config/ensure-deprecations-url-config';
+import { ensureOutputDirectoryConfig } from '../tasks/ensure-config/ensure-output-directory-config';
+import { ensureConfigDefaults } from '../tasks/ensure-config/ensure-config-defaults';
 import { printHeadline, ProcessFeedback } from '../log';
 import * as kleur from 'kleur';
 import {
   ensureExcludeGlobConfig,
   ensureIncludeGlobConfig,
-} from '../tasks/ensure-includes-excludes-config';
+} from '../tasks/ensure-config/ensure-includes-excludes-config';
 
 const feedback = getSetupFeedback();
 export async function setup(): Promise<CrawlConfig> {

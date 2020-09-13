@@ -1,36 +1,41 @@
-import { CrawlConfig } from '../models';
+import { CrawlConfig } from '../../models';
 import {
   DEFAULT_COMMENT_LINK_TEMPLATE,
   DEFAULT_COMMIT_MESSAGE,
+  DEFAULT_EXCLUDES,
+  DEFAULT_INCLUDES,
+  DEFAULT_OUTPUT_FORMATTER,
   HEALTH_CHECK_GROUP_NAME,
   SEMVER_TOKEN,
   TAG_FORMAT_TEMPLATE,
-  UNGROUPED_GROUP_NAME,
-} from '../constants';
-import { getSiblingPgkJson, SERVER_REGEX } from '../utils';
+  UNGROUPED_GROUP_NAME
+} from '../../constants';
+import { getSiblingPgkJson, SERVER_REGEX } from '../../utils';
 
 export async function ensureConfigDefaults(
   userConfig: CrawlConfig
 ): Promise<CrawlConfig> {
   return await {
-    outputFormatters: [
-      'tagBasedMarkdown',
-      'groupBasedMarkdown',
-      'deprecationIndex',
-    ],
+    outputFormatters: DEFAULT_OUTPUT_FORMATTER,
     tagFormat: getSuggestedTagFormat(),
     commitMessage: DEFAULT_COMMIT_MESSAGE,
     commentLinkFormat: DEFAULT_COMMENT_LINK_TEMPLATE,
-    groups: [
-      { key: UNGROUPED_GROUP_NAME, matchers: [] },
-      {
-        key: HEALTH_CHECK_GROUP_NAME,
-        matchers: ['\\/\\*\\* *\\' + userConfig.deprecationComment + ' *\\*/'],
-      },
-    ],
+    groups: getDefaultGroups(userConfig.deprecationComment),
+    include: DEFAULT_INCLUDES,
+    exclude: DEFAULT_EXCLUDES,
     // override defaults with user settings
-    ...userConfig,
+    ...userConfig
   };
+}
+
+export function getDefaultGroups(deprecationComment: string): { key: string, matchers: string[] }[] {
+  return [
+    { key: UNGROUPED_GROUP_NAME, matchers: [] },
+    {
+      key: HEALTH_CHECK_GROUP_NAME,
+      matchers: ['\\/\\*\\* *\\' + deprecationComment + ' *\\*/']
+    }
+  ];
 }
 
 export function getSuggestedTagFormat(): string {
