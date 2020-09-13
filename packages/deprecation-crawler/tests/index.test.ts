@@ -3,6 +3,7 @@ import * as cp from 'child_process';
 import * as path from 'path';
 import * as rimraf from 'rimraf';
 import { RAW_DEPRECATION_PATH, CRAWLER_MODES } from '../src/lib/constants';
+import { getCurrentBranchOrTag } from '../src/lib/utils';
 
 const SANDBOX_PATH = path.join(__dirname, '..', 'sandbox');
 const RAW_DEPRECATION_FILE = path.join(
@@ -39,7 +40,8 @@ beforeAll(async () => {
 });
 
 test('sandbox', async () => {
-  const cliOutput = await exec(`npm run crawl -- -t master --verbose`);
+  const branch = getCurrentBranchOrTag();
+  const cliOutput = await exec(`npm run crawl -- -t ${branch} --verbose`);
 
   // verify output
   expect(cliOutput).toMatch(/SETUP PHASE/i);
