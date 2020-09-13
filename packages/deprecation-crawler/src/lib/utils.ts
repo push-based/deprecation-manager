@@ -28,6 +28,8 @@ import { join } from 'path';
 import simpleGit, { DiffResultTextFile } from 'simple-git';
 import * as kleur from 'kleur';
 import * as path from 'path';
+import * as semverHelper from 'semver';
+import { logError } from './log';
 
 export function getSiblingPgkJson(
   pathOrFile: string
@@ -98,6 +100,7 @@ export function ensureDirExists(dir: string) {
 
 export function updateRepoConfig(config: CrawlConfig): void {
   const crawlerConfigPath = getConfigPath();
+  logVerbose(`update config under ${crawlerConfigPath}`);
   writeFileSync(crawlerConfigPath, formatCode(JSON.stringify(config), 'json'));
 }
 
@@ -107,7 +110,9 @@ export function readRepoConfig(): CrawlConfig {
   return JSON.parse(repoConfigFile);
 }
 
-export function readRawDeprecations(config: CrawlConfig) {
+export function readRawDeprecations(
+  config: CrawlConfig
+): { deprecations: Deprecation[]; path: string } {
   ensureDirExists(config.outputDirectory);
   const path = join(config.outputDirectory, `${RAW_DEPRECATION_PATH}`);
 
@@ -129,8 +134,37 @@ export function writeRawDeprecations(
   ensureDirExists(config.outputDirectory);
   const path = join(config.outputDirectory, `${RAW_DEPRECATION_PATH}`);
 
-  const json = JSON.stringify(deprecations, null, 4);
+  const sortedDeprecations = semverSort(
+    deprecations,
+    false,
+    (d: Deprecation) => d.version
+  );
+
+  const json = JSON.stringify(sortedDeprecations, null, 4);
   writeFileSync(path, json);
+  return void 0;
+}
+
+export function semverSort(
+  semvers: any[],
+  asc: boolean,
+  pick: (v: any) => string = (v: string): string => v
+) {
+  try {
+    return semvers.sort(function (v1, v2) {
+      const p1 = pick(v1);
+      const p2 = pick(v2);
+      const sv1 = SERVER_REGEX.exec(p1)?.[0] || p1;
+      const sv2 = SERVER_REGEX.exec(p2)?.[0] || p2;
+
+      return asc
+        ? semverHelper.compare(sv1, sv2)
+        : semverHelper.rcompare(sv1, sv2);
+    });
+  } catch (err) {
+    logError(err);
+    return semvers;
+  }
 }
 
 /**
@@ -213,10 +247,10 @@ export function run(
 }
 
 export function concat(processes: CrawlerProcess[]): CrawlerProcess {
-  return async function (d: CrawledRelease): Promise<CrawledRelease | void> {
+  return async function (r: CrawledRelease): Promise<CrawledRelease | void> {
     return await processes.reduce(
       async (deps, processor) => await processor(await deps),
-      Promise.resolve(d)
+      Promise.resolve(r)
     );
   };
 }

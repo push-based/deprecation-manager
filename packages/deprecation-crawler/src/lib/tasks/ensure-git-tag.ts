@@ -7,7 +7,7 @@ import {
   getCurrentBranchOrTag,
   getTags,
   isCrawlerModeSandbox,
-  SERVER_REGEX,
+  semverSort,
 } from '../utils';
 import { escapeRegExp, template } from 'lodash';
 import { SEMVER_TOKEN } from '../constants';
@@ -129,15 +129,4 @@ export async function getTagChoices(tags: GitTag[]): Promise<string[]> {
   );
   // remove any duplicates
   return [...new Set([...sortedTags])];
-}
-
-function semverSort(semvers: string[], asc: boolean) {
-  return semvers.sort(function (v1, v2) {
-    const sv1 = SERVER_REGEX.exec(v1)[0] || v1;
-    const sv2 = SERVER_REGEX.exec(v2)[0] || v2;
-
-    return asc
-      ? semverHelper.compare(sv1, sv2)
-      : semverHelper.rcompare(sv1, sv2);
-  });
 }

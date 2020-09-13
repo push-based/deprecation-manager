@@ -1,18 +1,17 @@
 import { setup } from '../processors/setup';
-import { generateOutput } from '../tasks/generate-output';
 import { CrawlConfig, CrawledRelease, CrawlerProcess } from '../models';
 import { readRawDeprecations, run } from '../utils';
 import { YargsCommandObject } from '../cli/model';
-import { group } from '../processors/group';
+import { writeRawDeprecationsTask } from '../tasks/write-raw-deprecations';
 
-export const groupCommand: YargsCommandObject = {
-  command: 'group',
-  description: 'Run the group processor',
+export const formatRawJsonCommand: YargsCommandObject = {
+  command: 'format-raw',
+  description: 'Run the formatRawJson processor',
   module: {
     handler: async (argv) => {
-      if (argv.verbose) console.info(`run grouping as a yargs command`);
+      if (argv.verbose) console.info(`run formatRawJson as a yargs command`);
       const config = await setup();
-      const tasks = [loadExistingDeprecations, group, generateOutput];
+      const tasks = [loadExistingDeprecations, writeRawDeprecationsTask];
 
       // Run all processors
       const initial = {} as CrawledRelease;

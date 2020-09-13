@@ -1,5 +1,5 @@
 {
-  "outputFormatters": ["groupBasedMarkdown"],
+  "outputFormatters": ["groupBasedMarkdown", "deprecationIndex"],
   "groups": [
     {
       "key": "ungrouped",
@@ -85,6 +85,10 @@
         "use the configuration object with \\{\\@link timeout\\} instead",
         "in favor of"
       ]
+    },
+    {
+      "key": "fire-house",
+      "matchers": ["throwError\\(\\(\\) \\=\\> new Error"]
     }
   ],
   "outputDirectory": "./docs_app/content/deprecations",
@@ -93,5 +97,7 @@
   "tsConfigPath": "src/tsconfig.base.json",
   "tagFormat": "${SEMVER_TOKEN}",
   "commitMessage": "docs(deprecation-manager): sync deprecations",
-  "commentLinkFormat": "Details: {@link ${COMMENT_LINK_URL_TOKEN}#${COMMENT_LINK_URL_PARAM_TOKEN}}"
+  "commentLinkFormat": "Details: {@link ${COMMENT_LINK_URL_TOKEN}#${COMMENT_LINK_URL_PARAM_TOKEN}}",
+  "include": ["./src/index.ts", "./src/operators/index.ts"],
+  "exclude": ["./**/*.(spec|test|d).ts"]
 }

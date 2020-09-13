@@ -37,7 +37,11 @@ export async function setup(): Promise<CrawlConfig> {
       .then(ensureConfigDefaults)),
   };
 
-  updateRepoConfig(config);
+  // NOTICE: this is needed for better git flow.
+  // Touch a file only if needed
+  if (JSON.stringify(repoConfig) !== JSON.stringify(config)) {
+    updateRepoConfig(config);
+  }
   if (isFirstRun || getVerboseFlag()) {
     feedback.printInitialEnd(config);
   }
