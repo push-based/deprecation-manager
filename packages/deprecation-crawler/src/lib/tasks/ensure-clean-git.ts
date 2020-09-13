@@ -6,6 +6,6 @@ import { CrawlerProcess } from '../models';
 
 export function ensureCleanGit(): CrawlerProcess {
   return tap(async () => {
-    return git.stash().then(() => Promise.resolve());
+    return git.clean('f').then(() => Promise.resolve());
   });
 }
