@@ -7,7 +7,12 @@ import {
   TAG_FORMAT_TEMPLATE,
   UNGROUPED_GROUP_NAME,
 } from '../constants';
-import { getSiblingPgkJson, SERVER_REGEX } from '../utils';
+import {
+  getSiblingPgkJson,
+  MAJOR_MINOR_SERVER_REGEX,
+  MAJOR_SERVER_REGEX,
+  SERVER_REGEX,
+} from '../utils';
 
 export async function ensureConfigDefaults(
   userConfig: CrawlConfig
@@ -40,16 +45,45 @@ export async function ensureConfigDefaults(
 }
 
 export function getSuggestedTagFormat(version: string): string {
-  let shell = version.split('@');
+  // package@1.2.3, package-1.2.3
+  const shell = version.split(/[@-]+[vV]*(?=[0-9])/);
+
   let start = '';
-  // npm scope style: @ present in version e.g. lib-name@1.0.0
+  // package style: '@' or '-' present in version e.g. lib-name@1.0.0 or lib-name-1.0.0
   if (shell.length > 1) {
-    start = shell[0] + '@';
+    const packageSeparator = version[shell[0].length];
+    start = shell[0] + packageSeparator;
     shell.shift();
   }
 
-  const semver = SERVER_REGEX.exec(shell[0])[0] || shell[0];
-  // npm scope style: semver can be 1.0.0 or v1.0.0
-  shell = shell[0].split(semver);
-  return [start, shell[0], `\${${SEMVER_TOKEN}}`, shell[1] || ''].join('');
+  let potentialSemver = shell[0];
+  let semver;
+
+  // v1.2.3, V1.2.3-alpha.1
+  if (potentialSemver[0].toLowerCase() === 'v') {
+    start += potentialSemver[0];
+    potentialSemver = potentialSemver.slice(1, potentialSemver.length);
+  }
+
+  // 1.2.3, 1.2.3-alpha.1, , 1.2.3+alpha.1
+  const matchFullSemver = SERVER_REGEX.exec(potentialSemver);
+
+  if (matchFullSemver) {
+    semver = matchFullSemver[0];
+  }
+  const matchMajorMinorSemver = MAJOR_MINOR_SERVER_REGEX.exec(potentialSemver);
+  if (matchMajorMinorSemver) {
+    semver = matchMajorMinorSemver[0];
+  }
+  const matchMajorSemver = MAJOR_SERVER_REGEX.exec(potentialSemver);
+  if (matchMajorSemver) {
+    semver = matchMajorSemver[0];
+  }
+  if (!semver) {
+    throw new Error(
+      `Can't suggest tag format for ${version}. Please stick to a semver version format.`
+    );
+  }
+
+  return [start, `\${${SEMVER_TOKEN}}`].join('');
 }
