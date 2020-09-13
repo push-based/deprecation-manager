@@ -1,7 +1,8 @@
 import { setup } from '../processors/setup';
 import { CrawlConfig, CrawledRelease, CrawlerProcess } from '../models';
-import { readRawDeprecations, run, writeRawDeprecationsTask } from '../utils';
+import { readRawDeprecations, run } from '../utils';
 import { YargsCommandObject } from '../cli/model';
+import { writeRawDeprecationsTask } from '../tasks/write-raw-deprecations';
 
 export const formatRawJsonCommand: YargsCommandObject = {
   command: 'format-raw',

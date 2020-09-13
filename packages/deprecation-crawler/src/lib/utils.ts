@@ -127,12 +127,6 @@ export function readRawDeprecations(
   return { deprecations, path };
 }
 
-export function writeRawDeprecationsTask(config: CrawlConfig): CrawlerProcess {
-  return async (r: CrawledRelease): Promise<void> => {
-    await writeRawDeprecations(r.deprecations, config);
-  };
-}
-
 export function writeRawDeprecations(
   deprecations: Deprecation[],
   config: CrawlConfig
