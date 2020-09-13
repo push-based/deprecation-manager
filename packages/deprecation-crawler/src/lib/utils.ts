@@ -1,10 +1,4 @@
-import {
-  existsSync,
-  mkdirSync,
-  writeFileSync,
-  readFileSync,
-  unlinkSync,
-} from 'fs';
+import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
 import {
   CrawlConfig,
   CrawledRelease,
