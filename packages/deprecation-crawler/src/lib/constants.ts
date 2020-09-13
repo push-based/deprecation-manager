@@ -2,6 +2,7 @@ import { Options } from 'yargs';
 import { YargsCommandObject } from './cli/model';
 import { groupCommand } from './commands/group.command';
 import { defaultCommand } from './commands/default.command';
+import { historyCommand } from './commands/history.command';
 
 export const DEPRECATIONS_OUTPUT_DIRECTORY = 'deprecations';
 export const CRAWLER_CONFIG_PATH = 'deprecation-crawler.config.json';
@@ -39,12 +40,15 @@ export const OPTIONS: { [key: string]: Options } = {
     type: 'string',
     description: 'Tag to crawler',
   },
-  'next-version': {
+  nextVersion: {
     alias: 'n',
     type: 'string',
     description: 'Version of the crawled results',
   },
 };
 
-export const COMMANDS: YargsCommandObject[] = [groupCommand, defaultCommand];
-
+export const COMMANDS: YargsCommandObject[] = [
+  groupCommand,
+  historyCommand,
+  defaultCommand,
+];

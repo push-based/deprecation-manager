@@ -52,13 +52,18 @@ export async function generateTagBasedFormat(
     }
   );
 
-  const markdownContent = [`# ${crawledRelease.tag}`, '', ...pagesInMd].join(
-    EOL
-  );
+  const markdownContent = [
+    `# ${crawledRelease.tag || crawledRelease.version}`,
+    '',
+    ...pagesInMd,
+  ].join(EOL);
 
   ensureDirExists(config.outputDirectory);
   writeFileSync(
-    join(config.outputDirectory, `${toFileName(crawledRelease.tag)}.md`),
+    join(
+      config.outputDirectory,
+      `${toFileName(crawledRelease.tag || crawledRelease.version)}.md`
+    ),
     formatCode(markdownContent, 'markdown')
   );
   console.log('Updated tag-based markdown format');

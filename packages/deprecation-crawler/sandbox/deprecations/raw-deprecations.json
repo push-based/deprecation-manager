@@ -12,7 +12,7 @@
         ],
         "version": "5.4.2",
         "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git",
-        "date": "2020-08-29T10:34:28+02:00",
+        "date": "2020-09-03T20:33:45+02:00",
         "ruid": "3998890672",
         "group": "all-lowercase"
     },
@@ -29,7 +29,7 @@
         ],
         "version": "5.4.2",
         "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git",
-        "date": "2020-08-29T10:34:28+02:00",
+        "date": "2020-09-03T20:33:45+02:00",
         "ruid": "2129363187",
         "group": "all-lowercase"
     },
@@ -46,7 +46,7 @@
         ],
         "version": "5.4.2",
         "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git",
-        "date": "2020-08-29T10:34:28+02:00",
+        "date": "2020-09-03T20:33:45+02:00",
         "ruid": "2585813938",
         "group": "all-lowercase"
     },
@@ -63,7 +63,7 @@
         ],
         "version": "5.4.2",
         "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git",
-        "date": "2020-08-29T10:34:28+02:00",
+        "date": "2020-09-03T20:33:45+02:00",
         "ruid": "3397214801",
         "group": "comment-style"
     },
@@ -80,7 +80,7 @@
         ],
         "version": "5.4.2",
         "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git",
-        "date": "2020-08-29T10:34:28+02:00",
+        "date": "2020-09-03T20:33:45+02:00",
         "ruid": "456802929",
         "group": "comment-style"
     },
@@ -97,7 +97,7 @@
         ],
         "version": "5.4.2",
         "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git",
-        "date": "2020-08-29T10:34:28+02:00",
+        "date": "2020-09-03T20:33:45+02:00",
         "ruid": "242198417",
         "group": "comment-style"
     },
@@ -114,7 +114,7 @@
         ],
         "version": "5.4.2",
         "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git",
-        "date": "2020-08-29T10:34:28+02:00",
+        "date": "2020-09-03T20:33:45+02:00",
         "ruid": "2601492017",
         "group": "comment-style"
     },
@@ -131,7 +131,7 @@
         ],
         "version": "5.4.2",
         "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git",
-        "date": "2020-08-29T10:34:28+02:00",
+        "date": "2020-09-03T20:33:45+02:00",
         "ruid": "2711487569",
         "group": "comment-style"
     },
@@ -148,7 +148,7 @@
         ],
         "version": "5.4.2",
         "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git",
-        "date": "2020-08-29T10:34:28+02:00",
+        "date": "2020-09-03T20:33:45+02:00",
         "ruid": "1734398741",
         "group": "catch-all"
     },
@@ -165,7 +165,7 @@
         ],
         "version": "5.4.2",
         "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git",
-        "date": "2020-08-29T10:34:28+02:00",
+        "date": "2020-09-03T20:33:45+02:00",
         "ruid": "3477709142",
         "group": "catch-all"
     },
@@ -182,7 +182,7 @@
         ],
         "version": "5.4.2",
         "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git",
-        "date": "2020-08-29T10:34:28+02:00",
+        "date": "2020-09-03T20:33:45+02:00",
         "ruid": "2417065367",
         "group": "catch-all"
     },
@@ -199,7 +199,7 @@
         ],
         "version": "5.4.2",
         "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git",
-        "date": "2020-08-29T10:34:28+02:00",
+        "date": "2020-09-03T20:33:45+02:00",
         "ruid": "3186155811",
         "group": "whitespace-normalisation"
     },
@@ -216,7 +216,7 @@
         ],
         "version": "5.4.2",
         "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git",
-        "date": "2020-08-29T10:34:28+02:00",
+        "date": "2020-09-03T20:33:45+02:00",
         "ruid": "677771456",
         "group": "whitespace-normalisation"
     },
@@ -233,7 +233,7 @@
         ],
         "version": "5.4.2",
         "remoteUrl": "https://github.com/timdeschryver/find-deprecations.git",
-        "date": "2020-08-29T10:34:28+02:00",
+        "date": "2020-09-03T20:33:45+02:00",
         "ruid": "3130163297",
         "group": "whitespace-normalisation"
     }

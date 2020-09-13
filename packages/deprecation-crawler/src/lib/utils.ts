@@ -1,4 +1,10 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import {
+  existsSync,
+  mkdirSync,
+  writeFileSync,
+  readFileSync,
+  unlinkSync,
+} from 'fs';
 import {
   CrawlConfig,
   CrawledRelease,
@@ -57,6 +63,7 @@ export function proxyMethodToggles<T>(
               return origMethod.apply(this, args);
             }
             logVerbose(`Call of method ${propKey} got ignored through toggle.`);
+
             return Promise.resolve();
           }
           return origMethod.apply(this, args);
@@ -152,7 +159,7 @@ export function logVerbose(message: string, enforceLog = false): void {
  * Check for version params from cli command
  */
 export function getVersion() {
-  const argPath = getCliParam(['next-version', 'n']);
+  const argPath = getCliParam(['nextVersion', 'n']);
   return argPath ? argPath : '';
 }
 
@@ -295,6 +302,18 @@ export async function getCurrentBranchOrTag() {
 
 export async function branchHasChanges(): Promise<boolean> {
   return await git.status(['-s']).then((r) => Boolean(r.files.length));
+}
+
+export async function getFilesWithInsertionWithin2Hashes(diffConfig: {
+  from: string;
+  to: string;
+}) {
+  const gitDiff = await git.diffSummary([
+    `${diffConfig.from}...${diffConfig.to}`,
+  ]);
+  return gitDiff.files
+    .filter((f) => !f.binary && (f as DiffResultTextFile).insertions > 0)
+    .map((f) => f.file);
 }
 
 export async function getRemoteUrl(): Promise<string> {

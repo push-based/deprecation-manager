@@ -6,12 +6,15 @@ import {
   updateRepoConfig,
 } from '../utils';
 import { ensureDeprecationCommentConfig } from '../tasks/ensure-deprecation-comment-config';
-import { ensureTsConfigPath } from '../tasks/ensure-tsconfig-path';
 import { ensureDeprecationUrlConfig } from '../tasks/ensure-deprecations-url-config';
 import { ensureOutputDirectoryConfig } from '../tasks/ensure-output-directory-config';
 import { ensureConfigDefaults } from '../tasks/ensure-config-defaults';
 import { printHeadline, ProcessFeedback } from '../log';
 import * as kleur from 'kleur';
+import {
+  ensureExcludeGlobConfig,
+  ensureIncludeGlobConfig,
+} from '../tasks/ensure-includes-excludes-config';
 
 const feedback = getSetupFeedback();
 export async function setup(): Promise<CrawlConfig> {
@@ -25,10 +28,11 @@ export async function setup(): Promise<CrawlConfig> {
 
   const config = {
     ...repoConfig,
-    ...(await ensureTsConfigPath(repoConfig)
-      .then(ensureDeprecationUrlConfig)
+    ...(await ensureDeprecationUrlConfig(repoConfig)
       .then(ensureDeprecationCommentConfig)
       .then(ensureOutputDirectoryConfig)
+      .then(ensureIncludeGlobConfig)
+      .then(ensureExcludeGlobConfig)
       // defaults should be last as it takes user settings
       .then(ensureConfigDefaults)),
   };
@@ -62,14 +66,6 @@ function getSetupFeedback(): ProcessFeedback & {
       );
       console.log(kleur.gray(`Configuration saved under: ${getConfigPath()}`));
       console.log(kleur.gray(JSON.stringify(config, null, 4)));
-      console.log(
-        kleur.gray(`From now on the crawler will go to ${getConfigPath()} and crawl files referenced under ${
-          config.tsConfigPath
-        } and these questions will not get asked next time.
-                   If you want to change something edit the content of ${getConfigPath()} or ${
-          config.tsConfigPath
-        } or create a custom tsconfig file.`)
-      );
     },
   };
 }
