@@ -320,7 +320,7 @@ export async function getFilesWithDeletionsWithin2Hashes(
     // Docs: https://git-scm.com/docs/git-diff#Documentation/git-diff.txt---diff-filterACDMRTUXB82308203
     // Uppercase e.g. M includes files, lowercase e.g. m removes files
     `--diff-filter=TMRD`,
-    `-G"deprecated"`,
+    `-G"${config.deprecationComment}"`,
     // @TODO add config.pathFilter here
   ]);
   return gitDiff.files
