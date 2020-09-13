@@ -8,11 +8,11 @@ import { commitChanges } from '../tasks/commit-changes';
 import { getVersion, run } from '../utils';
 import { CrawledRelease } from '../models';
 import { YargsCommandObject } from '../cli/model';
-import { DEFAULT_COMMAND_NAME } from '../cli';
 import { crawl } from '../processors/crawl';
 
 export const defaultCommand: YargsCommandObject = {
-  command: DEFAULT_COMMAND_NAME,
+  // * means the default command
+  command: '*',
   description: 'Run default processors',
   module: {
     handler: (): void => {
