@@ -5,13 +5,14 @@ import { updateRepository } from '../tasks/update-repository';
 import { askToSkip, getVersion, run } from '../utils';
 import { CrawlConfig, CrawledRelease, CrawlerProcess } from '../models';
 import { YargsCommandObject } from '../cli/model';
-import { DEFAULT_COMMAND_NAME } from '../cli';
 import { crawl } from '../processors/crawl';
 import { group } from '../processors/group';
 import { format } from '../processors/format';
 
 export const defaultCommand: YargsCommandObject = {
-  command: DEFAULT_COMMAND_NAME,
+  // * is the default command 
+  // https://github.com/yargs/yargs/blob/master/docs/advanced.md#default-commands
+  command: '*',
   description: 'Run default processors',
   module: {
     handler: (): void => {
