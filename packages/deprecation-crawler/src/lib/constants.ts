@@ -4,6 +4,7 @@ import { groupCommand } from './commands/group.command';
 import { defaultCommand } from './commands/default.command';
 import { historyCommand } from './commands/history.command';
 import { formatRawJsonCommand } from './commands/format-raw-json.command';
+import { initCommand } from './commands/init.command';
 
 export const DEPRECATIONS_OUTPUT_DIRECTORY = 'deprecations';
 export const CRAWLER_CONFIG_PATH = 'deprecation-crawler.config.json';
@@ -49,6 +50,7 @@ export const OPTIONS: { [key: string]: Options } = {
 };
 
 export const COMMANDS: YargsCommandObject[] = [
+  initCommand,
   groupCommand,
   historyCommand,
   formatRawJsonCommand,
