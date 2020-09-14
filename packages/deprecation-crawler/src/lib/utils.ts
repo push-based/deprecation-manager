@@ -45,7 +45,7 @@ export function getSiblingPgkJson(
 
 export const git = proxyMethodToggles(
   simpleGit(),
-  ['commit', 'push', 'clone'],
+  ['commit', 'push', 'clone', 'checkout'],
   () => toggles.executeGitCommands
 );
 
@@ -65,7 +65,6 @@ export function proxyMethodToggles<T>(
               return origMethod.apply(this, args);
             }
             logVerbose(`Call of method ${propKey} got ignored through toggle.`);
-
             return Promise.resolve();
           }
           return origMethod.apply(this, args);
@@ -184,7 +183,7 @@ export function getInteractive(): boolean {
 }
 
 function getBooleanParam(paramValue: string | boolean): boolean {
-  if(paramValue === false) {
+  if (paramValue === false) {
     return false;
   }
   return paramValue !== 'false';

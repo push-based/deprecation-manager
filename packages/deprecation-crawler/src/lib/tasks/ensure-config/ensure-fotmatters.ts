@@ -19,25 +19,22 @@ export async function ensureFormatter(
 
   if (configuredAndExistingFormatter.length <= 0) {
     throw new Error(`No registered formatter available! ${EOL}
-    registered formatter: ${Object.keys(config.outputFormatters).join(
-      ', '
-    )}${EOL}
+    registered formatter: ${config.outputFormatters.join(', ')}${EOL}
     Update outputFormatters to ${CRAWLER_CONFIG_PATH} with existing formatters.`);
   }
 
-  const wrongFormatter = configuredAndExistingFormatter
-    .filter(([key]) => !Object.keys(builtInFormatter).includes(key))
-    .map(([k]) => k);
+  const wrongFormatter = configuredAndExistingFormatter.filter(
+    (key) => !Object.keys(builtInFormatter).includes(key)
+  );
   if (wrongFormatter.length > 0) {
     throw new Error(`Wrong formatter registered! ${EOL}
-    Following formatter are not available: ${Object.keys(wrongFormatter).join(
-      ', '
-    )}${EOL}
+    Following formatter are not available: ${wrongFormatter.join(', ')}${EOL}
+    Available formatters: ${Object.keys(builtInFormatter).join(', ')}${EOL}
     Update outputFormatters to ${CRAWLER_CONFIG_PATH} with correct formatters.`);
   }
 
   return await {
     ...config,
-    outputFormatters: configuredAndExistingFormatter
+    outputFormatters: configuredAndExistingFormatter,
   };
 }
