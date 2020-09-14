@@ -11,7 +11,8 @@ import { YargsCommandObject } from '../cli/model';
 import { crawl } from '../processors/crawl';
 
 export const defaultCommand: YargsCommandObject = {
-  // * means the default command
+  // * is the default command 
+  // https://github.com/yargs/yargs/blob/master/docs/advanced.md#default-commands
   command: '*',
   description: 'Run default processors',
   module: {
