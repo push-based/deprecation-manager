@@ -1,11 +1,10 @@
 import { prompt } from 'enquirer';
 import { CrawlConfig } from '../../models';
 import { getInteractive } from '../../utils';
-import { ensureConfigDefaults } from './ensure-config-defaults';
 import { DEFAULT_EXCLUDES, DEFAULT_INCLUDES } from '../../constants';
 
 
-export async function ensureIncludeGlobConfig(
+export async function ensureIncludeGlob(
   config: CrawlConfig
 ): Promise<CrawlConfig> {
   const includePresent =
@@ -30,7 +29,7 @@ export async function ensureIncludeGlobConfig(
   };
 }
 
-export async function ensureExcludeGlobConfig(
+export async function ensureExcludeGlob(
   config: CrawlConfig
 ): Promise<CrawlConfig> {
   const excludePresent =

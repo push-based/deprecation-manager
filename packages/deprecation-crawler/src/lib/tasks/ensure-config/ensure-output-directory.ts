@@ -3,7 +3,7 @@ import { CrawlConfig } from '../../models';
 import { DEPRECATIONS_OUTPUT_DIRECTORY } from '../../constants';
 import { getInteractive } from '../../utils';
 
-export async function ensureOutputDirectoryConfig(
+export async function ensureOutputDirectory(
   config: CrawlConfig
 ): Promise<CrawlConfig> {
   let outputDirectorySuggestion = config.outputDirectory || DEPRECATIONS_OUTPUT_DIRECTORY;

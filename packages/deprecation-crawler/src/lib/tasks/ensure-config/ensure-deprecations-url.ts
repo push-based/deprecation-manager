@@ -2,7 +2,7 @@ import { prompt } from 'enquirer';
 import { CrawlConfig } from '../../models';
 import { getInteractive, getSiblingPgkJson } from '../../utils';
 
-export async function ensureDeprecationUrlConfig(
+export async function ensureDeprecationUrl(
   config: CrawlConfig
 ): Promise<CrawlConfig> {
   let suggestedDeprecationLink = config.deprecationLink || getSuggestionsFormPackageJson();

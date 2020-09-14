@@ -3,7 +3,7 @@ import { CrawlConfig } from '../../models';
 import { DEFAULT_DEPRECATION_MSG_TOKEN } from '../../constants';
 import { getInteractive } from '../../utils';
 
-export async function ensureDeprecationCommentConfig(
+export async function ensureDeprecationComment(
   config: CrawlConfig
 ): Promise<CrawlConfig> {
   let deprecationCommentSuggestion = config.deprecationComment || DEFAULT_DEPRECATION_MSG_TOKEN;

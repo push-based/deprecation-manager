@@ -1,23 +1,16 @@
 import { concat, tap } from '../utils';
 import { CrawlConfig, CrawledRelease, CrawlerProcess } from '../models';
-import { ensureFormatter } from '../tasks/ensure-config/ensure-fotmatters';
-import {
-  printFooterLine,
-  printHeadline,
-  printProgress,
-  ProcessFeedback,
-} from '../log';
+import { printFooterLine, printHeadline, printProgress, ProcessFeedback } from '../log';
 import * as kleur from 'kleur';
 
 const feedback = getFormatFeedback();
+
 // Formatting Job
-export function format(config): CrawlerProcess {
+export function format(cfg): CrawlerProcess {
   return concat([
-    tap(async (r) => feedback.printStart(config, r)),
-    ...ensureFormatter(config).map(([_, formatter]) =>
-      tap((r: CrawledRelease) => formatter(config, r))
-    ),
-    tap(async (r) => feedback.printEnd(config, r)),
+    tap(async (r: CrawledRelease) => feedback.printStart(cfg, r)),
+    ...cfg.map(formatter => tap(async (r: CrawledRelease) => formatter(cfg, r))),
+    tap(async (r: CrawledRelease) => feedback.printEnd(cfg, r))
   ]);
 }
 
@@ -38,10 +31,10 @@ function getFormatFeedback(): ProcessFeedback {
           kleur.gray(config.outputFormatters.join(',')),
           kleur.gray(`for`),
           kleur.black(rawRelease.deprecations.length),
-          kleur.gray(`deprecations`),
+          kleur.gray(`deprecations`)
         ].join(' ')
       );
       printFooterLine();
-    },
+    }
   };
 }
