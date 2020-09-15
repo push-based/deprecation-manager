@@ -6,10 +6,8 @@ import { CrawlConfig } from '../../models';
 export async function ensureFormatter(
   config: CrawlConfig
 ): Promise<CrawlConfig> {
-  if (config.outputFormatters.length <= 0) {
-    throw new Error(`No formatter registered! ${EOL}
-    builtInFormatter: ${Object.keys(builtInFormatter).join(', ')}${EOL}
-    Add outputFormatters to ${CRAWLER_CONFIG_PATH}.`);
+  if ((config.outputFormatters || []).length <= 0) {
+    return { ...config, outputFormatters: Object.keys(builtInFormatter) };
   }
 
   const configuredAndExistingFormatter = Object.entries(builtInFormatter)

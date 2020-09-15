@@ -14,7 +14,7 @@ import { addVersion } from '../tasks/add-version';
 import { prompt } from 'enquirer';
 import { getTagChoices } from '../tasks/ensure-git-tag';
 import { ensureCleanGit } from '../tasks/ensure-clean-git';
-import { ensureConfigDefaults } from '../tasks/ensure-config';
+import * as cfgQuestions from '../tasks/ensure-config';
 
 export const historyCommand: YargsCommandObject = {
   command: 'history',
@@ -25,7 +25,18 @@ export const historyCommand: YargsCommandObject = {
       let config = readRepoConfig();
       const isInitialized = Object.keys(config).length > 0;
       if (!isInitialized) {
-        config = await ensureConfigDefaults(config);
+        config = await {
+          ...(await cfgQuestions
+            .ensureDeprecationUrl(config)
+            .then(cfgQuestions.ensureDeprecationComment)
+            .then(cfgQuestions.ensureGroups)
+            .then(cfgQuestions.ensureFormatter)
+            .then(cfgQuestions.ensureOutputDirectory)
+            .then(cfgQuestions.ensureIncludeGlob)
+            .then(cfgQuestions.ensureExcludeGlob)
+            // defaults should be last as it takes user settings
+            .then(cfgQuestions.ensureConfigDefaults)),
+        };
       }
 
       const current = await getCurrentBranchOrTag();
