@@ -45,7 +45,6 @@ test('sandbox', async () => {
 
   // verify output
   expect(cliOutput).toMatch(/SETUP PHASE/i);
-  expect(cliOutput).toMatch(/tsconfig.sandbox.json/i);
   expect(cliOutput).toMatch(/CRAWL PHASE/i);
   expect(cliOutput).toMatch(/GROUPING PHASE/i);
   expect(cliOutput).toMatch(/FORMAT OUTPUT/i);

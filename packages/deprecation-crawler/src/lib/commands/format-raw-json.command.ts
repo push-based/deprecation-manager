@@ -1,8 +1,8 @@
-import { setup } from '../processors/setup';
 import { CrawlConfig, CrawledRelease, CrawlerProcess } from '../models';
 import { readRawDeprecations, run } from '../utils';
 import { YargsCommandObject } from '../cli/model';
 import { writeRawDeprecationsTask } from '../tasks/write-raw-deprecations';
+import * as cfgQuestions from '../tasks/ensure-config';
 
 export const formatRawJsonCommand: YargsCommandObject = {
   command: 'format-raw',
@@ -10,7 +10,11 @@ export const formatRawJsonCommand: YargsCommandObject = {
   module: {
     handler: async (argv) => {
       if (argv.verbose) console.info(`run formatRawJson as a yargs command`);
-      const config = await setup();
+      const config = await {
+        ... Promise.resolve({ } as CrawlConfig)
+          .then(cfgQuestions.ensureOutputDirectory)
+      };
+
       const tasks = [loadExistingDeprecations, writeRawDeprecationsTask];
 
       // Run all processors

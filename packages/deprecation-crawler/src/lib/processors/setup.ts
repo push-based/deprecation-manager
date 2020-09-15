@@ -5,16 +5,9 @@ import {
   readRepoConfig,
   updateRepoConfig,
 } from '../utils';
-import { ensureDeprecationCommentConfig } from '../tasks/ensure-deprecation-comment-config';
-import { ensureDeprecationUrlConfig } from '../tasks/ensure-deprecations-url-config';
-import { ensureOutputDirectoryConfig } from '../tasks/ensure-output-directory-config';
-import { ensureConfigDefaults } from '../tasks/ensure-config-defaults';
 import { printHeadline, ProcessFeedback } from '../log';
 import * as kleur from 'kleur';
-import {
-  ensureExcludeGlobConfig,
-  ensureIncludeGlobConfig,
-} from '../tasks/ensure-includes-excludes-config';
+import * as cfgQuestions from '../tasks/ensure-config';
 
 const feedback = getSetupFeedback();
 export async function setup(): Promise<CrawlConfig> {
@@ -28,13 +21,15 @@ export async function setup(): Promise<CrawlConfig> {
 
   const config = {
     ...repoConfig,
-    ...(await ensureDeprecationUrlConfig(repoConfig)
-      .then(ensureDeprecationCommentConfig)
-      .then(ensureOutputDirectoryConfig)
-      .then(ensureIncludeGlobConfig)
-      .then(ensureExcludeGlobConfig)
+    ...(await cfgQuestions.ensureDeprecationUrl(repoConfig)
+      .then(cfgQuestions.ensureDeprecationComment)
+      .then(cfgQuestions.ensureGroups)
+      .then(cfgQuestions.ensureFormatter)
+      .then(cfgQuestions.ensureOutputDirectory)
+      .then(cfgQuestions.ensureIncludeGlob)
+      .then(cfgQuestions.ensureExcludeGlob)
       // defaults should be last as it takes user settings
-      .then(ensureConfigDefaults)),
+      .then(cfgQuestions.ensureConfigDefaults)),
   };
 
   // NOTICE: this is needed for better git flow.

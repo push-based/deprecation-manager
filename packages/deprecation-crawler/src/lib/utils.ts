@@ -45,7 +45,7 @@ export function getSiblingPgkJson(
 
 export const git = proxyMethodToggles(
   simpleGit(),
-  ['commit', 'push', 'clone'],
+  ['commit', 'push', 'clone', 'checkout'],
   () => toggles.executeGitCommands
 );
 
@@ -65,7 +65,6 @@ export function proxyMethodToggles<T>(
               return origMethod.apply(this, args);
             }
             logVerbose(`Call of method ${propKey} got ignored through toggle.`);
-
             return Promise.resolve();
           }
           return origMethod.apply(this, args);
@@ -173,6 +172,21 @@ export function semverSort(
 export function getConfigPath(): string {
   const argPath = getCliParam(['path', 'p']);
   return argPath ? argPath : CRAWLER_CONFIG_PATH;
+}
+
+/**
+ * Check for path params from cli command
+ */
+export function getInteractive(): boolean {
+  const argPath = getCliParam(['interactive']);
+  return getBooleanParam(argPath);
+}
+
+function getBooleanParam(paramValue: string | boolean): boolean {
+  if (paramValue === false) {
+    return false;
+  }
+  return paramValue !== 'false';
 }
 
 /**

@@ -1,13 +1,13 @@
 import { setup } from '../processors/setup';
 import { checkout } from '../tasks/checkout';
 import { addVersion } from '../tasks/add-version';
-import { generateOutput } from '../tasks/generate-output';
 import { updateRepository } from '../tasks/update-repository';
 import { askToSkip, getVersion, run } from '../utils';
 import { CrawlConfig, CrawledRelease, CrawlerProcess } from '../models';
 import { YargsCommandObject } from '../cli/model';
 import { crawl } from '../processors/crawl';
 import { group } from '../processors/group';
+import { format } from '../processors/format';
 
 export const defaultCommand: YargsCommandObject = {
   // * is the default command 
@@ -25,19 +25,22 @@ export const defaultCommand: YargsCommandObject = {
             (config: CrawlConfig): CrawlerProcess =>
               askToSkip('Grouping?', group(config), {
                 precondition: async (r) =>
-                  r.deprecations?.some((d) => !d.group),
+                  r.deprecations?.some((d) => !d.group)
               }),
-            generateOutput,
-            updateRepository,
+            (config: CrawlConfig): CrawlerProcess =>
+              askToSkip('Update Formatted Output?', format(config), {
+                precondition: async (r) => r.deprecations?.length > 0
+              }),
+            updateRepository
           ];
 
           // Run all processors
           const initial = {
-            version: getVersion(),
+            version: getVersion()
           } as CrawledRelease;
           run(tasks, config)(initial);
         })
         .catch((e) => console.error(e));
-    },
-  },
+    }
+  }
 };
