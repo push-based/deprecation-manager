@@ -253,6 +253,17 @@ function getGroupRegexQuestion() {
 }
 
 function testMessage(reg: string, deprecationMessage: string): boolean {
+  if (!reg) {
+    return;
+  }
+
+  // user gives us a regexp
+  if (reg.startsWith('/')) {
+    const regexp = stringToRegex(reg);
+    return regexp.test(deprecationMessage);
+  }
+
+  // user gives us text
   return (
     reg &&
     new RegExp(parseDeprecationMessageOrRegex(reg)).test(
@@ -275,4 +286,20 @@ function parseDeprecationMessageOrRegex(deprecationMessage: string): string {
       // tri trailing and leading white spaces
       .trim()
   );
+}
+
+function stringToRegex(text: string) {
+  // Main regex
+  const main = text.match(/\/(.+)\/.*/)[1];
+  // Regex options
+  const options = [
+    ...new Set(
+      text
+        .match(/\/.+\/(.*)/)[1]
+        .split('')
+        .concat('i', 'g')
+    ),
+  ].join('');
+  // Return compiled regex
+  return new RegExp(main, options);
 }
