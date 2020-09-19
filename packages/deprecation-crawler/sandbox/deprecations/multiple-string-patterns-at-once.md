@@ -1,13 +1,13 @@
 <!-- ruid-groups
 
 - master:
-  - https://github.com/timdeschryver/find-deprecations/tree/master/multiple-string-patterns-at-once/crawled.ts#L15
-  - https://github.com/timdeschryver/find-deprecations/tree/master/multiple-string-patterns-at-once/crawled.ts#L21
-  - https://github.com/timdeschryver/find-deprecations/tree/master/multiple-string-patterns-at-once/crawled.ts#L27
+  - https://github.com/timdeschryver/find-deprecations/tree/master/multiple-string-patterns-at-once/crawled.ts#L12
+  - https://github.com/timdeschryver/find-deprecations/tree/master/multiple-string-patterns-at-once/crawled.ts#L18
+  - https://github.com/timdeschryver/find-deprecations/tree/master/multiple-string-patterns-at-once/crawled.ts#L24
 
 ruid-groups -->
 
-# catch-all
+# multiple-string-patterns-at-once
 
 Some general information what all there deprecations have in common.
 

@@ -70,15 +70,13 @@ test('sandbox', async () => {
   expect(
     rawDeprecations.filter((d) => d.group === 'whitespace-normalisation')
   ).toHaveLength(3);
-  // BUG: this has to have 3 hits
   expect(
     rawDeprecations.filter(
       (d) => d.group === 'multiple-string-patterns-at-once'
     )
-  ).toHaveLength(0);
-  // @TODO BUG: this has to have 0 hits
+  ).toHaveLength(3);
   expect(rawDeprecations.filter((d) => d.group === 'catch-all')).toHaveLength(
-    3
+    0
   );
 
   // without passing a version via the CLI, new deprecations shouldn't have a version

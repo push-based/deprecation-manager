@@ -10,7 +10,7 @@
     },
     {
       "key": "multiple-string-patterns-at-once",
-      "matchers": ["/^(?=.*This const named!)(?=.*deprecated!)(?=.*xyz!).../"]
+      "matchers": ["/(This const named)|(important)|(`t2`)/"]
     },
     { "key": "comment-style", "matchers": ["comment-style"] },
     { "key": "catch-all", "matchers": ["(.*?)"] }

@@ -91,7 +91,7 @@ function foo5() {
 }
 ```
 
-## catch-all
+## multiple-string-patterns-at-once
 
 ### crawled.ts
 
@@ -100,7 +100,6 @@ function foo5() {
 @deprecated This const named `t` is deprecated. See {@link info} for xyz.
 Example: 3 pattern match
 Group name: multi pattern match
-Regex: /^(?=.This const named!)(?=.deprecated!)(?=.xyz!).../
 
 ```ts
 const multiPatternMatch1 = 0;
@@ -108,7 +107,7 @@ const multiPatternMatch1 = 0;
 
 #### multiPatternMatch2 (VariableStatement) {#3477709142}
 
-@deprecated IMPORTANT! This const named `t1` is deprecated. See {@link info} for xyz.
+@deprecated This is deprecated IMPORTANT!. See {@link info} for xyz.
 Example: 3 pattern match with other start
 
 ```ts
@@ -117,7 +116,7 @@ const multiPatternMatch2 = 0;
 
 #### multiPatternMatch3 (VariableStatement) {#2417065367}
 
-@deprecated This const named `t2` is deprecated. See {@link info} for xyz and related things.
+@deprecated `t2` is deprecated. See {@link info} for xyz and related things.
 Example: 3 pattern match with other end
 
 ```ts
