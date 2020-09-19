@@ -9,7 +9,7 @@ import {
   COMMENT_LINK_URL_PARAM_TOKEN,
   COMMENT_LINK_URL_TOKEN,
 } from '../../constants';
-import { ensureCommentLinkFormat } from '../../tasks/ensure-comment-link-template';
+import { ensureCommentLinkFormat } from '../../tasks/ensure-config/ensure-comment-link-template';
 import {
   createCrawlerTsConfig,
   deleteCrawlerTsConfig,

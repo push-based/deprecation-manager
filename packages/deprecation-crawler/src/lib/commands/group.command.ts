@@ -1,9 +1,9 @@
-import { setup } from '../processors/setup';
-import { addGroups } from '../tasks/add-groups';
-import { generateOutput } from '../tasks/generate-output';
 import { CrawlConfig, CrawledRelease, CrawlerProcess } from '../models';
-import { readRawDeprecations, run } from '../utils';
+import { askToSkip, readRawDeprecations, run } from '../utils';
 import { YargsCommandObject } from '../cli/model';
+import { group } from '../processors/group';
+import { format } from '../processors/format';
+import * as cfgQuestions from '../tasks/ensure-config';
 
 export const groupCommand: YargsCommandObject = {
   command: 'group',
@@ -11,8 +11,20 @@ export const groupCommand: YargsCommandObject = {
   module: {
     handler: async (argv) => {
       if (argv.verbose) console.info(`run grouping as a yargs command`);
-      const config = await setup();
-      const tasks = [loadExistingDeprecations, addGroups, generateOutput];
+      const config = await {
+        ...Promise.resolve({} as CrawlConfig)
+          .then(cfgQuestions.ensureOutputDirectory)
+          .then(cfgQuestions.ensureFormatter)
+          .then(cfgQuestions.ensureGroups),
+      };
+      const tasks = [
+        loadExistingDeprecations,
+        group,
+        (config: CrawlConfig): CrawlerProcess =>
+          askToSkip('Update Formatted Output?', format(config), {
+            precondition: async (r) => r.deprecations?.length > 0,
+          }),
+      ];
 
       // Run all processors
       const initial = {} as CrawledRelease;

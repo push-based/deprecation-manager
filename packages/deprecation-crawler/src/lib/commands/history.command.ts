@@ -1,9 +1,10 @@
-import { setup } from '../processors/setup';
 import { CrawledRelease, Deprecation, GitTag } from '../models';
 import {
   getCurrentBranchOrTag,
   git,
+  readRepoConfig,
   run,
+  updateRepoConfig,
   writeRawDeprecations,
 } from '../utils';
 import { YargsCommandObject } from '../cli/model';
@@ -11,11 +12,8 @@ import { checkout } from '../tasks/checkout';
 import { crawl } from '../processors/crawl';
 import { addVersion } from '../tasks/add-version';
 import { prompt } from 'enquirer';
-import { existsSync } from 'fs';
-import { join } from 'path';
-import { RAW_DEPRECATION_PATH } from '../constants';
-import { logError } from '../log';
-import { commitChanges } from '../tasks/commit-changes';
+import { ensureCleanGit } from '../tasks/ensure-clean-git';
+import * as cfgQuestions from '../tasks/ensure-config';
 import { getTagChoices } from '../tasks/ensure-git-tag';
 
 export const historyCommand: YargsCommandObject = {
@@ -24,17 +22,21 @@ export const historyCommand: YargsCommandObject = {
   module: {
     handler: async (argv) => {
       if (argv.verbose) console.info(`run history as a yargs command`);
-      const config = await setup();
-
-      const rawDeprecationsPath = join(
-        config.outputDirectory,
-        `${RAW_DEPRECATION_PATH}`
-      );
-      if (existsSync(rawDeprecationsPath)) {
-        logError(
-          'The history command can only be run on a clean repository without existing deprecations'
-        );
-        return;
+      let config = readRepoConfig();
+      const isInitialized = Object.keys(config).length > 0;
+      if (!isInitialized) {
+        config = await {
+          ...(await cfgQuestions
+            .ensureDeprecationUrl(config)
+            .then(cfgQuestions.ensureDeprecationComment)
+            .then(cfgQuestions.ensureGroups)
+            .then(cfgQuestions.ensureFormatter)
+            .then(cfgQuestions.ensureOutputDirectory)
+            .then(cfgQuestions.ensureIncludeGlob)
+            .then(cfgQuestions.ensureExcludeGlob)
+            // defaults should be last as it takes user settings
+            .then(cfgQuestions.ensureConfigDefaults)),
+        };
       }
 
       const current = await getCurrentBranchOrTag();
@@ -60,7 +62,7 @@ export const historyCommand: YargsCommandObject = {
 
       const deprecations: Deprecation[] = [];
       for (const tag of tagsToCrawl) {
-        const tasks = [checkout, crawl, addVersion, commitChanges];
+        const tasks = [checkout, crawl, addVersion, ensureCleanGit];
         const initial = {
           version: tag,
           tag: tag,
@@ -75,6 +77,9 @@ export const historyCommand: YargsCommandObject = {
         ...new Map(deprecations.map((r) => [r.ruid, r])).values(),
       ];
       writeRawDeprecations(uniqueDeprecations, config);
+      if (!isInitialized) {
+        updateRepoConfig(config);
+      }
     },
   },
 };

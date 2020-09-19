@@ -41,7 +41,6 @@ export async function ensureConfigDefaults(
     ...userConfig,
   };
 }
-
 export function getSuggestedTagFormat(version: string): string {
   // package@1.2.3, package-1.2.3
   const shell = version.split(/[@-]+[vV]*(?=[0-9])/);

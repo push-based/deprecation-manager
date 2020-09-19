@@ -39,14 +39,12 @@ beforeAll(async () => {
 });
 
 test('sandbox', async () => {
-  const branch = 'master';
   const cliOutput = await exec(
-    `npm run crawl -- -t ${branch} --verbose --unhandled-rejections=strict`
+    `npm run crawl -- -t master --verbose --unhandled-rejections=strict`
   ).catch(console.error);
 
   // verify output
   expect(cliOutput).toMatch(/SETUP PHASE/i);
-  expect(cliOutput).toMatch(/tsconfig.sandbox.json/i);
   expect(cliOutput).toMatch(/CRAWL PHASE/i);
   expect(cliOutput).toMatch(/GROUPING PHASE/i);
   expect(cliOutput).toMatch(/FORMAT OUTPUT/i);
@@ -72,15 +70,13 @@ test('sandbox', async () => {
   expect(
     rawDeprecations.filter((d) => d.group === 'whitespace-normalisation')
   ).toHaveLength(3);
-  // BUG: this has to have 3 hits
   expect(
     rawDeprecations.filter(
       (d) => d.group === 'multiple-string-patterns-at-once'
     )
-  ).toHaveLength(0);
-  // @TODO BUG: this has to have 0 hits
+  ).toHaveLength(3);
   expect(rawDeprecations.filter((d) => d.group === 'catch-all')).toHaveLength(
-    3
+    0
   );
 
   // without passing a version via the CLI, new deprecations shouldn't have a version
@@ -88,7 +84,10 @@ test('sandbox', async () => {
 
   // by passing a version via the CLI (existing) deprecations should be updated to the version
   const version = '5.4.2';
-  await exec(`npm run crawl -- -t master --nextVersion ${version}`);
+  await exec(
+    `npm run crawl -- -t master --nextVersion ${version} --unhandled-rejections=strict`
+  ).catch(console.error);
+
   const updatedRawDeprecations = JSON.parse(
     fs.readFileSync(RAW_DEPRECATION_FILE, 'utf8')
   );

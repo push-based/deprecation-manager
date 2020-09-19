@@ -2,7 +2,7 @@
 
 Have a version of the [RxJS repository](https://github.com/ReactiveX/rxjs) locally available.
 
-To get a real life experiance checkout the PR related to deprecation management:  
+To get a real life experience checkout the PR related to deprecation management:  
 `git fetch <remote> pull/5426/head:pr/5426 && git checkout pr/5426`
 
 **TLDR**
@@ -13,7 +13,7 @@ It is also a good example of a CI integration.
 1. Copy the following content into `docs_app/deprecation-crawler.config.json`  
    https://raw.githubusercontent.com/timdeschryver/deprecation-manager/master/packages/deprecation-crawler/docs/config-examples/rxjs-example.deprecation-crawler.config.json
 
-2. Run `npx deprecation-crawler@1.10.0 -p docs_app/deprecation-crawler.config.json` and say yes to every question.
+2. Run `npx deprecation-crawler@1.10.0 history -p docs_app/deprecation-crawler.config.json` and say yes to every question.
 
 - 💡 place `deprecation-crawler.config.json` into `tmp` folder and also point the output folder there to avoid changes in the repository.
 
@@ -53,8 +53,8 @@ In practice you will run through this process a couple of times until you have a
 
 Every now and than go to your config file and anopt rename the groupnames or matchers as you like.
 
-- 💡 The grouping mechanism helps with 2 gefauts, `ungrouped` and `helath-check`.
-  `ungrouped` can be used to decide later on a group but have it "marked as todo" and `helath-check` can be used to validate your deprecations.
+- 💡 The grouping mechanism helps with 2 defauts, `ungrouped` and `heath-check`.
+  `ungrouped` can be used to decide later on a group but have it "marked as todo" and `health-check` can be used to validate your deprecations.
 
 4. Output Formatter  
    √ Update Formatted Output? (Y/n) · true  
