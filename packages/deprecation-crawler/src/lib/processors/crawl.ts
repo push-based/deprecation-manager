@@ -1,4 +1,9 @@
-import { CrawlConfig, CrawledRelease, CrawlerProcess } from '../models';
+import {
+  CrawlConfig,
+  CrawledRelease,
+  CrawlerProcess,
+  Deprecation,
+} from '../models';
 import { concat, tap } from '../utils';
 import { crawlDeprecations, getSourceFiles } from '../crawler';
 import { addRuid } from '../tasks/add-ruid';
@@ -42,8 +47,11 @@ export function crawl(config: CrawlConfig): CrawlerProcess {
 }
 
 function getCrawlFeedback(): ProcessFeedback {
+  let existingDeprecations: Deprecation[] = [];
   return {
     printStart(config: CrawlConfig, r: CrawledRelease): void {
+      existingDeprecations = r?.deprecations || [];
+
       printHeadline('CRAWL PHASE');
       console.log(
         kleur.gray(`🔎 Looking for deprecations in: `),
@@ -58,11 +66,15 @@ function getCrawlFeedback(): ProcessFeedback {
       rawRelease: CrawledRelease
     ): Promise<void> {
       const files = await getSourceFiles(config);
+      const existingRuids = existingDeprecations.map((d) => d.ruid);
+      const newDeprecations = rawRelease.deprecations.filter(
+        (d) => !existingRuids.includes(d.ruid)
+      );
       console.log(
         kleur.green('✓ '),
         kleur.gray(`Found `),
-        kleur.black(`${rawRelease.deprecations.length}`),
-        kleur.gray(` in `),
+        kleur.black(`${newDeprecations.length}`),
+        kleur.gray(` deprecations in `),
         kleur.gray(files.length),
         kleur.gray(` files.`)
       );
