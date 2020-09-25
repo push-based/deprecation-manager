@@ -8,9 +8,10 @@ import { YargsCommandObject } from '../cli/model';
 import { crawl } from '../processors/crawl';
 import { group } from '../processors/group';
 import { format } from '../processors/format';
+import { saveDeprecations } from '../tasks/save-deprecations';
 
 export const defaultCommand: YargsCommandObject = {
-  // * is the default command 
+  // * is the default command
   // https://github.com/yargs/yargs/blob/master/docs/advanced.md#default-commands
   command: '*',
   description: 'Run default processors',
@@ -25,22 +26,22 @@ export const defaultCommand: YargsCommandObject = {
             (config: CrawlConfig): CrawlerProcess =>
               askToSkip('Grouping?', group(config), {
                 precondition: async (r) =>
-                  r.deprecations?.some((d) => !d.group)
+                  r.deprecations?.some((d) => !d.group),
               }),
+            saveDeprecations,
             (config: CrawlConfig): CrawlerProcess =>
               askToSkip('Update Formatted Output?', format(config), {
-                precondition: async (r) => r.deprecations?.length > 0
+                precondition: async (r) => r.deprecations?.length > 0,
               }),
-            updateRepository
+            updateRepository,
           ];
-
           // Run all processors
           const initial = {
-            version: getVersion()
+            version: getVersion(),
           } as CrawledRelease;
           run(tasks, config)(initial);
         })
         .catch((e) => console.error(e));
-    }
-  }
+    },
+  },
 };
