@@ -4,8 +4,7 @@
   "commentLinkFormat": "Details: {@link ${COMMENT_LINK_URL_TOKEN}#${COMMENT_LINK_URL_PARAM_TOKEN}}",
   "groups": [
     { "key": "ungrouped", "matchers": [] },
-    { "key": "health-check", "matchers": ["\\/\\*\\* *\\@deprecated *\\*/"] },
-    { "key": "action", "matchers": ["action"] }
+    { "key": "health-check", "matchers": ["\\/\\*\\* *\\@deprecated *\\*/"] }
   ],
   "outputDirectory": "./packages/deprecation-crawler/github-actions-test/deprecations",
   "deprecationComment": "@deprecated",
