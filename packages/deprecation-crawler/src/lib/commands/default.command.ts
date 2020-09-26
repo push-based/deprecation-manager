@@ -34,15 +34,12 @@ export const defaultCommand: YargsCommandObject = {
             (config: CrawlConfig): CrawlerProcess =>
               getInteractive()
                 ? askToSkip('Update Formatted Output?', format(config), {
-                    precondition: async (r) =>
-                      r.deprecations?.length > 0 && getInteractive(),
+                    precondition: async (r) => r.deprecations?.length > 0,
                   })
                 : format(config),
             (config: CrawlConfig): CrawlerProcess =>
               getInteractive()
-                ? askToSkip('Update Repository?', updateRepository(config), {
-                    precondition: () => Promise.resolve(getInteractive()),
-                  })
+                ? askToSkip('Update Repository?', updateRepository(config))
                 : updateRepository(config),
           ];
           // Run all processors
