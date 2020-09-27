@@ -1,7 +1,7 @@
 import {
   ensureConfigDefaults,
   getSuggestedTagFormat,
-} from '../../src/lib/tasks/ensure-config-defaults';
+} from '../../src/lib/tasks/ensure-config/ensure-config-defaults';
 import { CrawlConfig } from '../../src/lib/models';
 
 describe('ensureConfigDefaults', () => {
