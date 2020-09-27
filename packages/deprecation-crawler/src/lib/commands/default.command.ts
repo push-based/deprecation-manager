@@ -10,7 +10,7 @@ import { group } from '../processors/group';
 import { format } from '../processors/format';
 
 export const defaultCommand: YargsCommandObject = {
-  // * is the default command
+  // * is the default command 
   // https://github.com/yargs/yargs/blob/master/docs/advanced.md#default-commands
   command: '*',
   description: 'Run default processors',
