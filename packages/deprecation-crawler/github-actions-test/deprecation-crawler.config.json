@@ -1,0 +1,17 @@
+{
+  "tagFormat": "${SEMVER_TOKEN}",
+  "commitMessage": "docs(deprecation-manager): sync deprecations",
+  "commentLinkFormat": "Details: {@link ${COMMENT_LINK_URL_TOKEN}#${COMMENT_LINK_URL_PARAM_TOKEN}}",
+  "groups": [
+    { "key": "ungrouped", "matchers": [] },
+    { "key": "health-check", "matchers": ["\\/\\*\\* *\\@deprecated *\\*/"] }
+  ],
+  "outputDirectory": "./packages/deprecation-crawler/github-actions-test/deprecations",
+  "deprecationComment": "@deprecated",
+  "include": ["./packages/deprecation-crawler/github-actions-test/**/*.ts"],
+  "exclude": [
+    "./packages/deprecation-crawler/github-actions-test/**/*.(spec|test|d).ts"
+  ],
+  "deprecationLink": "/deprecations",
+  "outputFormatters": ["groupBasedMarkdown", "deprecationIndex"]
+}

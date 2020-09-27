@@ -4,6 +4,7 @@ import {
   git,
   readRepoConfig,
   run,
+  semverSort,
   updateRepoConfig,
   writeRawDeprecations,
 } from '../utils';
@@ -25,7 +26,7 @@ export const historyCommand: YargsCommandObject = {
       let config = readRepoConfig();
       const isInitialized = Object.keys(config).length > 0;
       if (!isInitialized) {
-        config = await {
+        config = {
           ...(await cfgQuestions
             .ensureDeprecationUrl(config)
             .then(cfgQuestions.ensureDeprecationComment)
@@ -66,6 +67,9 @@ export const historyCommand: YargsCommandObject = {
         const initial = {
           version: tag,
           tag: tag,
+          // are used to only log new deprecations
+          // will be overwritten after crawl
+          deprecations: deprecations,
         } as CrawledRelease;
         const release = (await run(tasks, config)(initial)) as CrawledRelease;
         deprecations.push(...release.deprecations);
@@ -73,8 +77,14 @@ export const historyCommand: YargsCommandObject = {
 
       await git.checkout(current);
 
+      const sortedDeprecations = semverSort(
+        deprecations,
+        false,
+        (d: Deprecation) => d.version
+      );
+
       const uniqueDeprecations = [
-        ...new Map(deprecations.map((r) => [r.ruid, r])).values(),
+        ...new Map(sortedDeprecations.map((r) => [r.ruid, r])).values(),
       ];
       writeRawDeprecations(uniqueDeprecations, config);
       if (!isInitialized) {

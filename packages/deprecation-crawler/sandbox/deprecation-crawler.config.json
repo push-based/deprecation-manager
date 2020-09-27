@@ -1,5 +1,9 @@
 {
-  "outputFormatters": ["tagBasedMarkdown", "groupBasedMarkdown"],
+  "outputFormatters": [
+    "tagBasedMarkdown",
+    "groupBasedMarkdown",
+    "deprecationIndex"
+  ],
   "tagFormat": "${SEMVER_TOKEN}",
   "commitMessage": "docs(deprecation-manager): sync deprecations",
   "groups": [

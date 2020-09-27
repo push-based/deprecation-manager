@@ -116,6 +116,11 @@ export function readRawDeprecations(
   const path = join(config.outputDirectory, `${RAW_DEPRECATION_PATH}`);
 
   let deprecations: Deprecation[] = [];
+
+  if (!existsSync(path)) {
+    return { deprecations, path };
+  }
+
   try {
     const t = readFileSync(path);
     deprecations = JSON.parse((t as unknown) as string);
@@ -141,7 +146,6 @@ export function writeRawDeprecations(
 
   const json = JSON.stringify(sortedDeprecations, null, 4);
   writeFileSync(path, json);
-  return void 0;
 }
 
 export function semverSort(
@@ -153,6 +157,15 @@ export function semverSort(
     return semvers.sort(function (v1, v2) {
       const p1 = pick(v1);
       const p2 = pick(v2);
+      if (p1 === p2) {
+        return 0;
+      }
+      if (!p1) {
+        return asc ? -1 : 1;
+      }
+      if (!p2) {
+        return asc ? 1 : -1;
+      }
       const sv1 = SERVER_REGEX.exec(p1)?.[0] || p1;
       const sv2 = SERVER_REGEX.exec(p2)?.[0] || p2;
 
