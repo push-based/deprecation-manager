@@ -77,8 +77,10 @@ function getCrawlFeedback(): ProcessFeedback {
         kleur.gray(` files.`)
       );
       console.log(
-        kleur.gray(`Used tsConfig `),
-        kleur.black(`${config.tsConfigPath}`),
+        kleur.gray(`Included files `),
+        kleur.black(`${config.include}`),
+        kleur.gray(`excluded files `),
+        kleur.black(`${config.exclude}`),
         kleur.gray(` and pathFilter of `),
         kleur.black(`'${config.pathFilter}'`)
       );
