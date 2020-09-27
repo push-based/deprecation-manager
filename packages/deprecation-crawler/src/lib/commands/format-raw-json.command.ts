@@ -11,8 +11,9 @@ export const formatRawJsonCommand: YargsCommandObject = {
     handler: async (argv) => {
       if (argv.verbose) console.info(`run formatRawJson as a yargs command`);
       const config = await {
-        ... Promise.resolve({ } as CrawlConfig)
-          .then(cfgQuestions.ensureOutputDirectory)
+        ...Promise.resolve({} as CrawlConfig).then(
+          cfgQuestions.ensureOutputDirectory
+        ),
       };
 
       const tasks = [loadExistingDeprecations, writeRawDeprecationsTask];

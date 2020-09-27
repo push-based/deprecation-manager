@@ -6,7 +6,8 @@ import { getInteractive } from '../../utils';
 export async function ensureOutputDirectory(
   config: CrawlConfig
 ): Promise<CrawlConfig> {
-  let outputDirectorySuggestion = config.outputDirectory || DEPRECATIONS_OUTPUT_DIRECTORY;
+  let outputDirectorySuggestion =
+    config.outputDirectory || DEPRECATIONS_OUTPUT_DIRECTORY;
   if (getInteractive()) {
     const { outputDirectory }: CrawlConfig = await prompt([
       {
@@ -22,6 +23,6 @@ export async function ensureOutputDirectory(
 
   return {
     ...config,
-    outputDirectory: outputDirectorySuggestion
+    outputDirectory: outputDirectorySuggestion,
   };
 }

@@ -1,0 +1,16 @@
+[
+  {
+    "path": "packages/deprecation-crawler/github-actions-test/src/initial-test.ts",
+    "lineNumber": 8,
+    "name": "initialGitHubActionTest",
+    "kind": "VariableStatement",
+    "code": "const initialGitHubActionTest = 0;",
+    "deprecationMessage": "/**\r\n * @deprecated for the initial github action test\r\n */",
+    "pos": [48, 107],
+    "version": "",
+    "remoteUrl": "https://github.com/ts-code-health/deprecation-manager.git",
+    "date": "2020-09-26T09:59:09+02:00",
+    "ruid": "3634283877",
+    "group": "action"
+  }
+]

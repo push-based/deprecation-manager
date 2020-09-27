@@ -5,6 +5,7 @@ import {
   getCliParam,
   getConfigPath,
   getCurrentBranchOrTag,
+  getInteractive,
   getTags,
   isCrawlerModeSandbox,
   semverSort,
@@ -53,6 +54,10 @@ export function ensureGitTag(config: CrawlConfig): CrawlerProcess {
     }
     // user did not pass tag over CLI param
     else {
+      if (!getInteractive()) {
+        throw new Error(`Interactive param can only work if a tag is passed.
+        Use --tag tagName with --interactive false`);
+      }
       const gitTags = await getTagChoices(relevantBranches);
       const tagChoices = [currentBranch, ...gitTags];
 

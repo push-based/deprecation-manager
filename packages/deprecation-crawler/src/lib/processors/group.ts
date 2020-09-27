@@ -8,6 +8,8 @@ import {
 } from '../models';
 import {
   concat,
+  getConfigPath,
+  getInteractive,
   logVerbose,
   tap,
   toFileName,
@@ -76,6 +78,10 @@ export async function addGrouping(
 
       if (escapeGrouping) {
         continue;
+      }
+      if (!getInteractive()) {
+        throw new Error(`Interactive param can only work if all deprecations are hit by a matcher.
+        Update groups in ${getConfigPath()} with a matcher.`);
       }
       const groupKey = await getGroupNameFromExistingOrInputQuestion(
         deprecation,

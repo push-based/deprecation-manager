@@ -3,7 +3,6 @@ import { CrawlConfig } from '../../models';
 import { getInteractive } from '../../utils';
 import { DEFAULT_EXCLUDES, DEFAULT_INCLUDES } from '../../constants';
 
-
 export async function ensureIncludeGlob(
   config: CrawlConfig
 ): Promise<CrawlConfig> {
@@ -15,17 +14,17 @@ export async function ensureIncludeGlob(
       {
         type: 'input',
         name: 'include',
-        message: 'What\'s the glob for included files?',
+        message: "What's the glob for included files?",
         initial: includeSuggestion.join(' '),
-        skip: includePresent
-      }
+        skip: includePresent,
+      },
     ]);
     includeSuggestion = include.split(' ');
   }
 
   return {
     ...config,
-    include: includeSuggestion
+    include: includeSuggestion,
   };
 }
 
@@ -40,16 +39,16 @@ export async function ensureExcludeGlob(
       {
         type: 'input',
         name: 'exclude',
-        message: 'What\'s the glob for excluded files?',
+        message: "What's the glob for excluded files?",
         initial: excludeSuggestion.join(' '),
-        skip: excludePresent
-      }
+        skip: excludePresent,
+      },
     ]);
     excludeSuggestion = exclude.split(' ');
   }
 
   return {
     ...config,
-    exclude: excludeSuggestion
+    exclude: excludeSuggestion,
   };
 }

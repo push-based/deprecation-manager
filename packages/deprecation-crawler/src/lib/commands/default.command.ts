@@ -2,7 +2,7 @@ import { setup } from '../processors/setup';
 import { checkout } from '../tasks/checkout';
 import { addVersion } from '../tasks/add-version';
 import { updateRepository } from '../tasks/update-repository';
-import { askToSkip, getVersion, run } from '../utils';
+import { askToSkip, getInteractive, getVersion, run } from '../utils';
 import { CrawlConfig, CrawledRelease, CrawlerProcess } from '../models';
 import { YargsCommandObject } from '../cli/model';
 import { crawl } from '../processors/crawl';
@@ -24,16 +24,23 @@ export const defaultCommand: YargsCommandObject = {
             crawl,
             addVersion,
             (config: CrawlConfig): CrawlerProcess =>
-              askToSkip('Grouping?', group(config), {
-                precondition: async (r) =>
-                  r.deprecations?.some((d) => !d.group),
-              }),
+              getInteractive()
+                ? askToSkip('Grouping?', group(config), {
+                    precondition: async (r) =>
+                      r.deprecations?.some((d) => !d.group),
+                  })
+                : group(config),
             saveDeprecations,
             (config: CrawlConfig): CrawlerProcess =>
-              askToSkip('Update Formatted Output?', format(config), {
-                precondition: async (r) => r.deprecations?.length > 0,
-              }),
-            updateRepository,
+              getInteractive()
+                ? askToSkip('Update Formatted Output?', format(config), {
+                    precondition: async (r) => r.deprecations?.length > 0,
+                  })
+                : format(config),
+            (config: CrawlConfig): CrawlerProcess =>
+              getInteractive()
+                ? askToSkip('Update Repository?', updateRepository(config))
+                : updateRepository(config),
           ];
           // Run all processors
           const initial = {

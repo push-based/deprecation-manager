@@ -433,4 +433,51 @@ export const toggles = {
   executeGitCommands: !isCrawlerModeSandbox(),
 };
 
-export const SERVER_REGEX = /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/i;
+/*
+The `<` and `>` mark start and end of a match
+e.g. package@1.2.3-prerelease.1 with marked match looks like package@<1.2.3-prerelease.1>
+<0.0.0>
+<0.0.0-alpha>
+<0.0.0-alpha.0>
+<1.2.3>
+<11.22.33>
+<1.2.3-alpha>
+<11.22.33-alpha>
+<1.2.3-alpha.4>
+<11.22.33-alpha.4>
+<11.22.33-alpha-44>
+<1.2.3-alpha-4>
+package@<1.2.3-alpha>
+package-<1.2.3-alpha.0>
+--
+WRONG:
+00.00.00 (multiple zeros)
+11.22+33-alpha.4 (wrong patch separator)
+11.22.33+alpha.4 (wrong prerelease separator)
+11.22.33-alpha?4 (wrong prerelease separator)
+package-<11.22.33-alpha.0> (wrong package separator)
+ */
+export const SERVER_REGEX = /^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?=$|\s)/i;
+// export const SERVER_REGEX = /(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/i;
+
+/*
+The `<` and `>` mark start and end of a match
+e.g. package@1.2.3-alpha.1 with marked match looks like package@<1.2.3-alpha.1>
+<0>
+<0.0>
+--
+WRONG:
+1. (not ending on space or newline)
+ */
+export const MAJOR_SERVER_REGEX = /(^v*(?:0|[1-9]*))(?=$|\s)/i;
+
+/*
+The `<` and `>` mark start and end of a match
+e.g. package@1.2.3-alpha.1 with marked match looks like package@<1.2.3-alpha.1>
+<0.0>
+<1.2>
+--
+WRONG:
+1 (no minor version)
+ */
+export const MAJOR_MINOR_SERVER_REGEX = /(^v*(?:0|[1-9]*))\.(?:0|[1-9]*)(?=$|\s)/i;
