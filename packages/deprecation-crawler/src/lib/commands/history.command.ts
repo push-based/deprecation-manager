@@ -13,9 +13,9 @@ import { checkout } from '../tasks/checkout';
 import { crawl } from '../processors/crawl';
 import { addVersion } from '../tasks/add-version';
 import { prompt } from 'enquirer';
+import { getTagChoices } from '../tasks/ensure-git-tag';
 import { ensureCleanGit } from '../tasks/ensure-clean-git';
 import * as cfgQuestions from '../tasks/ensure-config';
-import { getTagChoices } from '../tasks/ensure-git-tag';
 
 export const historyCommand: YargsCommandObject = {
   command: 'history',

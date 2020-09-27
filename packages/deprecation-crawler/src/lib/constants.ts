@@ -4,10 +4,10 @@ import { groupCommand } from './commands/group.command';
 import { defaultCommand } from './commands/default.command';
 import { historyCommand } from './commands/history.command';
 import { formatRawJsonCommand } from './commands/format-raw-json.command';
-import { initCommand } from './commands/init.command';
-
 export const UNGROUPED_GROUP_NAME = 'ungrouped';
 export const HEALTH_CHECK_GROUP_NAME = 'health-check';
+import { initCommand } from './commands/init.command';
+
 export const DEPRECATIONS_OUTPUT_DIRECTORY = 'deprecations';
 export const CRAWLER_CONFIG_PATH = 'deprecation-crawler.config.json';
 export const SEMVER_TOKEN = `SEMVER_TOKEN`;
