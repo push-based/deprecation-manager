@@ -1,5 +1,9 @@
 {
-  "outputFormatters": ["tagBasedMarkdown", "groupBasedMarkdown"],
+  "outputFormatters": [
+    "tagBasedMarkdown",
+    "groupBasedMarkdown",
+    "deprecationIndex"
+  ],
   "tagFormat": "${SEMVER_TOKEN}",
   "commitMessage": "docs(deprecation-manager): sync deprecations",
   "groups": [
@@ -10,13 +14,12 @@
     },
     {
       "key": "multiple-string-patterns-at-once",
-      "matchers": ["/^(?=.*This const named!)(?=.*deprecated!)(?=.*xyz!).../"]
+      "matchers": ["/(This const named)|(important)|(`t2`)/"]
     },
     { "key": "comment-style", "matchers": ["comment-style"] },
     { "key": "catch-all", "matchers": ["(.*?)"] }
   ],
   "outputDirectory": "./deprecations",
-  "tsConfigPath": "tsconfig.sandbox.json",
   "deprecationComment": "@deprecated",
   "deprecationLink": "sandbox-deprecation-link",
   "commentLinkFormat": "Details: {@link ${COMMENT_LINK_URL_TOKEN}#${COMMENT_LINK_URL_PARAM_TOKEN}}",

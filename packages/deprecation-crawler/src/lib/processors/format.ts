@@ -1,6 +1,5 @@
 import { concat, tap } from '../utils';
 import { CrawlConfig, CrawledRelease, CrawlerProcess } from '../models';
-import { ensureFormatter } from '../tasks/ensure-fotmatters';
 import {
   printFooterLine,
   printHeadline,
@@ -8,16 +7,20 @@ import {
   ProcessFeedback,
 } from '../log';
 import * as kleur from 'kleur';
+import { builtInFormatter } from '../output-formatters';
 
 const feedback = getFormatFeedback();
+
 // Formatting Job
-export function format(config): CrawlerProcess {
+export function format(config: CrawlConfig): CrawlerProcess {
   return concat([
-    tap(async (r) => feedback.printStart(config, r)),
-    ...ensureFormatter(config).map(([_, formatter]) =>
-      tap((r: CrawledRelease) => formatter(config, r))
-    ),
-    tap(async (r) => feedback.printEnd(config, r)),
+    tap(async (r: CrawledRelease) => feedback.printStart(config, r)),
+    ...Object.entries(builtInFormatter)
+      .filter(([key]) => config.outputFormatters.includes(key))
+      .map(([_, formatter]) =>
+        tap(async (r: CrawledRelease) => formatter(config, r))
+      ),
+    tap(async (r: CrawledRelease) => feedback.printEnd(config, r)),
   ]);
 }
 

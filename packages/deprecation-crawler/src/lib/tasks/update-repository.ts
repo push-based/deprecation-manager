@@ -1,5 +1,5 @@
 import { CrawlConfig, CrawlerProcess } from '../models';
-import { tap, askToSkip } from '../utils';
+import { tap } from '../utils';
 import { generateTaggedCommentsInRepository } from '../output-formatters/git/tag-comments.git.formatter';
 
 /**
@@ -7,11 +7,5 @@ import { generateTaggedCommentsInRepository } from '../output-formatters/git/tag
  * Adds the RUID to to the deprecation messages in the codebase
  */
 export function updateRepository(config: CrawlConfig): CrawlerProcess {
-  return askToSkip(
-    'Repo Update?',
-    tap((r) => generateTaggedCommentsInRepository(config, r)),
-    {
-      precondition: async (r) => r.deprecations?.length > 0,
-    }
-  );
+  return tap((r) => generateTaggedCommentsInRepository(config, r));
 }

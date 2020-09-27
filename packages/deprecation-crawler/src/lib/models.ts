@@ -1,10 +1,12 @@
-export interface CrawlConfig {
-  // defaults
+export interface CrawlDefaultConfig {
   tagFormat: string;
   commentLinkFormat: string;
   commitMessage: string;
   groups: { key: string; matchers: string[] }[];
   outputFormatters: string[];
+}
+
+export interface CrawlConfig extends CrawlDefaultConfig {
   // required fields
   deprecationComment: string;
   deprecationLink: string;

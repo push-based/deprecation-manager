@@ -6,7 +6,15 @@ import {
   CrawlerProcess,
   Deprecation,
 } from '../models';
-import { concat, tap, toFileName, updateRepoConfig } from '../utils';
+import {
+  concat,
+  getConfigPath,
+  getInteractive,
+  logVerbose,
+  tap,
+  toFileName,
+  updateRepoConfig,
+} from '../utils';
 import { generateRawJson } from '../output-formatters/json/raw.json.formatter';
 import { UNGROUPED_GROUP_NAME } from '../constants';
 import {
@@ -43,70 +51,93 @@ export async function addGrouping(
   groupFeedback.printStart(config, crawledRelease);
   const { groups } = config as { groups: Group[] };
   const deprecationsWithGroup: Deprecation[] = [];
+  let newConfig = config;
+  if (crawledRelease.deprecations.length <= 0) {
+    logVerbose('No deprecations to group');
+    return crawledRelease;
+  } else {
+    let escapeGrouping = false;
+    for (const deprecation of crawledRelease.deprecations) {
+      if (deprecation?.group?.length >= 1) {
+        logVerbose('Deprecation already grouped');
+        continue;
+      }
 
-  let escapeGrouping = false;
-  for (const deprecation of crawledRelease.deprecations) {
-    const deprecationHasExistingGroup = checkForExistingGroup(
-      groups,
-      deprecation
-    );
+      const deprecationHasExistingGroup = getGroupFromDeprecationMessage(
+        groups,
+        deprecation
+      );
 
-    if (deprecationHasExistingGroup) {
+      if (deprecationHasExistingGroup) {
+        deprecationsWithGroup.push({
+          ...deprecation,
+          group: deprecationHasExistingGroup,
+        });
+        continue;
+      }
+
+      if (escapeGrouping) {
+        continue;
+      }
+      if (!getInteractive()) {
+        throw new Error(`Interactive param can only work if all deprecations are hit by a matcher.
+        Update groups in ${getConfigPath()} with a matcher.`);
+      }
+      const groupKey = await getGroupNameFromExistingOrInputQuestion(
+        deprecation,
+        [
+          ESCAPE_GROUPING_ANSWER,
+          CREATE_NEW_GROUP_ANSWER,
+          ...getGroupNames(groups),
+        ]
+      );
+
+      if (groupKey === ESCAPE_GROUPING_ANSWER || escapeGrouping) {
+        escapeGrouping = true;
+        continue;
+      }
+
+      const answerRegex: { regexp: string } = await prompt([
+        getGroupRegexQuestion(),
+      ]);
+      const parsedRegex = answerRegex.regexp;
+      const group = groups.find((g) => g.key === groupKey);
+
+      // Don't store RegExp because they are not serializable
+      if (group) {
+        // don't push empty regex
+        if (parsedRegex !== '') {
+          group.matchers.push(parsedRegex);
+        }
+      } else {
+        groups.push({
+          key: groupKey || UNGROUPED_GROUP_NAME,
+          matchers: parsedRegex !== '' ? [parsedRegex] : [],
+        });
+      }
+
       deprecationsWithGroup.push({
         ...deprecation,
-        group: deprecationHasExistingGroup,
-      });
-      continue;
-    }
-
-    if (escapeGrouping) {
-      continue;
-    }
-    const groupKey = await getGroupNameFromExistingOrInputQuestion(
-      deprecation,
-      [
-        ESCAPE_GROUPING_ANSWER,
-        CREATE_NEW_GROUP_ANSWER,
-        ...getGroupNames(groups),
-      ]
-    );
-
-    if (groupKey === ESCAPE_GROUPING_ANSWER || escapeGrouping) {
-      escapeGrouping = true;
-      continue;
-    }
-
-    const answerRegex: { regexp: string } = await prompt([
-      getGroupRegexQuestion(),
-    ]);
-    const parsedRegex = answerRegex.regexp;
-    const group = groups.find((g) => g.key === groupKey);
-
-    // Don't store RegExp because they are not serializable
-    if (group) {
-      // don't push empty regex
-      if (parsedRegex !== '') {
-        group.matchers.push(parsedRegex);
-      }
-    } else {
-      groups.push({
-        key: groupKey || UNGROUPED_GROUP_NAME,
-        matchers: parsedRegex !== '' ? [parsedRegex] : [],
+        group: groupKey,
       });
     }
 
-    deprecationsWithGroup.push({
-      ...deprecation,
-      group: groupKey,
-    });
+    newConfig = { ...config, groups };
+    updateRepoConfig(newConfig);
   }
 
-  const newConfig = { ...config, groups };
-  updateRepoConfig(newConfig);
+  const uniqueDeprecations = [
+    ...new Map(
+      [...crawledRelease.deprecations, ...deprecationsWithGroup].map((r) => [
+        r.ruid,
+        r,
+      ])
+    ).values(),
+  ];
 
   const newCrawledRelease = {
     ...crawledRelease,
-    deprecations: deprecationsWithGroup,
+    deprecations: uniqueDeprecations,
   };
   groupFeedback.printEnd(newConfig, newCrawledRelease);
 
@@ -150,7 +181,10 @@ function getGroupNames(groups: { key: string }[]): string[] {
   ];
 }
 
-function checkForExistingGroup(groups: Group[], deprecation: Deprecation) {
+function getGroupFromDeprecationMessage(
+  groups: Group[],
+  deprecation: Deprecation
+): string | undefined {
   return groups.find((group) => {
     // If matchers are present test them else return false
     return group.matchers.length
@@ -225,6 +259,17 @@ function getGroupRegexQuestion() {
 }
 
 function testMessage(reg: string, deprecationMessage: string): boolean {
+  if (!reg) {
+    return;
+  }
+
+  // user gives us a regexp
+  if (reg.startsWith('/')) {
+    const regexp = stringToRegex(reg);
+    return regexp.test(deprecationMessage);
+  }
+
+  // user gives us text
   return (
     reg &&
     new RegExp(parseDeprecationMessageOrRegex(reg)).test(
@@ -247,4 +292,20 @@ function parseDeprecationMessageOrRegex(deprecationMessage: string): string {
       // tri trailing and leading white spaces
       .trim()
   );
+}
+
+function stringToRegex(text: string) {
+  // Main regex
+  const main = text.match(/\/(.+)\/.*/)[1];
+  // Regex options
+  const options = [
+    ...new Set(
+      text
+        .match(/\/.+\/(.*)/)[1]
+        .split('')
+        .concat('i', 'g')
+    ),
+  ].join('');
+  // Return compiled regex
+  return new RegExp(main, options);
 }

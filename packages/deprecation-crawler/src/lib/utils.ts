@@ -1,8 +1,8 @@
 import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
 import {
   CrawlConfig,
-  CrawledRelease,
   CrawlerProcess,
+  CrawledRelease,
   Deprecation,
 } from './models';
 
@@ -18,10 +18,11 @@ import {
 } from './constants';
 import { prompt } from 'enquirer';
 import * as yargs from 'yargs';
-import * as path from 'path';
-import { join } from 'path';
+import { join, dirname } from 'path';
 import simpleGit, { DiffResultTextFile } from 'simple-git';
 import * as kleur from 'kleur';
+import * as semverHelper from 'semver';
+import { logError } from './log';
 
 export function getSiblingPgkJson(
   pathOrFile: string
@@ -31,13 +32,13 @@ export function getSiblingPgkJson(
   repository?: { url: string };
 } {
   return JSON.parse(
-    readFile(path.join(path.dirname(pathOrFile), 'package.json')) || '{}'
+    readFile(join(dirname(pathOrFile), 'package.json')) || '{}'
   );
 }
 
 export const git = proxyMethodToggles(
   simpleGit(),
-  ['commit', 'push', 'clone'],
+  ['commit', 'push', 'clone', 'checkout'],
   () => toggles.executeGitCommands
 );
 
@@ -57,7 +58,6 @@ export function proxyMethodToggles<T>(
               return origMethod.apply(this, args);
             }
             logVerbose(`Call of method ${propKey} got ignored through toggle.`);
-
             return Promise.resolve();
           }
           return origMethod.apply(this, args);
@@ -92,6 +92,7 @@ export function ensureDirExists(dir: string) {
 
 export function updateRepoConfig(config: CrawlConfig): void {
   const crawlerConfigPath = getConfigPath();
+  logVerbose(`update config under ${crawlerConfigPath}`);
   writeFileSync(crawlerConfigPath, formatCode(JSON.stringify(config), 'json'));
 }
 
@@ -101,11 +102,18 @@ export function readRepoConfig(): CrawlConfig {
   return JSON.parse(repoConfigFile);
 }
 
-export function readRawDeprecations(config: CrawlConfig) {
+export function readRawDeprecations(
+  config: CrawlConfig
+): { deprecations: Deprecation[]; path: string } {
   ensureDirExists(config.outputDirectory);
   const path = join(config.outputDirectory, `${RAW_DEPRECATION_PATH}`);
 
   let deprecations: Deprecation[] = [];
+
+  if (!existsSync(path)) {
+    return { deprecations, path };
+  }
+
   try {
     const t = readFileSync(path);
     deprecations = JSON.parse((t as unknown) as string);
@@ -123,8 +131,45 @@ export function writeRawDeprecations(
   ensureDirExists(config.outputDirectory);
   const path = join(config.outputDirectory, `${RAW_DEPRECATION_PATH}`);
 
-  const json = JSON.stringify(deprecations, null, 4);
+  const sortedDeprecations = semverSort(
+    deprecations,
+    false,
+    (d: Deprecation) => d.version
+  );
+
+  const json = JSON.stringify(sortedDeprecations, null, 4);
   writeFileSync(path, json);
+}
+
+export function semverSort(
+  semvers: any[],
+  asc: boolean,
+  pick: (v: any) => string = (v: string): string => v
+) {
+  try {
+    return semvers.sort(function (v1, v2) {
+      const p1 = pick(v1);
+      const p2 = pick(v2);
+      if (p1 === p2) {
+        return 0;
+      }
+      if (!p1) {
+        return asc ? -1 : 1;
+      }
+      if (!p2) {
+        return asc ? 1 : -1;
+      }
+      const sv1 = SERVER_REGEX.exec(p1)?.[0] || p1;
+      const sv2 = SERVER_REGEX.exec(p2)?.[0] || p2;
+
+      return asc
+        ? semverHelper.compare(sv1, sv2)
+        : semverHelper.rcompare(sv1, sv2);
+    });
+  } catch (err) {
+    logError(err);
+    return semvers;
+  }
 }
 
 /**
@@ -133,6 +178,21 @@ export function writeRawDeprecations(
 export function getConfigPath(): string {
   const argPath = getCliParam(['path', 'p']);
   return argPath ? argPath : CRAWLER_CONFIG_PATH;
+}
+
+/**
+ * Check for path params from cli command
+ */
+export function getInteractive(): boolean {
+  const argPath = getCliParam(['interactive']);
+  return getBooleanParam(argPath);
+}
+
+function getBooleanParam(paramValue: string | boolean): boolean {
+  if (paramValue === false) {
+    return false;
+  }
+  return paramValue !== 'false';
 }
 
 /**
@@ -207,10 +267,10 @@ export function run(
 }
 
 export function concat(processes: CrawlerProcess[]): CrawlerProcess {
-  return async function (d: CrawledRelease): Promise<CrawledRelease | void> {
+  return async function (r: CrawledRelease): Promise<CrawledRelease | void> {
     return await processes.reduce(
       async (deps, processor) => await processor(await deps),
-      Promise.resolve(d)
+      Promise.resolve(r)
     );
   };
 }
@@ -365,4 +425,51 @@ export const toggles = {
   executeGitCommands: !isCrawlerModeSandbox(),
 };
 
-export const SERVER_REGEX = /(?<=^v?|\sv?)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/i;
+/*
+The `<` and `>` mark start and end of a match
+e.g. package@1.2.3-prerelease.1 with marked match looks like package@<1.2.3-prerelease.1>
+<0.0.0>
+<0.0.0-alpha>
+<0.0.0-alpha.0>
+<1.2.3>
+<11.22.33>
+<1.2.3-alpha>
+<11.22.33-alpha>
+<1.2.3-alpha.4>
+<11.22.33-alpha.4>
+<11.22.33-alpha-44>
+<1.2.3-alpha-4>
+package@<1.2.3-alpha>
+package-<1.2.3-alpha.0>
+--
+WRONG:
+00.00.00 (multiple zeros)
+11.22+33-alpha.4 (wrong patch separator)
+11.22.33+alpha.4 (wrong prerelease separator)
+11.22.33-alpha?4 (wrong prerelease separator)
+package-<11.22.33-alpha.0> (wrong package separator)
+ */
+export const SERVER_REGEX = /^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?=$|\s)/i;
+// export const SERVER_REGEX = /(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*)(?:\.(?:0|[1-9]\d*|[\da-z-]*[a-z-][\da-z-]*))*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?(?=$|\s)/i;
+
+/*
+The `<` and `>` mark start and end of a match
+e.g. package@1.2.3-alpha.1 with marked match looks like package@<1.2.3-alpha.1>
+<0>
+<0.0>
+--
+WRONG:
+1. (not ending on space or newline)
+ */
+export const MAJOR_SERVER_REGEX = /(^v*(?:0|[1-9]*))(?=$|\s)/i;
+
+/*
+The `<` and `>` mark start and end of a match
+e.g. package@1.2.3-alpha.1 with marked match looks like package@<1.2.3-alpha.1>
+<0.0>
+<1.2>
+--
+WRONG:
+1 (no minor version)
+ */
+export const MAJOR_MINOR_SERVER_REGEX = /(^v*(?:0|[1-9]*))\.(?:0|[1-9]*)(?=$|\s)/i;
