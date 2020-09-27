@@ -1,4 +1,7 @@
-export { ensureIncludeGlob, ensureExcludeGlob } from './ensure-includes-excludes';
+export {
+  ensureIncludeGlob,
+  ensureExcludeGlob,
+} from './ensure-includes-excludes';
 export { ensureCommentLinkFormat } from './ensure-comment-link-template';
 export { ensureConfigDefaults } from './ensure-config-defaults';
 export { ensureDeprecationComment } from './ensure-deprecation-comment';

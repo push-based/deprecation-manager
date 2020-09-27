@@ -5,7 +5,8 @@ import { getInteractive, getSiblingPgkJson } from '../../utils';
 export async function ensureDeprecationUrl(
   config: CrawlConfig
 ): Promise<CrawlConfig> {
-  let suggestedDeprecationLink = config.deprecationLink || getSuggestionsFormPackageJson();
+  let suggestedDeprecationLink =
+    config.deprecationLink || getSuggestionsFormPackageJson();
 
   if (getInteractive()) {
     const { deprecationLink }: CrawlConfig = await prompt([
@@ -22,7 +23,7 @@ export async function ensureDeprecationUrl(
 
   return {
     ...config,
-    deprecationLink: suggestedDeprecationLink
+    deprecationLink: suggestedDeprecationLink,
   };
 }
 

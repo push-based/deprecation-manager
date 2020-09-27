@@ -8,7 +8,6 @@ export const UNGROUPED_GROUP_NAME = 'ungrouped';
 export const HEALTH_CHECK_GROUP_NAME = 'health-check';
 import { initCommand } from './commands/init.command';
 
-
 export const DEPRECATIONS_OUTPUT_DIRECTORY = 'deprecations';
 export const CRAWLER_CONFIG_PATH = 'deprecation-crawler.config.json';
 export const SEMVER_TOKEN = `SEMVER_TOKEN`;
@@ -57,7 +56,8 @@ export const OPTIONS: { [key: string]: Options } = {
   },
   interactive: {
     type: 'boolean',
-    description: 'When false questions are skipped with the values from the suggestions',
+    description:
+      'When false questions are skipped with the values from the suggestions',
   },
 };
 

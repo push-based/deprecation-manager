@@ -12,20 +12,18 @@ export const groupCommand: YargsCommandObject = {
     handler: async (argv) => {
       if (argv.verbose) console.info(`run grouping as a yargs command`);
       const config = await {
-          ...(Promise.resolve({ } as CrawlConfig)
+        ...Promise.resolve({} as CrawlConfig)
           .then(cfgQuestions.ensureOutputDirectory)
           .then(cfgQuestions.ensureFormatter)
-          .then(cfgQuestions.ensureGroups)),
+          .then(cfgQuestions.ensureGroups),
       };
       const tasks = [
         loadExistingDeprecations,
         group,
         (config: CrawlConfig): CrawlerProcess =>
-          askToSkip('Update Formatted Output?',
-            format(config)
-            , {
-            precondition: async (r) => r.deprecations?.length > 0
-          })
+          askToSkip('Update Formatted Output?', format(config), {
+            precondition: async (r) => r.deprecations?.length > 0,
+          }),
       ];
 
       // Run all processors
@@ -38,6 +36,6 @@ export const groupCommand: YargsCommandObject = {
           return (await { deprecations }) as CrawledRelease;
         };
       }
-    }
-  }
+    },
+  },
 };
