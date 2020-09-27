@@ -1,4 +1,5 @@
 export interface CrawlDefaultConfig {
+  pathFilter: string;
   tagFormat: string;
   commentLinkFormat: string;
   commitMessage: string;

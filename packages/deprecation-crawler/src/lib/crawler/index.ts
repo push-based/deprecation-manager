@@ -14,7 +14,9 @@ import {
   createCrawlerTsConfig,
   deleteCrawlerTsConfig,
   logVerbose,
+  getPathFilter
 } from '../utils';
+import * as minimatch from 'minimatch';
 
 // What about https://ts-morph.com/details/documentation#js-docs ?
 // Problem: can't find top level deprecations? e.g. merge
@@ -27,6 +29,10 @@ export async function crawlDeprecations(
   const deprecations = sourceFiles
     // TODO: seems like these files cannot be parsed correctly?
     .filter((file) => !file.getFilePath().includes('/Observable.ts'))
+    .filter((file) => {
+      const pathFilter = getPathFilter() || config.pathFilter;
+      return pathFilter ? minimatch(file.getFilePath(), pathFilter) : true;
+    })
     .map((file) => crawlFileForDeprecations(config, crawledRelease, file))
     .reduce((acc, val) => acc.concat(val), []);
 

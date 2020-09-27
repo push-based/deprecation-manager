@@ -1,10 +1,5 @@
-import {
-  CrawlConfig,
-  CrawledRelease,
-  CrawlerProcess,
-  Deprecation,
-} from '../models';
-import { concat, tap } from '../utils';
+import { CrawlConfig, CrawledRelease, CrawlerProcess } from '../models';
+import { concat, getPathFilter, tap } from '../utils';
 import { crawlDeprecations, getSourceFiles } from '../crawler';
 import { addRuid } from '../tasks/add-ruid';
 import {
@@ -14,6 +9,7 @@ import {
   ProcessFeedback,
 } from '../log';
 import * as kleur from 'kleur';
+import * as minimatch from 'minimatch';
 
 const feedback = getCrawlFeedback();
 
@@ -47,11 +43,8 @@ export function crawl(config: CrawlConfig): CrawlerProcess {
 }
 
 function getCrawlFeedback(): ProcessFeedback {
-  let existingDeprecations: Deprecation[] = [];
   return {
     printStart(config: CrawlConfig, r: CrawledRelease): void {
-      existingDeprecations = r?.deprecations || [];
-
       printHeadline('CRAWL PHASE');
       console.log(
         kleur.gray(`🔎 Looking for deprecations in: `),
@@ -66,17 +59,30 @@ function getCrawlFeedback(): ProcessFeedback {
       rawRelease: CrawledRelease
     ): Promise<void> {
       const files = await getSourceFiles(config);
-      const existingRuids = existingDeprecations.map((d) => d.ruid);
-      const newDeprecations = rawRelease.deprecations.filter(
-        (d) => !existingRuids.includes(d.ruid)
-      );
       console.log(
         kleur.green('✓ '),
         kleur.gray(`Found `),
-        kleur.black(`${newDeprecations.length}`),
-        kleur.gray(` deprecations in `),
-        kleur.gray(files.length),
+        kleur.black(`${rawRelease.deprecations.length}`),
+        kleur.gray(` in `),
+        kleur.black(
+          files
+            // @TODO reuse this logic or better implement it before the .getSourceFiles method is called
+            .filter((file) => {
+              const pathFilter = getPathFilter() || config.pathFilter;
+              return pathFilter
+                ? minimatch(file.getFilePath(), pathFilter)
+                : true;
+            }).length
+        ),
         kleur.gray(` files.`)
+      );
+      console.log(
+        kleur.gray(`Included files `),
+        kleur.black(`${config.include}`),
+        kleur.gray(`excluded files `),
+        kleur.black(`${config.exclude}`),
+        kleur.gray(` and pathFilter of `),
+        kleur.black(`'${config.pathFilter}'`)
       );
       printFooterLine();
     },
