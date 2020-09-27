@@ -1,10 +1,4 @@
-import {
-  existsSync,
-  mkdirSync,
-  writeFileSync,
-  readFileSync,
-  unlinkSync,
-} from 'fs';
+import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
 import {
   CrawlConfig,
   CrawlerProcess,
@@ -24,10 +18,9 @@ import {
 } from './constants';
 import { prompt } from 'enquirer';
 import * as yargs from 'yargs';
-import { join } from 'path';
+import { join, dirname } from 'path';
 import simpleGit, { DiffResultTextFile } from 'simple-git';
 import * as kleur from 'kleur';
-import * as path from 'path';
 import * as semverHelper from 'semver';
 import { logError } from './log';
 
@@ -39,7 +32,7 @@ export function getSiblingPgkJson(
   repository?: { url: string };
 } {
   return JSON.parse(
-    readFile(path.join(path.dirname(pathOrFile), 'package.json')) || '{}'
+    readFile(join(dirname(pathOrFile), 'package.json')) || '{}'
   );
 }
 
@@ -386,25 +379,30 @@ export async function getRemoteUrl(): Promise<string> {
   );
 }
 
-function crawlerTsConfig() {
-  return join('./', 'deprecation.tsconfig.json');
-}
-
-export function createCrawlerTsConfig(config: CrawlConfig) {
-  ensureDirExists(config.outputDirectory);
-  const tsconfig = crawlerTsConfig();
-  writeFileSync(
-    tsconfig,
-    JSON.stringify({
-      include: config.include,
-      exclude: config.exclude,
-    })
-  );
-  return tsconfig;
-}
-export function deleteCrawlerTsConfig(_config: CrawlConfig) {
-  const tsconfig = crawlerTsConfig();
-  unlinkSync(tsconfig);
+export async function getFilesWithDeletionsWithin2Hashes(
+  config: CrawlConfig,
+  diffConfig: {
+    from: string;
+    to: string;
+  }
+) {
+  // NOTICE: maybe diff directly is better
+  // git.diff([`${diffConfig.from}...${diffConfig.to}`, `--diff-filter=DRM`, `-G"${config.deprecationComment}"`, `-U0`, `--stat`]);
+  const gitDiff = await git.diffSummary([
+    `${diffConfig.from}...${diffConfig.to}`,
+    // Docs: https://git-scm.com/docs/git-diff#Documentation/git-diff.txt---diff-filterACDMRTUXB82308203
+    // Uppercase e.g. M includes files, lowercase e.g. m removes files
+    `--diff-filter=TMRD`,
+    `-G"${config.deprecationComment}"`,
+    // @TODO add config.pathFilter here
+  ]);
+  return gitDiff.files
+    .filter(
+      (f) =>
+        (!f.binary && (f as DiffResultTextFile).deletions > 0) ||
+        (f as DiffResultTextFile).changes > 0
+    )
+    .map((f) => f.file);
 }
 
 export function getCrawlerMode() {
@@ -414,6 +412,7 @@ export function getCrawlerMode() {
 export function isCrawlerModeSandbox(): boolean {
   return getCrawlerMode() === CRAWLER_MODES.SANDBOX;
 }
+
 export function isCrawlerModeCi(): boolean {
   return getCrawlerMode() === CRAWLER_MODES.CI;
 }

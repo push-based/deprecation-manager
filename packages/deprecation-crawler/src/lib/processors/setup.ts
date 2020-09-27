@@ -21,7 +21,8 @@ export async function setup(): Promise<CrawlConfig> {
 
   const config = {
     ...repoConfig,
-    ...(await cfgQuestions.ensureDeprecationUrl(repoConfig)
+    ...(await cfgQuestions
+      .ensureDeprecationUrl(repoConfig)
       .then(cfgQuestions.ensureDeprecationComment)
       .then(cfgQuestions.ensureGroups)
       .then(cfgQuestions.ensureFormatter)
